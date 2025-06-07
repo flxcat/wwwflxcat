@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Fèlix">
+<meta name="description" content="Quarta part del curs Curs BBDD i Java centrada en el mapatge d’arxius XML amb objectes de Java. Aquesta tècnica minimitza la separació entre el magatzem de dades i el llenguatge d’alt nivell, fent que la informació s’integri millor en el cicle de vida de l’aplicació.">
+
+<title>XML i Java amb StaX i JAXB – flx.cat</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8eff75af44363e7f64015f2cd3896f7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Cap resultat",
+    "search-matching-documents-text": "documents que coincideixen",
+    "search-copy-link-title": "Copia l'enllaç a la cerca",
+    "search-hide-matches-text": "Amaga les coincidències addicionals",
+    "search-more-match-text": "altra coincidència en aquest document",
+    "search-more-matches-text": "altres coincidències en aquest document",
+    "search-clear-button-title": "Neteja",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel·la",
+    "search-submit-button-title": "Envia",
+    "search-label": "Cerca"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="XML i Java amb StaX i JAXB – flx.cat">
+<meta property="og:description" content="Quarta part del curs Curs BBDD i Java centrada en el mapatge d’arxius XML amb objectes de Java. Aquesta tècnica minimitza la separació entre el magatzem de dades i el llenguatge d’alt nivell, fent que la informació s’integri millor en el cicle de vida de l’aplicació.">
+<meta property="og:image" content="https://www.flx.cat/posts/2013-06-29-BD04-xml-java-stax-jaxb/images/featured.jpg">
+<meta property="og:site_name" content="flx.cat">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">flx.cat</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Cerca"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Commuta la navegació" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Inici</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Quant a…</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../posts/2013-06-29-BD04-xml-java-stax-jaxb/index.html">4 StaX i JAXB</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">XML i Java amb StaX i JAXB</h1>
+                  <div>
+        <div class="description">
+          Quarta part del curs <a href="../2013-05-10-BD00-curs-bbdd-i-java">Curs BBDD i Java</a> centrada en el mapatge d’arxius XML amb objectes de Java. Aquesta tècnica minimitza la separació entre el magatzem de dades i el llenguatge d’alt nivell, fent que la informació s’integri millor en el cicle de vida de l’aplicació.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">bases de dades</div>
+                <div class="quarto-category">rdbms</div>
+                <div class="quarto-category">ordbms</div>
+                <div class="quarto-category">mysql</div>
+                <div class="quarto-category">java</div>
+                <div class="quarto-category">jdbc</div>
+                <div class="quarto-category">stax</div>
+                <div class="quarto-category">jaxb</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Autor/a</div>
+      <div class="quarto-title-meta-contents">
+               <p>Fèlix </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Publicat</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">29 de juny de 2013</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-05-10-BD00-curs-bbdd-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Curs BDDD (índex)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD01-tipus-de-bases-de-dades/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 Tipus de bases de dades</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD02-jdbc-amb-sql/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 JDBC amb SQL</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD03-ordbms-amb-oracle/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 Oracle ORDBMS</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD04-xml-java-stax-jaxb/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">4 StaX i JAXB</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD05-hibernate-mapatge-objecte-relacional/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 Hibernate i ORM</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD06-hibernate-i-jpa/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 Hibernate/JPA</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-02-BD07-oodbms-amb-db4o-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 db4o+Java</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 XND: XPath/XQuery</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD09-xnd-basex-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 XND: BaseX+Java</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En aquesta pàgina</h2>
+   
+  <ul>
+  <li><a href="#arxius-xml" id="toc-arxius-xml" class="nav-link active" data-scroll-target="#arxius-xml">1. Arxius XML</a>
+  <ul class="collapse">
+  <li><a href="#característiques-principals" id="toc-característiques-principals" class="nav-link" data-scroll-target="#característiques-principals">1.1. Característiques principals</a></li>
+  <li><a href="#exemple-darxiu-xml" id="toc-exemple-darxiu-xml" class="nav-link" data-scroll-target="#exemple-darxiu-xml">1.2. Exemple d’arxiu XML</a></li>
+  <li><a href="#consideracions-de-sintaxi" id="toc-consideracions-de-sintaxi" class="nav-link" data-scroll-target="#consideracions-de-sintaxi">1.3. Consideracions de sintaxi</a></li>
+  <li><a href="#seccions-cdata" id="toc-seccions-cdata" class="nav-link" data-scroll-target="#seccions-cdata">1.4. Seccions <code>CDATA</code></a></li>
+  <li><a href="#esquemes-xml" id="toc-esquemes-xml" class="nav-link" data-scroll-target="#esquemes-xml">1.5. Esquemes XML</a></li>
+  <li><a href="#conclusions-sobre-lús-de-xml" id="toc-conclusions-sobre-lús-de-xml" class="nav-link" data-scroll-target="#conclusions-sobre-lús-de-xml">1.6. Conclusions sobre l’ús de XML</a></li>
+  </ul></li>
+  <li><a href="#mètodes-daccés-a-arxius-xml" id="toc-mètodes-daccés-a-arxius-xml" class="nav-link" data-scroll-target="#mètodes-daccés-a-arxius-xml">2. Mètodes d’accés a arxius XML</a></li>
+  <li><a href="#una-api-java-de-parser-stax" id="toc-una-api-java-de-parser-stax" class="nav-link" data-scroll-target="#una-api-java-de-parser-stax">3. Una API Java de <em>parser</em>: <code>StaX</code></a>
+  <ul class="collapse">
+  <li><a href="#càrrega-darxius-xml" id="toc-càrrega-darxius-xml" class="nav-link" data-scroll-target="#càrrega-darxius-xml">3.1. Càrrega d’arxius XML</a></li>
+  <li><a href="#escriptura-darxius-xml" id="toc-escriptura-darxius-xml" class="nav-link" data-scroll-target="#escriptura-darxius-xml">3.2. Escriptura d’arxius XML</a></li>
+  </ul></li>
+  <li><a href="#una-api-java-per-a-binding-jaxb" id="toc-una-api-java-per-a-binding-jaxb" class="nav-link" data-scroll-target="#una-api-java-per-a-binding-jaxb">4. Una API Java per a <em>binding</em>: <code>JAXB</code></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="arxius-xml" class="level2">
+<h2 class="anchored" data-anchor-id="arxius-xml">1. Arxius XML</h2>
+<section id="característiques-principals" class="level3">
+<h3 class="anchored" data-anchor-id="característiques-principals">1.1. Característiques principals</h3>
+<p>XML són les sigles de <strong><em>eXtensible Markup Language</em></strong>, i va ser definit el 1998 pel <strong><em>World Wide Web Consortium</em> (W3C)</strong>.</p>
+<p>Els documents XML estan formats per una col·lecció d’elements. Cadascun d’ells està delimitat entre marques d’inici i de final (aquestes marques habitualment s’anomenen <strong><em>tags</em></strong>).</p>
+<p>Tot document XML ha de presentar un únic element arrel, que encerclarà tots els altres elements. Aquest element arrel és únic (un i només un) i serà l’arrel de l’arbre d’elements que conformen el document.</p>
+<p>S’ha de tenir en compte que l’especificació dels arxius XML diferencia entre majúscules i minúscules i cal tenir això present en la seva definició i manipulació.</p>
+<p>Característiques d’un arxiu XML correctament formatat:</p>
+<ul>
+<li>Sempre comença per un pròleg.</li>
+<li>Cada marca d’apertura té la seva corresponent de tancament.</li>
+<li>Totes les marques estan completament niades (estructurades en arbre).</li>
+</ul>
+<p>Característiques d’un arxiu XML <strong>vàlid</strong>:</p>
+<ul>
+<li>Ha de ser correctament formatat (criteris anteriors).</li>
+<li>Ha de contenir un enllaç a un esquema XML i ha de ser vàlid respecte d’aquell esquema.</li>
+</ul>
+</section>
+<section id="exemple-darxiu-xml" class="level3">
+<h3 class="anchored" data-anchor-id="exemple-darxiu-xml">1.2. Exemple d’arxiu XML</h3>
+<p>El següent és un arxiu XML correctament formatat i vàlid:</p>
+<p><strong>Arxiu biblio.xml</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>biblio.xml</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="biblio.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span> <span class="fu">?&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="dt">&lt;!DOCTYPE</span> <span class="dt">biblioteca</span> SYSTEM "biblio.dtd"<span class="dt">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">&lt;!-- Un exemple de base de dades bibliogràfica --&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>&lt;<span class="kw">biblioteca</span>&gt;</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">'978-0156837507'</span>&gt;</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    &lt;<span class="kw">idioma</span>&gt;en&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    &lt;<span class="kw">titol</span>&gt;Solaris&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    &lt;<span class="kw">autor</span>&gt;Stanislaw Lem&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb1-9"><a href="#cb1-9"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb1-10"><a href="#cb1-10"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">'978-2070575923'</span>&gt;</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    &lt;<span class="kw">idioma</span>&gt;fr&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    &lt;<span class="kw">titol</span>&gt;Le Petit Prince&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    &lt;<span class="kw">autor</span>&gt;Antoine de Saint-Exupéry&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb1-14"><a href="#cb1-14"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb1-15"><a href="#cb1-15"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">'978-8474103656'</span>&gt;</span>
+<span id="cb1-16"><a href="#cb1-16"></a>    &lt;<span class="kw">idioma</span>&gt;ca&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb1-17"><a href="#cb1-17"></a>    &lt;<span class="kw">titol</span>&gt;<span class="bn">&lt;![CDATA[</span>La fi de l'eternitat<span class="bn">]]&gt;</span>&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb1-18"><a href="#cb1-18"></a>    &lt;<span class="kw">autor</span>&gt;Isaac Asimov&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb1-19"><a href="#cb1-19"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb1-20"><a href="#cb1-20"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">'978-0441010622'</span>&gt;</span>
+<span id="cb1-21"><a href="#cb1-21"></a>    &lt;<span class="kw">idioma</span>&gt;en&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb1-22"><a href="#cb1-22"></a>    &lt;<span class="kw">titol</span>&gt;Dune&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb1-23"><a href="#cb1-23"></a>    &lt;<span class="kw">autor</span>&gt;Frank Herbert&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb1-24"><a href="#cb1-24"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb1-25"><a href="#cb1-25"></a>  <span class="co">&lt;!-- més llibres ... --&gt;</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a>&lt;/<span class="kw">biblioteca</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="consideracions-de-sintaxi" class="level3">
+<h3 class="anchored" data-anchor-id="consideracions-de-sintaxi">1.3. Consideracions de sintaxi</h3>
+<p>Observant l’exemple mostrat, destaquem les següents característiques en el seu format:</p>
+<ul>
+<li><p>Els arxius XML, com es veu, sempre comencen per un pròleg que descriu l’arxiu XML mateix. Aquest pròleg pot ser mínim, com:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="fu">?&gt;</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O pot contenir altre informació, com la codificació dels caràcters i altres propietats:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="ot"> standalone=</span><span class="st">"yes"</span> <span class="fu">?&gt;</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>També s’ha de tenir en compte que un <em>tag</em> que no conté contingut al seu interior es coneix com a <strong><em>tag</em> buit</strong>. Per exemple: “<code>&lt;logo/&gt;</code>”.</p></li>
+<li><p>Els <strong>comentaris</strong> en XML es defineixen així: <code>&lt;!-- comentari --&gt;</code>.</p></li>
+<li><p>Si hem d’incloure algun caràcter que pugui ser interpretat per la mateixa sintaxi de XML, haurem d’escapar-lo per prevenir la confusió amb el significat estàndard. Els caràcters que presenten escapament són els següents:</p></li>
+</ul>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Caràcter</th>
+<th style="text-align: left;">Codi escapat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>&amp;</code> (ampersand)</td>
+<td style="text-align: left;"><code>&amp;amp;</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&lt;</code> (menor que)</td>
+<td style="text-align: left;"><code>&amp;lt;</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>&gt;</code> (major que)</td>
+<td style="text-align: left;"><code>&amp;gt;</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>'</code> (cometa simple)</td>
+<td style="text-align: left;"><code>&amp;apos;</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>"</code> (cometa doble)</td>
+<td style="text-align: left;"><code>&amp;quot;</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="seccions-cdata" class="level3">
+<h3 class="anchored" data-anchor-id="seccions-cdata">1.4. Seccions <code>CDATA</code></h3>
+<p>En un arxiu o document XML, una secció <code>CDATA</code> és una secció de contingut d’un element que és marcat com a dades exclusivament, de manera que no s’interpreti el seu contingut com a ordres o marques de sintaxi.</p>
+<p>Per tant, una secció <code>CDATA</code> és simplement una alternativa de sintaxi per expressar dades textuals, on cap caràcter especial hagi hagut de ser escapat (sense necessitat de <code>&lt;</code> o <code>&amp;</code>, per exemple).</p>
+<p>La secció marcada <code>CDATA</code> ha d’estar encerclada de la següent manera:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bn">&lt;![CDATA[</span> ... text ... <span class="bn">]]&gt;</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Tot el text inclòs en la secció <code>CDATA</code> serà interpretat com a caràcters literal, sense marques o referència a entitats.</p>
+<p>Així doncs, si en un document XML haguéssim d’enregistrar una condició com <code>(edat&lt;40) &amp;&amp; (tipus&gt;3)</code>, ho podríem fer de dues maneres:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">condicio</span>&gt; (edat<span class="dv">&amp;lt;</span>40) <span class="dv">&amp;amp;&amp;amp;</span> (tipus<span class="dv">&amp;gt;</span>3) &lt;/<span class="kw">condicio</span>&gt;</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">condicio</span>&gt;<span class="bn">&lt;![CDATA[</span> (edat&lt;40) &amp;&amp; (tipus&gt;3) <span class="bn">]]&gt;</span>&lt;/<span class="kw">condicio</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com es veu, la segona permet una lectura immediata, però ha d’estar encerclada entre les marques que defineixen la secció <code>CDATA</code>.</p>
+</section>
+<section id="esquemes-xml" class="level3">
+<h3 class="anchored" data-anchor-id="esquemes-xml">1.5. Esquemes XML</h3>
+<p>El mecanisme més senzill per proporcionar una sintaxi per a l’estructura d’un document XML determinat és la definició d’un <strong>DTD (<em>Document Type Definition</em>)</strong>. N’hi ha altres tècniques, però aquesta és la més senzilla i còmoda, a més de formar part de l’estàndard original XML.</p>
+<p>En aquest sentit, un esquema XML especifica formalment l’estructura del document XML, permetent:</p>
+<ul>
+<li><strong>Validació</strong>: Assegurem que conté les dades correctes en els llocs correctes.</li>
+<li><strong>Interoperativitat</strong>: Com que disposar de la sintaxi de l’estructura no genera dubtes, diferents equips de persones poden treballar en el document sabent de quina manera quedarà estructurada la informació.</li>
+<li><strong>Generació de codi</strong>: Es poden utilitzar els esquemes XML per generar codi que permeti als desenvolupadors llegir i escriure documents XML seguint l’estructuració descrita. A aquesta tècnica se la coneix com <strong><em>Binding</em></strong> i serà estudiada en el curs. Existeix <em>Binding</em> XML de dades per a C#, C++, Java, Visual Basic, VB.Net, entre altres.</li>
+<li><strong>Visualitzacions</strong>: És possible mostrar de manera adient l’estructura d’un arxiu XML si coneixem la seva sintaxi estructural. Així podem generar vistes sobre les dades del document o automatitzar processos de visualització de forma senzilla.</li>
+<li><strong>Documentació</strong>: Un esquema XML pot contenir documentació, que serà processada a altres formats segons convingui.</li>
+</ul>
+<p>Un exemple d’esquema XML en format DTD podria ser el següent:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>biblio.dtd</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="biblio.dtd"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span> <span class="fu">?&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">&lt;!-- Aquesta és la DTD de la biblioteca --&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="er">&lt;</span>!ELEMENT biblioteca (llibre)*&gt;</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="er">&lt;</span>!ELEMENT llibre (idioma, titol, autor)&gt;</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="er">&lt;</span>!ATTLIST llibre isbn CDATA #REQUIRED&gt;</span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="er">&lt;</span>!ELEMENT idioma (#PCDATA)&gt;</span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="er">&lt;</span>!ELEMENT titol (#PCDATA)&gt;</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="er">&lt;</span>!ELEMENT autor (#PCDATA)&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Observi com s’indica que una biblioteca està formada per un o més llibres, que els llibres han de presentar tres elements al seu interior (idioma, títol i autor) i un atribut (el ISBN).</p>
+<p>Observi també com s’ha especificat el tipus de dades dels diferents elements: el ISBN és <code>CDATA</code> (text directe) mentre que els elements idioma, títol i autor són text interpretat (que pot escapar-se o encerclar-se amb una secció <code>CDATA</code>).</p>
+</section>
+<section id="conclusions-sobre-lús-de-xml" class="level3">
+<h3 class="anchored" data-anchor-id="conclusions-sobre-lús-de-xml">1.6. Conclusions sobre l’ús de XML</h3>
+<p>Els <strong>avantatges</strong> més importants de fer servir arxius XML sobre altres tipus de format són:</p>
+<ul>
+<li>El contingut dels arxius XML és text pla.</li>
+<li>Representa dades sense definir com han de ser mostrades.</li>
+<li>Pot ser transformat en altres formats aplicant XSL.</li>
+<li>Pot ser fàcilment processat mitjançant <em>parsers</em> estàndard.</li>
+<li>Presenta una estructura jeràrquica.</li>
+</ul>
+<p>Només destaca un <strong>inconvenient</strong>, i és que en alguns tipus de documents i dades genera un gran volum de marques per descriure correctament el contingut de dades del mateix. Un exemple d’això és <strong>MathML</strong> (que molt poca gent fa servir en productes comercials).</p>
+<p>Observi el següent exemple de MathML:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb7-1"><a href="#cb7-1"></a>&lt;<span class="kw">math</span><span class="ot"> xmlns=</span><span class="st">"http://www.w3.org/1998/Math/MathML"</span><span class="ot"> display=</span><span class="st">"block"</span>&gt;</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  &lt;<span class="kw">mrow</span>&gt;</span>
+<span id="cb7-3"><a href="#cb7-3"></a>    &lt;<span class="kw">mi</span>&gt;x&lt;/<span class="kw">mi</span>&gt;</span>
+<span id="cb7-4"><a href="#cb7-4"></a>    &lt;<span class="kw">mo</span>&gt;=&lt;/<span class="kw">mo</span>&gt;</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    &lt;<span class="kw">mfrac</span>&gt;</span>
+<span id="cb7-6"><a href="#cb7-6"></a>      &lt;<span class="kw">mrow</span>&gt;</span>
+<span id="cb7-7"><a href="#cb7-7"></a>        &lt;<span class="kw">mo</span>&gt;<span class="dv">&amp;#x2212;</span>&lt;/<span class="kw">mo</span>&gt;</span>
+<span id="cb7-8"><a href="#cb7-8"></a>        &lt;<span class="kw">mi</span>&gt;b&lt;/<span class="kw">mi</span>&gt;</span>
+<span id="cb7-9"><a href="#cb7-9"></a>        &lt;<span class="kw">mo</span>&gt;<span class="dv">&amp;#xB1;</span>&lt;/<span class="kw">mo</span>&gt;</span>
+<span id="cb7-10"><a href="#cb7-10"></a>        &lt;<span class="kw">msqrt</span>&gt;</span>
+<span id="cb7-11"><a href="#cb7-11"></a>          &lt;<span class="kw">mrow</span>&gt;</span>
+<span id="cb7-12"><a href="#cb7-12"></a>            &lt;<span class="kw">msup</span>&gt;</span>
+<span id="cb7-13"><a href="#cb7-13"></a>              &lt;<span class="kw">mi</span>&gt;b&lt;/<span class="kw">mi</span>&gt;</span>
+<span id="cb7-14"><a href="#cb7-14"></a>              &lt;<span class="kw">mn</span>&gt;2&lt;/<span class="kw">mn</span>&gt;</span>
+<span id="cb7-15"><a href="#cb7-15"></a>            &lt;/<span class="kw">msup</span>&gt;</span>
+<span id="cb7-16"><a href="#cb7-16"></a>            &lt;<span class="kw">mo</span>&gt;<span class="dv">&amp;#x2212;</span>&lt;/<span class="kw">mo</span>&gt;</span>
+<span id="cb7-17"><a href="#cb7-17"></a>            &lt;<span class="kw">mn</span>&gt;4&lt;/<span class="kw">mn</span>&gt;</span>
+<span id="cb7-18"><a href="#cb7-18"></a>            &lt;<span class="kw">mi</span>&gt;a&lt;/<span class="kw">mi</span>&gt;</span>
+<span id="cb7-19"><a href="#cb7-19"></a>            &lt;<span class="kw">mi</span>&gt;c&lt;/<span class="kw">mi</span>&gt;</span>
+<span id="cb7-20"><a href="#cb7-20"></a>          &lt;/<span class="kw">mrow</span>&gt;</span>
+<span id="cb7-21"><a href="#cb7-21"></a>        &lt;/<span class="kw">msqrt</span>&gt;</span>
+<span id="cb7-22"><a href="#cb7-22"></a>      &lt;/<span class="kw">mrow</span>&gt;</span>
+<span id="cb7-23"><a href="#cb7-23"></a>      &lt;<span class="kw">mrow</span>&gt;</span>
+<span id="cb7-24"><a href="#cb7-24"></a>        &lt;<span class="kw">mn</span>&gt;2&lt;/<span class="kw">mn</span>&gt;</span>
+<span id="cb7-25"><a href="#cb7-25"></a>        &lt;<span class="kw">mi</span>&gt;a&lt;/<span class="kw">mi</span>&gt;</span>
+<span id="cb7-26"><a href="#cb7-26"></a>      &lt;/<span class="kw">mrow</span>&gt;</span>
+<span id="cb7-27"><a href="#cb7-27"></a>    &lt;/<span class="kw">mfrac</span>&gt;</span>
+<span id="cb7-28"><a href="#cb7-28"></a>  &lt;/<span class="kw">mrow</span>&gt;</span>
+<span id="cb7-29"><a href="#cb7-29"></a>&lt;/<span class="kw">math</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>El resultat d’aquest XML, aplicant-li un renderitzador adequat (per exemple, el navegador Safari n’incorpora un per defecte), serà visualitzat com a:</p>
+<div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/captura_formula_xml.png" class="img-fluid figure-img"></p>
+<figcaption>Formula MathML renderitzada</figcaption>
+</figure>
+</div>
+</div>
+<p>Aquesta mateixa fórmula, codificada en LaTeX, simplement és:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x=<span class="fu">\frac</span>{-b<span class="fu">\pm\sqrt</span>{b^2-4ac}}{2a}</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Resultant en:</p>
+<p><span class="math display">\[ x=\frac{-b\pm\sqrt{b^2-4ac}}{2a} \]</span></p>
+<p>Podem dir que XML és útil sempre i quan és evident aplicar-lo. Si quan l’apliquem, l’estructura és complexa i difícil de seguir i llegir, aleshores és millor alguna altra alternativa, excepte el cas en què volem un format uniforme que sempre tingui el mateix aspecte i estructura.</p>
+<p>No és la finalitat d’aquest curs aprendre les interioritats i detalls menors en l’estructura de XML, però sí en farem ús i per tant hem d’estar familiaritzats amb els seus trets bàsics. D’aquí que s’hagi presentat una introducció al tema i no una anàlisi en profunditat.</p>
+</section>
+</section>
+<section id="mètodes-daccés-a-arxius-xml" class="level2">
+<h2 class="anchored" data-anchor-id="mètodes-daccés-a-arxius-xml">2. Mètodes d’accés a arxius XML</h2>
+<p>Per accedir a les dades que estan emmagatzemades en un document XML, podem triar entre dues tècniques bàsiques:</p>
+<ul>
+<li><p>El <strong><em>parser</em></strong> o <strong>analitzador sintàctic</strong>: Aquest mecanisme consisteix en recórrer l’arxiu XML per extreure la informació seguint les característiques estructurals que presenta. Requereix codificar (d’una manera o altre) la sintaxi de l’esquema utilitzat o proporcionar l’esquema externament, de manera que el <em>parser</em> pugui interpretar l’estructura de manera adequada.</p></li>
+<li><p>El <strong><em>binding</em></strong> o <strong>vinculació de dades</strong>: Aquest altre mecanisme permet vincular les dades dels objectes i estructures del llenguatge amb els seus corresponents elements del document XML. D’alguna manera es realitza una <strong>sincronització</strong> entre la rèplica en memòria utilitzada pel llenguatge d’alt nivell i la representació emmagatzemada en el document XML al disc dur.</p></li>
+</ul>
+<p>De la primera tècnica, el <em>parser</em>, nosaltres treballarem sobre la API de Java anomenada <code>StaX</code>; mentre que sobre la part de <em>binding</em> treballarem amb el API anomenat <code>JAXB</code>.</p>
+</section>
+<section id="una-api-java-de-parser-stax" class="level2">
+<h2 class="anchored" data-anchor-id="una-api-java-de-parser-stax">3. Una API Java de <em>parser</em>: <code>StaX</code></h2>
+<p>La tècnica de <em>parser</em> consisteix en recórrer l’arxiu XML i anar descobrint els elements i <em>tags</em> que s’hi troben. En funció de cada cas, el lector anirà enviant la informació trobada a la variable, estructura o classe adient.</p>
+<p>Per tant, el programador ha de tenir un coneixement clar de l’estructura del document XML (el seu esquema) i codificar l’anàlisi de l’esquema en el codi del programa. Per a estructures senzilles això no és gaire complicat, però per documents XML amb múltiples nivells jeràrquics, la cosa pot ser força incòmoda i feixuga.</p>
+<p>Com a exemple, vegem la següent situació: Disposem de l’arxiu de biblioteca anterior <code>biblio.xml</code> i volem escriure un lector i un escriptor d’aquest format de document.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Observi ara l’exemple número 4</p>
+</div>
+</div>
+<p>Com es veu, el programa desitjat hauria de llegir la biblioteca de l’arxiu, afegir dos llibres més i escriure la biblioteca en un nou arxiu anomenat <code>biblio2.xml</code>.</p>
+<p>Tal i com s’ha codificat el programa, necessitem de dues classes noves: <code>Biblioteca</code> i <code>Llibre</code> per mantenir la informació en memòria.</p>
+<p>La classe <code>Llibre</code> simplement és una típica classe POJO amb els mètodes <em>setter</em> i <em>getter</em> corresponents per a cada atribut del llibre. A més, una funció <code>toString()</code> que mostra la informació del llibre per pantalla.</p>
+<p>Quant a la biblioteca, la cosa ja és més complexa, perquè no només és una llista de llibres, sinó que també hi implementem la lectura i escriptura en arxius XML. Aquesta classe presenta dues parts ben diferenciades:</p>
+<ul>
+<li><p>Per una banda, tenim el fet que “<em>una biblioteca és una col·lecció de llibres</em>” i això ens comporta una declaració i uns mètodes relacionats.</p></li>
+<li><p>Per altra banda, necessitem els mètodes que llegeixen i escriure la informació en arxius XML, i són les funcions <code>carregarXML()</code> i <code>desarXML()</code>. Les dues reben el nom d’arxiu de què es vol llegir o on es vol escriure, respectivament.</p></li>
+</ul>
+<p>Parlem ara dels mètodes relacionats amb XML (la part prèvia hauria de ser evident a la vista del codi).</p>
+<section id="càrrega-darxius-xml" class="level3">
+<h3 class="anchored" data-anchor-id="càrrega-darxius-xml">3.1. Càrrega d’arxius XML</h3>
+<p>Quant a la càrrega des d’un arxiu XML, podrà observar en la codificació de la funció <code>carregarXML()</code> que requerim un objecte <code>XMLEventReader</code> que és el que va llegint i trobant elements dins de l’arxiu XML. Aquest objecte s’instancia a partir d’un lector d’arxiu de tipus <code>FileInputStream</code>.</p>
+<p>Cada vegada que trobem un esdeveniment (amb <code>er.hasNext()</code>), hem de gestionar el seu significat en funció del <em>tag</em> o estructura que contingui:</p>
+<ul>
+<li>Si és un inici de <em>tag</em> <code>&lt;llibre&gt;</code>, haurem de llegir l’atribut ISBN.</li>
+<li>Si és un inici de <em>tag</em> <code>&lt;idioma&gt;</code>, <code>&lt;titol&gt;</code> o <code>&lt;autor&gt;</code>, simplement llegim la dada continguda com a bloc de text.</li>
+<li>Si és un tancament de <em>tag</em> <code>&lt;llibre&gt;</code>, haurem de desar el llibre llegit a la biblioteca (cridant <code>afegirLlibre()</code>).</li>
+</ul>
+</section>
+<section id="escriptura-darxius-xml" class="level3">
+<h3 class="anchored" data-anchor-id="escriptura-darxius-xml">3.2. Escriptura d’arxius XML</h3>
+<p>Quant a l’escriptura a un arxiu XML, podrà veure a la funció <code>desarXML()</code> que hem de realitzar el procés invers al de lectura, generant esdeveniments (elements i atributs) que vagin afegint-se a l’arxiu. És un procés semblant al d’anar escrivint text mesclat amb variables amb funcions bàsiques com <code>println()</code>, però amb mètodes relacionats amb XML.</p>
+<p>Observi com definim un <code>XMLEventWriter</code> que és l’encarregat de gestionar l’escriptura en arxiu amb un <code>FileOutputStream</code> com a destí de l’escriptura.</p>
+<p>Observarà com es van enviant els diferents elements (inici de document, definició del DTD, afegir un comentari, inici del <em>tag</em> principal <code>&lt;biblioteca&gt;</code>) i aleshores passem a escriure, un a un, tots els llibres de la biblioteca. Posteriorment tancarem el <em>tag</em> de <code>&lt;biblioteca&gt;</code> i el document.</p>
+<p>En el cas del format de sortida, s’ha volgut modificar el format, de manera que ara l’idioma sigui un atribut del llibre i no un element diferenciat. Per tant, per a cada llibre s’escriurà el <em>tag</em> d’obertura juntament amb el ISBN i l’idioma, i després el títol i l’autor en <em>tags</em> diferenciats. A més, tots els títols han d’aparèixer escapats dins d’un <em>tag</em> <code>CDATA</code>.</p>
+<p>Observi també com s’han anat afegint tabuladors i finals de línia.</p>
+<p>L’arxiu generat ha quedat així:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>biblio2.xml</strong></pre>
+</div>
+<div class="sourceCode" id="cb9" data-filename="biblio2.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="fu">?&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="dt">&lt;!DOCTYPE</span> <span class="dt">biblioteca</span> SYSTEM "biblio.dtd"<span class="dt">&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">&lt;!--Un exemple de base de dades bibliogràfica--&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>&lt;<span class="kw">biblioteca</span>&gt;</span>
+<span id="cb9-5"><a href="#cb9-5"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-0156837507"</span><span class="ot"> idioma=</span><span class="st">"en"</span>&gt;</span>
+<span id="cb9-6"><a href="#cb9-6"></a>    &lt;<span class="kw">titol</span>&gt;<span class="bn">&lt;![CDATA[</span>Solaris<span class="bn">]]&gt;</span>&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb9-7"><a href="#cb9-7"></a>    &lt;<span class="kw">autor</span>&gt;Stanislaw Lem&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb9-8"><a href="#cb9-8"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb9-9"><a href="#cb9-9"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-2070575923"</span><span class="ot"> idioma=</span><span class="st">"fr"</span>&gt;</span>
+<span id="cb9-10"><a href="#cb9-10"></a>    &lt;<span class="kw">titol</span>&gt;<span class="bn">&lt;![CDATA[</span>Le Petit Prince<span class="bn">]]&gt;</span>&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb9-11"><a href="#cb9-11"></a>    &lt;<span class="kw">autor</span>&gt;Antoine de Saint-Exupéry&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb9-12"><a href="#cb9-12"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb9-13"><a href="#cb9-13"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-8474103656"</span><span class="ot"> idioma=</span><span class="st">"ca"</span>&gt;</span>
+<span id="cb9-14"><a href="#cb9-14"></a>    &lt;<span class="kw">titol</span>&gt;<span class="bn">&lt;![CDATA[</span>La fi de l'eternitat<span class="bn">]]&gt;</span>&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb9-15"><a href="#cb9-15"></a>    &lt;<span class="kw">autor</span>&gt;Isaac Asimov&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb9-16"><a href="#cb9-16"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb9-17"><a href="#cb9-17"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-0441010622"</span><span class="ot"> idioma=</span><span class="st">"en"</span>&gt;</span>
+<span id="cb9-18"><a href="#cb9-18"></a>    &lt;<span class="kw">titol</span>&gt;<span class="bn">&lt;![CDATA[</span>Dune<span class="bn">]]&gt;</span>&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb9-19"><a href="#cb9-19"></a>    &lt;<span class="kw">autor</span>&gt;Frank Herbert&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb9-20"><a href="#cb9-20"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb9-21"><a href="#cb9-21"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-84-615-9841-0"</span><span class="ot"> idioma=</span><span class="st">"ca"</span>&gt;</span>
+<span id="cb9-22"><a href="#cb9-22"></a>    &lt;<span class="kw">titol</span>&gt;<span class="bn">&lt;![CDATA[</span>Oracle SQL és fàcil!<span class="bn">]]&gt;</span>&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb9-23"><a href="#cb9-23"></a>    &lt;<span class="kw">autor</span>&gt;Fèlix Galindo Allué&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb9-24"><a href="#cb9-24"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb9-25"><a href="#cb9-25"></a>  &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"0-13-027363-5"</span><span class="ot"> idioma=</span><span class="st">"en"</span>&gt;</span>
+<span id="cb9-26"><a href="#cb9-26"></a>    &lt;<span class="kw">titol</span>&gt;<span class="bn">&lt;![CDATA[</span>Thinking in Java<span class="bn">]]&gt;</span>&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb9-27"><a href="#cb9-27"></a>    &lt;<span class="kw">autor</span>&gt;Bruce Eckel&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb9-28"><a href="#cb9-28"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb9-29"><a href="#cb9-29"></a>&lt;/<span class="kw">biblioteca</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Com veu, la tècnica és senzilla, però es fa llarga la codificació del programa si l’estructura jeràrquica té molts nivells intermedis. Pensi, per exemple, com s’hauria d’implementar un lector per a la fórmula MathML mostrada anteriorment!!!</p>
+</section>
+</section>
+<section id="una-api-java-per-a-binding-jaxb" class="level2">
+<h2 class="anchored" data-anchor-id="una-api-java-per-a-binding-jaxb">4. Una API Java per a <em>binding</em>: <code>JAXB</code></h2>
+<p>La tècnica anomenada <em>binding</em> consisteix en vincular un objecte o un grup d’objectes amb un document XML, de manera que pugui ser importat cap a aquests objectes i després exportat de nou cap al document:</p>
+<ul>
+<li><p>Quan s’<strong>importa</strong> el document XML (<strong><em>unmarshalling</em></strong>), es crearan objectes Java associats a aquelles dades XML i amb els atributs assignats als valors que correspongui segons el contingut de l’arxiu XML.</p></li>
+<li><p>Quan s’<strong>exporta</strong> el document XML (<strong><em>marshalling</em></strong>), els atributs i valors dels objectes Java seran desats a l’arxiu XML resseguint l’estructura de dades present als objectes.</p></li>
+</ul>
+<p>Per a que tot això sigui possible, Java ha de conèixer els atributs i els seus noms associats al document XML. A més, els tipus de dada han de ser senzills: enters, text, llistes bàsiques, etc.</p>
+<p>Per poder marcar aquestes qüestions s’utilitza una tècnica addicional anomenada <strong><em>annotation</em></strong>. Amb aquesta tècnica s’inclouen directrius que ajuden a discernir característiques i condicions sobre la vinculació dades–XML.</p>
+<p>Vegem ara com es construiria una aplicació semblant a la anteriorment mostrada per al cas StaX. Considerem el mateix programa de prova i adaptem-lo a la nova tècnica.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Observi ara l’exemple número 5</p>
+</div>
+</div>
+<p>Quant a la classe <code>ProvaBiblioteca</code> (el programa principal), només hi ha dos canvis importants: S’ha canviat la manera de carregar la biblioteca a un mètode estàtic i s’ha canviat el nom de l’arxiu resultant.</p>
+<p>Per a la declaració de la classe <code>Llibre</code> observarà que, com abans, aquesta classe conté la definició dels atributs i els seus corresponents mètodes <em>setter</em> i <em>getter</em>.</p>
+<p>A més, trobarà les següents <strong><em>annotations</em></strong>:</p>
+<ul>
+<li><p>Amb <code>@XmlRootElement(name = "llibre")</code> (línia 5) indiquem que el nom de l’element XML associat a aquesta classe és el <em>tag</em> <code>&lt;llibre&gt;</code>. Observi que la classe té la primera lletra en majúscules i Java és sensible a majúscules. Per això cal indicar la traducció.</p></li>
+<li><p>Amb <code>@XmlType(propOrder = { "idioma", "autor", "titol" })</code> (línia 6) indiquem que aquesta classe té aquestes tres propietats associades amb els atributs del mateix nom. Això vol dir que haurà de cercar al document XML aquests tres elements dins del <em>tag</em> assignat a cada llibre.</p></li>
+<li><p>Amb <code>@XmlAttribute</code> (línia 22) indiquem que el <em>getter</em> indicat a la línia següent correspon a un atribut del <em>tag</em> <code>&lt;llibre&gt;</code>, a diferència dels altres tres elements.</p></li>
+</ul>
+<p>I per a la classe <code>Biblioteca</code> tindrem també algunes <strong><em>annotations</em></strong>:</p>
+<ul>
+<li><p>Amb <code>@XmlRootElement(name = "biblioteca")</code> (línia 8) indiquem com abans que el nom del <em>tag</em> associat a aquesta classe es dirà <code>&lt;biblioteca&gt;</code>.</p></li>
+<li><p>Amb <code>@XmlElement(name = "llibre")</code> (línia 14) indiquem que aquesta classe és un receptacle de <em>tags</em> <code>&lt;llibre&gt;</code>. Com abans, s’indica just abans del <em>getter</em> d’aquest element. Els elements descoberts seran enregistrats internament al <code>ArrayList</code> indicat a la línia 10.</p></li>
+</ul>
+<p>Quan a les funcions de lectura i escriptura del document XML, comentar que:</p>
+<ul>
+<li>S’ha fet la funció de càrrega en forma estàtica, perquè la lectura que realitza JAXB ja retorna un objecte de la classe arrel.</li>
+<li>Sobre la forma de fer la lectura, veurà que el procés és força planer un cop es coneix. S’indica la classe arrel del document (en aquest cas la classe <code>Biblioteca</code>) i el nom de l’arxiu al procés de <em>unmarshalling</em>.</li>
+<li>Sobre la forma de fer l’escriptura, veurà que el procés és idèntic al de lectura, canviant el mètode al de <em>marshalling</em>.</li>
+<li>A més, en l’escriptura, s’ha indicat amb la propietat adient que volem que faci un bon formatat del document (amb tabuladors i retorns de línia). Si no es posa, el document XML resultant queda tot en una sola línia seguida.</li>
+</ul>
+<p>El resultat de l’execució d’aquest programa és idèntic a l’anterior. El document XML resultant quedarà així:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>biblio3.xml</strong></pre>
+</div>
+<div class="sourceCode" id="cb10" data-filename="biblio3.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="ot"> standalone=</span><span class="st">"yes"</span><span class="fu">?&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>&lt;<span class="kw">biblioteca</span>&gt;</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-0156837507"</span>&gt;</span>
+<span id="cb10-4"><a href="#cb10-4"></a>        &lt;<span class="kw">idioma</span>&gt;en&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb10-5"><a href="#cb10-5"></a>        &lt;<span class="kw">autor</span>&gt;Stanislaw Lem&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb10-6"><a href="#cb10-6"></a>        &lt;<span class="kw">titol</span>&gt;Solaris&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb10-7"><a href="#cb10-7"></a>    &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb10-8"><a href="#cb10-8"></a>    &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-2070575923"</span>&gt;</span>
+<span id="cb10-9"><a href="#cb10-9"></a>        &lt;<span class="kw">idioma</span>&gt;fr&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb10-10"><a href="#cb10-10"></a>        &lt;<span class="kw">autor</span>&gt;Antoine de Saint-Exupéry&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb10-11"><a href="#cb10-11"></a>        &lt;<span class="kw">titol</span>&gt;Le Petit Prince&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb10-12"><a href="#cb10-12"></a>    &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb10-13"><a href="#cb10-13"></a>    &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-8474103656"</span>&gt;</span>
+<span id="cb10-14"><a href="#cb10-14"></a>        &lt;<span class="kw">idioma</span>&gt;ca&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb10-15"><a href="#cb10-15"></a>        &lt;<span class="kw">autor</span>&gt;Isaac Asimov&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb10-16"><a href="#cb10-16"></a>        &lt;<span class="kw">titol</span>&gt;La fi de l'eternitat&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb10-17"><a href="#cb10-17"></a>    &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb10-18"><a href="#cb10-18"></a>    &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-0441010622"</span>&gt;</span>
+<span id="cb10-19"><a href="#cb10-19"></a>        &lt;<span class="kw">idioma</span>&gt;en&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb10-20"><a href="#cb10-20"></a>        &lt;<span class="kw">autor</span>&gt;Frank Herbert&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb10-21"><a href="#cb10-21"></a>        &lt;<span class="kw">titol</span>&gt;Dune&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb10-22"><a href="#cb10-22"></a>    &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb10-23"><a href="#cb10-23"></a>    &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-84-615-9841-0"</span>&gt;</span>
+<span id="cb10-24"><a href="#cb10-24"></a>        &lt;<span class="kw">idioma</span>&gt;ca&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb10-25"><a href="#cb10-25"></a>        &lt;<span class="kw">autor</span>&gt;Fèlix Galindo Allué&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb10-26"><a href="#cb10-26"></a>        &lt;<span class="kw">titol</span>&gt;Oracle SQL és fàcil!&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb10-27"><a href="#cb10-27"></a>    &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb10-28"><a href="#cb10-28"></a>    &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"0-13-027363-5"</span>&gt;</span>
+<span id="cb10-29"><a href="#cb10-29"></a>        &lt;<span class="kw">idioma</span>&gt;en&lt;/<span class="kw">idioma</span>&gt;</span>
+<span id="cb10-30"><a href="#cb10-30"></a>        &lt;<span class="kw">autor</span>&gt;Bruce Eckel&lt;/<span class="kw">autor</span>&gt;</span>
+<span id="cb10-31"><a href="#cb10-31"></a>        &lt;<span class="kw">titol</span>&gt;Thinking in Java&lt;/<span class="kw">titol</span>&gt;</span>
+<span id="cb10-32"><a href="#cb10-32"></a>    &lt;/<span class="kw">llibre</span>&gt;</span>
+<span id="cb10-33"><a href="#cb10-33"></a>&lt;/<span class="kw">biblioteca</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Com veu, inclou els 6 llibres correctament formatats seguint l’estructura dels objectes i les seves dades.</p>
+<p>Evidentment aquesta tècnica és aparentment més còmoda, però es complica quan volem utilitzar tipus de dades diferents dels bàsics, o quan volem realitzar estructures XML complexes. No obstant, el codi generat ha estat mínim i resulta una bona primera aproximació per a la lectura i escriptura d’arxius XML senzills.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.flx\.cat");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

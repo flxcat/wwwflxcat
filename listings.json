@@ -1,0 +1,26 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/2021-04-01-arguments-i-modificadors-en-shell-scripts/index.html",
+      "/posts/2013-12-04-bucles-en-el-sed/index.html",
+      "/posts/2013-11-11-guia-rapida-git/index.html",
+      "/posts/2013-11-10-liquid-latex-jekyll-plugin/index.html",
+      "/posts/2013-11-09-liquid-lipsum-jekyll-plugin/index.html",
+      "/posts/2013-07-03-BD09-xnd-basex-i-java/index.html",
+      "/posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html",
+      "/posts/2013-07-02-BD07-oodbms-amb-db4o-i-java/index.html",
+      "/posts/2013-07-01-BD06-hibernate-i-jpa/index.html",
+      "/posts/2013-07-01-BD05-hibernate-mapatge-objecte-relacional/index.html",
+      "/posts/2013-06-29-BD02-jdbc-amb-sql/index.html",
+      "/posts/2013-06-29-BD01-tipus-de-bases-de-dades/index.html",
+      "/posts/2013-06-29-BD03-ordbms-amb-oracle/index.html",
+      "/posts/2013-06-29-BD04-xml-java-stax-jaxb/index.html",
+      "/posts/2013-05-10-BD00-curs-bbdd-i-java/index.html",
+      "/posts/2013-04-22-creating-a-new-grub2-background-image/index.html",
+      "/posts/2012-07-19-oracle-sql-es-facil/index.html",
+      "/posts/2010-11-17-format-intel-hex/index.html",
+      "/posts/2010-10-22-elements-de-sortida-electronics-1/index.html"
+    ]
+  }
+]

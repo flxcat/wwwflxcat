@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Fèlix">
+<meta name="description" content="Es tracten els diferents elements disponibles per a realitzar la sortida de dades en un circuit electrònic. S’estudien els LEDs (amb i sense transistor), el relé, i multitud d’elements LED en diferents estructures.">
+
+<title>Elements de sortida electrònics (I) – flx.cat</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8eff75af44363e7f64015f2cd3896f7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Cap resultat",
+    "search-matching-documents-text": "documents que coincideixen",
+    "search-copy-link-title": "Copia l'enllaç a la cerca",
+    "search-hide-matches-text": "Amaga les coincidències addicionals",
+    "search-more-match-text": "altra coincidència en aquest document",
+    "search-more-matches-text": "altres coincidències en aquest document",
+    "search-clear-button-title": "Neteja",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel·la",
+    "search-submit-button-title": "Envia",
+    "search-label": "Cerca"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background-image: url(images/featured.jpg);
+background-size: cover;
+      }
+</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Elements de sortida electrònics (I) – flx.cat">
+<meta property="og:description" content="Es tracten els diferents elements disponibles per a realitzar la sortida de dades en un circuit electrònic. S’estudien els LEDs (amb i sense transistor), el relé, i multitud d’elements LED en diferents estructures.">
+<meta property="og:image" content="https://www.flx.cat/posts/2010-10-22-elements-de-sortida-electronics-1/images/featured.jpg">
+<meta property="og:site_name" content="flx.cat">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">flx.cat</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Cerca"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Commuta la navegació" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Inici</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Quant a…</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Elements de sortida electrònics (I)</h1>
+                  <div>
+        <div class="description">
+          Es tracten els diferents elements disponibles per a realitzar la sortida de dades en un circuit electrònic. S’estudien els LEDs (amb i sense transistor), el relé, i multitud d’elements LED en diferents estructures.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Electrònica</div>
+                <div class="quarto-category">sortida</div>
+                <div class="quarto-category">LED</div>
+                <div class="quarto-category">multiplexació</div>
+                <div class="quarto-category">charlieplexing</div>
+                <div class="quarto-category">alfanumèric</div>
+                <div class="quarto-category">transistor</div>
+                <div class="quarto-category">relé</div>
+                <div class="quarto-category">microprocessador</div>
+                <div class="quarto-category">microcontrolador</div>
+                <div class="quarto-category">PIC</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Autor/a</div>
+      <div class="quarto-title-meta-contents">
+               <p>Fèlix </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Publicat</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">22 d’octubre de 2010</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En aquesta pàgina</h2>
+   
+  <ul>
+  <li><a href="#el-led" id="toc-el-led" class="nav-link active" data-scroll-target="#el-led">El LED</a></li>
+  <li><a href="#la-barra-de-leds" id="toc-la-barra-de-leds" class="nav-link" data-scroll-target="#la-barra-de-leds">La barra de LEDs</a></li>
+  <li><a href="#el-led-a-través-de-transistor" id="toc-el-led-a-través-de-transistor" class="nav-link" data-scroll-target="#el-led-a-través-de-transistor">El LED a través de transistor</a></li>
+  <li><a href="#el-relé" id="toc-el-relé" class="nav-link" data-scroll-target="#el-relé">El relé</a></li>
+  <li><a href="#els-leds-multiplexats" id="toc-els-leds-multiplexats" class="nav-link" data-scroll-target="#els-leds-multiplexats">Els LEDs multiplexats</a></li>
+  <li><a href="#un-a-un" id="toc-un-a-un" class="nav-link" data-scroll-target="#un-a-un">Un a un</a></li>
+  <li><a href="#en-agrupacions" id="toc-en-agrupacions" class="nav-link" data-scroll-target="#en-agrupacions">En agrupacions</a></li>
+  <li><a href="#leds-i-registres" id="toc-leds-i-registres" class="nav-link" data-scroll-target="#leds-i-registres">LEDs i registres</a></li>
+  <li><a href="#la-tècnica-del-charlieplexing" id="toc-la-tècnica-del-charlieplexing" class="nav-link" data-scroll-target="#la-tècnica-del-charlieplexing">La tècnica del <em>charlieplexing</em></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p><img src="images/featured.jpg" class="img-fluid"></p>
+<section id="el-led" class="level2">
+<h2 class="anchored" data-anchor-id="el-led">El LED</h2>
+<p>Sense entrar en consideracions físiques o electròniques sobre el silici i els diferents dopants que fan possible l’existència dels LEDs, tots sabem que n’existeixen de diferents mides i colors. Podem trobar actualment fins i tot aquells que tenen la possibilitat de mostrar-nos més d’un color (bi-color, tri-color), o fins i tot els LEDs RGB, que permeten la construcció de qualsevol color activant independentment cadascun dels tres colors bàsics (vermell, verd i blau) a diferents nivells d’intensitat.</p>
+<p>Per al nostre estudi inicial considerarem només els LEDs d’un sol color, els tradicionals. Pensi’s, per tant, en el típic LED de color vermell, de 5mm de diàmetre.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Diode_LED_Vermell.png" class="centered img-fluid figure-img"></p>
+<figcaption>LED vermell de 5mm</figcaption>
+</figure>
+</div>
+<p>Aquests LEDs tenen, com a característica principal, que amb només 10mA de corrent al seu través i un mínim d’entre 1.7V i 2.2V entre els seus terminals, ja donen prou llum com per a considerar-los plenament encesos.</p>
+<p>Per tant, el mecanisme de càlcul és senzill:</p>
+<ul>
+<li>Hem d’assegurar-nos que la tensió disponible és superior als 1.7V – 2.2V</li>
+<li>La intensitat de llum generada és proporcional al corrent que passa al seu través</li>
+<li>Si tenim més de 1.7V – 2.2V, hem de col·locar una resistència limitadora que es quedi amb la resta de tensió; aprofitant-la, de retruc, per a fixar el corrent que passarà a través del LED</li>
+</ul>
+<p>Amb tot el que s’ha dit, assumeixi’s el circuit de la figura següent:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/circuit_led_senzill.png" class="img-fluid figure-img"></p>
+<figcaption>Circuit senzill amb LED</figcaption>
+</figure>
+</div>
+<p>En aquesta simulació de Proteus pot veure’s com, amb una alimentació de 5V, una resistència de 220Ω fa que el corrent que passa a través del LED sigui d’aproximadament 14mA. En la majoria de casos, aquest nivell de brillantor és més que suficient.</p>
+<p>El càlcul involucrat és el següent:</p>
+<ul>
+<li>Suposem que volem encendre el LED amb 15mA de corrent (nivell de llum intens, però no extrem)</li>
+<li>Considerem que el LED treballa a 1.7V</li>
+</ul>
+<p>Aleshores,</p>
+<p><span class="math display">\[  R=\frac{5-1.7}{0.015}=220\Omega \]</span></p>
+<p>Així es fa per trobar la resistència adequada per a cada cas de tensió i corrent desitjats.</p>
+<p>El valor més habitual de resistència limitadora és de 220Ω o 330Ω, per a una alimentació a 5V. A vegades 470Ω per a il·luminació suau:</p>
+<ul>
+<li>Amb R=220Ω: <span class="math display">\[I=\frac{5-1.7}{220}=15\textrm{mA}\]</span></li>
+<li>Amb R=330Ω: <span class="math display">\[I=\frac{5-1.7}{330}=10\textrm{mA}\]</span></li>
+<li>Amb R=470Ω: <span class="math display">\[I=\frac{5-1.7}{470}=7\textrm{mA}\]</span></li>
+</ul>
+<p>També podem posar el LED a la part superior, i deixar la resistència a sota. És a dir, intercanviant els papers de resistència i LED.</p>
+<p>Els circuits de lògica digital, els microprocessadors i altres components d’altes prestacions, lliuren un “0” o un “1” lògics, que queden codificats amb una tensió baixa i una tensió alta, respectivament.</p>
+<p>Podem aprofitar el cas de sortida “1” per encendre un LED, connectant-lo al zero a través d’una resistència, com abans. Si el terminal treu un “0”, el LED romandrà apagat.</p>
+<p>Però també podem aprofitar el cas de sortida a “0” per a encendre el LED, ara connectant-lo a través d’una resistència al positiu de l’alimentació. El terminal treurà un “0” lògic, que serà una tensió baixa, i el LED s’encendrà. Si el terminal treu un “1”, el LED romandrà apagat.</p>
+<p>Els valors concrets amb què això succeeix poden variar, considerant que el nivell mínim d’operació d’un transistor és de 0.6V. Això comporta que, habitualment, el “0” queda codificat amb un nivell baix de 0.6V aproximadament; mentre que el “1”, nivell alt, és d’uns 4V.</p>
+<p>Això permet que, de fet, els circuits lògics podem actuar directament sobre un LED, sempre i quan el circuit integrat determinat tingui prou corrent disponible a les seves sortides. Això <strong>sempre</strong> s’ha de comprovar prèviament, perquè podria fer malbé el dispositiu, sobretot en el cas de microprocessadors d’alta capacitat quant a càlcul i velocitats.</p>
+<p>Els paràmetres per a aquesta comprovació són:</p>
+<ul>
+<li>El corrent màxim permès per terminal de sortida, considerant el corrent sortint (LED encès amb “1” lògic). Normalment anomenat <span class="math inline">\(I_{OH,max}\)</span>, o sota la terminologia “<em>Max. current (source)</em>”</li>
+<li>El corrent màxim permès per terminal de sortida, considerant el corrent entrant (LED encès amb “0” lògic). Normalment anomenat <span class="math inline">\(I_{OL,max}\)</span>, o sota la terminologia “<em>Max. current (sink)</em>”</li>
+<li>El màxim de corrent sortint global de tot el dispositiu (la suma de tots els corrents sortints de tots els terminals): Alguns dispositius tenen un màxim global per qüestions de dissipació de calor</li>
+<li>El màxim de corrent entrant global de tot el dispositiu (la suma de tots els corrents entrants de tots els terminals)</li>
+</ul>
+<p>No obstant això, la majoria de circuits integrats permetran els 10mA necessaris per a il·luminar un LED en algun terminal de sortida. I, de fet, uns quants LEDs situats en diferents terminals. Observi’s la figura següent:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/circuit_led_complex.png" class="img-fluid figure-img"></p>
+<figcaption>Circuit amb diversos LEDs</figcaption>
+</figure>
+</div>
+<p>En aquest cas s’ha considerat que, si el microprocessador lliura un “1” lògic per un terminal determinat dels utilitzats (<code>RA0</code>, <code>RA1</code>, <code>RA2</code> o <code>RA3</code>), aleshores el LED corresponent s’encendrà.</p>
+<p>Podem commutar la polaritat dels LEDs i connectar al positiu, redreçant el circuit tal i com es mostra a la figura següent:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/circuit_led_complex_neg.png" class="img-fluid figure-img"></p>
+<figcaption>Circuit amb diversos LEDs, per a nivell baix</figcaption>
+</figure>
+</div>
+<p>En aquest cas, per encendre un LED s’haurà de treure un “0” lògic pel terminal corresponent.</p>
+</section>
+<section id="la-barra-de-leds" class="level2">
+<h2 class="anchored" data-anchor-id="la-barra-de-leds">La barra de LEDs</h2>
+<p>Als circuits on es necessiti un nombre elevat de LEDs, o si volem construir un indicador de nivell amb LEDs (un termòmetre, per exemple), podem fer servir les barres de LEDs.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/array_leds.png" class="img-fluid figure-img"></p>
+<figcaption>Array de LEDs</figcaption>
+</figure>
+</div>
+<p>Aquests elements disposen d’un determinat nombre de LEDs en un encapsulat únic (típicament 10), cosa que millora el disseny del circuit físic, permetent reduir la seva mida.</p>
+<p>Típicament poden trobar-se de colors vermell o verd en configuracions de 10 LEDs.</p>
+<p>El tipus d’encapsulat (<em>footprint</em>) és el mateix que el d’un circuit integrat de 20 terminals (10 a cada banda), si és un <em>array</em> de 10 LEDs. Per tant, podria col·locar-se amb un sòcol DIL20.</p>
+<p>En aquest punt és interessant notar l’existència dels <em>arrays</em> de resistències fixes; que, a diferència de la barra de LEDs, en aquest cas es disposa d’un dels dos terminals de les resistències en forma compartida.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/array_resistencies.png" class="img-fluid figure-img"></p>
+<figcaption>Array de resistències fixes</figcaption>
+</figure>
+</div>
+<p>Aquests grups de resistències, combinats amb els <em>arrays</em> de LEDs, permeten una reducció molt important de l’espai necessari per als senyalitzadors del nostre circuit.</p>
+<p>Quant a les consideracions tècniques referents a tensions i corrents, els paràmetres dels <em>arrays</em> de LEDs solen ser semblants als dels LEDs individuals; de manera que requerirem, novament, resistències limitadores de corrent de valors similars als anteriors.</p>
+<p>Les caigudes de tensió necessàries per a fer-los funcionar són les habituals, d’entre 1.7V i 2.2V, segons el tipus de LED que contenen (sobretot depenent del color, perquè els verds normalment requereixen una tensió més alta que els vermells).</p>
+<p>La figura següent mostra un circuit de microprocessador amb una barra de LEDs i <em>array</em> de resistències.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/circuit_barra_leds.png" class="img-fluid figure-img"></p>
+<figcaption>Circuit amb barra de LEDs</figcaption>
+</figure>
+</div>
+<p>La figura següent mostra com queda una placa de circuit imprès fent servir aquests elements.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/barra_leds_3d.png" class="img-fluid figure-img"></p>
+<figcaption>Aprofitament de l’espai amb barres de LED</figcaption>
+</figure>
+</div>
+</section>
+<section id="el-led-a-través-de-transistor" class="level2">
+<h2 class="anchored" data-anchor-id="el-led-a-través-de-transistor">El LED a través de transistor</h2>
+<p>No tots els dispositius electrònics són capaços d’oferir a les seves sortides una intensitat de corrent sortint o entrant elevats. Existeix el cas de dispositius que gairebé no arriben als pocs mil·liampers i que, per tant, són incapaços d’alimentar adequadament LEDs i altres dispositius senyalitzadors de sortida.</p>
+<p>També pot donar-se el cas que la suma de tots els corrents generats o absorbits pels diferents terminals del circuit integrat en qüestió és superior al límit recomanat pel fabricant, sobretot relacionant-ho amb la dissipació de potència en el seu interior i el perill que això comporta sobre la longevitat del C.I. mateix.</p>
+<p>La solució que sempre tenim disponible és cedir la responsabilitat d’oferir corrent a un altre dispositiu. I el cas més senzill és el simple transistor BJT, ja sigui en configuració NPN com PNP.</p>
+<p>Com sabem, un transistor BJT presenta un factor de guany en corrent que segueix l’expressió:</p>
+<p><span class="math display">\[I_C=\beta_F\cdot I_B\]</span></p>
+<p>El paràmetre de guany de col·lector, <span class="math inline">\(\beta_F\)</span> es pot trobar també escrit com a <span class="math inline">\(h_{fe}\)</span>, corresponent al mateix paràmetre en tots dos casos.</p>
+<p>Així doncs, en termes generals, el que ens interessa és aplicar el transistor de manera que el corrent de col·lector sigui el necessari per a fer funcionar el dispositiu que hi posem; i a la vegada, fer que el mateix transistor es quedi amb el mínim potencial aplicat entre col·lector i emissor, de manera que la seva dissipació d’energia sigui la mínima possible. A aquest punt de treball dels transistors se l’anomena <strong>saturació</strong>.</p>
+<p>De manera similar, quan el transistor no ha de conduir, ha de quedar-se amb tot el potencial disponible, fent que el corrent sigui exactament zero. A aquest punt de treball dels transistors se l’anomena <strong>tall</strong>.</p>
+<p>Commutar a un transistor de tall a saturació serà possible amb configuracions com les mostrades aquí:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/configuracions_transistor.png" class="img-fluid figure-img"></p>
+<figcaption>Configuracions amb transistor NPN(esquerra) i PNP(dreta)</figcaption>
+</figure>
+</div>
+<p>Quant als càlculs necessaris per a ajustar les resistències que hi són presents, prendrem el cas NPN (el PNP és exactament igual, canviant “1” per “0” i viceversa).</p>
+<p>En primer lloc volem que quan el transistor estigui en tall, aquest no provoqui el pas de corrent. Això ja ho aconsegueix la configuració mostrada.</p>
+<p>En segon lloc, volem que quan el transistor condueixi (activem el LED des de l’entrada aplicant un “1” a la resistència del terminal de base del transistor), aleshores ho faci en saturació. La saturació consisteix en una mínima caiguda de potencial entre col·lector i emissor. El valor habitual és de 0.2V.</p>
+<p>Si el circuit està en saturació, quedaran disponibles per al LED i la resistència de col·lector un total de: <span class="math display">\[5V-0.2V=4.8V\]</span></p>
+<p>(Estem considerant una alimentació de 5V).</p>
+<p>De la mateixa manera, el LED mateix necessitarà 1.7V per encendre’s, de manera que la caiguda de potencial desitjat a la resistència quedarà reduïda a:</p>
+<p><span class="math display">\[ 4.8V-1.7V=3.1V \]</span></p>
+<p>Si volem que el LED s’encengui amb uns 15mA de corrent (lluminositat mitja-alta), aleshores necessitem una resistència de col·lector de:</p>
+<p><span class="math display">\[R_C=\frac{3.1}{0.015}=206.\widehat{6}\approx 220\Omega\]</span></p>
+<p>Per tant, el corrent real que en resultarà serà de:</p>
+<p><span class="math display">\[I_C=\frac{3.1}{220}=0.0141=14.1mA\]</span></p>
+<p>Si treballem amb un transistor NPN de guany <span class="math inline">\(h_{fe}=100\)</span> (els transistors presenten guanys com aquest o superiors), aleshores el corrent de base que ha d’existir serà de:</p>
+<p><span class="math display">\[I_B=\frac{I_C}{h_{fe}}=\frac{0.0141}{100}=0.000141=0.141mA\]</span></p>
+<p>En la base del transistor, aquest sempre es quedarà amb una tensió de 0.7V per l’efecte díode present entre base i emissor. Així doncs, la resistència de la base presentarà una caiguda de tensió de</p>
+<p><span class="math display">\[5V-0.7V=4.3V\]</span></p>
+<p>(Considerant que el “1” sigui exactament 5V).</p>
+<p>Així doncs, sabem corrent i tensió i, aplicant llei d’Ohm, podem trobar la resistència de base necessària:</p>
+<p><span class="math display">\[R_B=\frac{4.3}{0.000141}=30496.45 \approx 27k\Omega\]</span></p>
+<p>Observi’s que hem arrodonit cap avall. Això és perquè la saturació s’aconsegueix amb valors més baixos de resistència, no més elevats. Si els dispositius presenten derives dels seus paràmetres, anirem més segurs si utilitzem una resistència més baixa.</p>
+<p>Els paràmetres que fan que aquests càlculs no siguin precisos són:</p>
+<ul>
+<li>La tensió base-emissor no és constant de 0.7V</li>
+<li>La tensió que necessita el LED per encendre’s no és sempre 1.7V</li>
+<li>La <span class="math inline">\(h_{fe}\)</span> no és independent de la tensió aplicada i presenta una tolerància elevada</li>
+</ul>
+<p>Per tot això, cal fer un arrodoniment de la resistència de base, <span class="math inline">\(R_B\)</span>, cap avall; i així assegurar-nos que s’assoleix saturació o s’està molt aprop.</p>
+<p>Si s’observa la característica tècnica d’un transistor real, com el BC547, s’observarà que la seva <span class="math inline">\(h_{fe}\)</span> pot oscil·lar entre 110 i 800!!! Si considerem <span class="math inline">\(h_{fe}\)</span> de 110, la resistència de base hauria de ser de 33kΩ, mentre que si considerem que <span class="math inline">\(h_{fe}\)</span> és 800, la resistència de base hauria de pujar als 240kΩ. Evidentment ens quedaríem amb el cas més baix, el de 33kΩ.</p>
+<p>A més, pensi’s que 0.2V entre col·lector i emissor, amb 20mA de corrent, provoquen una dissipació de potència de 4mW. Si ens equivoquem i cauen entre col·lector i emissor més Volts per no trobar-se en saturació, estarem provocant una dissipació de potència molt major, que podria superar el màxim permès pel dispositiu concret triat. Això és molt important en muntatge miniatura superficial (transistors SMD).</p>
+</section>
+<section id="el-relé" class="level2">
+<h2 class="anchored" data-anchor-id="el-relé">El relé</h2>
+<p>Un relé és un dispositiu electrònic-mecànic que fa d’interruptor control·lat. Si passa corrent a través de la seva bobina en quantitat suficient, és capaç de tancar un contacte mecànic que activa un altre circuit, totalment independent elèctricament del primer.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/rele.png" class="img-fluid figure-img"></p>
+<figcaption>Un relé convencional</figcaption>
+</figure>
+</div>
+<p>Així doncs, amb relés, podem controlar motors de 24V, bombetes de 220V i altres mecanismes simplement des d’un senyal digital tipus “0”/“1” lògic.</p>
+<p>Malauradament, un circuit electrònic digital no pot comandar de manera directa la bobina del relé; i necessitem, forçosament, d’un transistor per a proporcionar el corrent requerit.</p>
+<p>Com que un relé consta d’una bobina, i aquesta bobina ha de ser capaç de moure el mecanisme del contacte mecànic. Això vol dir que la resistència equivalent de la bobina és d’uns pocs Ohms. A més, la bobina ha de ser alimentat a una tensió que dependrà del model concret de relé que es triï.</p>
+<p>Així doncs, podem trobar relés de 12V amb una bobina que presenta una resistència equivalent de 240Ω, per exemple.</p>
+<p>Un circuit per a condicionar la sortida digital d’algun circuit electrònic i alimentar adequadament un relé pot ser com el mostrat a la figura següent (de fet, podria construir-se l’equivalent amb transistor PNP)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/circuit_rele.png" class="img-fluid figure-img"></p>
+<figcaption>Circuit de control d’un relé</figcaption>
+</figure>
+</div>
+<p>En aquest cas hem de calcular la resistència de base necessària per a fer funcionar el relé, minimitzant la caiguda de tensió entre col·lector i emissor del transistor.</p>
+<p>A continuació es mostren els càlculs per a un relé de 12V, 240Ω, amb transistor BC547.</p>
+<p>Si el transistor ha d’estar en saturació, aleshores el corrent de col·lector ha de ser:</p>
+<p><span class="math display">\[I_C=\frac{12-0.2}{240}=0.04917=49.17mA\]</span></p>
+<p>Assumint una <span class="math inline">\(h_{fe}\)</span> del transistor de 100, aleshores el corrent de base haurà de ser:</p>
+<p><span class="math display">\[I_B=\frac{I_C}{h_{fe}}=0.04917/100=0.0004917 = 0.4917mA\]</span></p>
+<p>Com que en el terminal de base el senyal digital considerem que és de 5V per a codificar un “1” lògic, aleshores, tenint present la caiguda de 0.7V a la base del transistor, tindrem:</p>
+<p><span class="math display">\[R_C=\frac{5-0.7}{0.0004917}=8745.17\approx 8k2\Omega\]</span></p>
+<p>Això vol dir que necessitarem una resistència a la base del transistor d’uns 8k2Ω.</p>
+<p>Evidentment, succeeix el que es comentava amb els LEDs: els transistors presenten guanys no constants, de la mateixa manera que els 0.7V de base són un valor mitjà.</p>
+<p>També s’haurà observat el díode col·locat en polarització inversa en paral·lel amb el relé. Aquest díode és imprescindible perquè protegeix el transistor i l’alimentació dels pics provocats per la commutació de la bobina del relé. No oblidem que es tracta d’una bobina i el seu efecte sobre el circuit pot ser destructiu des del punt de vista de contaminar els senyals. El díode anul·la aquests espuris, protegint transistor, circuits lògics i alimentació global.</p>
+</section>
+<section id="els-leds-multiplexats" class="level2">
+<h2 class="anchored" data-anchor-id="els-leds-multiplexats">Els LEDs multiplexats</h2>
+<p>En un circuit complex, amb molts LEDs que puguin estar encesos a la vegada, ens podem trobar amb la limitació que el consum global de tots els LEDs és excessiu, o pot arribar a ser-ho en cas que tots ells s’encenguin. Això provoca que el circuit que els ha d’alimentar hagi d’estar preparat per a suportar una dissipació de potència elevada.</p>
+<p>No obstant això, els LEDs són indicadors per a l’ull humà, i aquest últim presenta una limitació que ens afavoreix, i és que si un LED està encenent-se i apagant-se a una freqüència superior als 50Hz, l’ull considera que està permanentment encès. A això se li diu “<strong>persistència de la visió</strong>”, i és un fenomen conegut i estudiat en extrem.</p>
+<p>Podem aprofitar aquest fet, de manera que només un o uns pocs LEDs estiguin encesos a la vegada i la resta apagats, i fer un recorregut per tots els LEDs, de manera que la freqüència total (corresponent al recorregut per tots els LEDs) sigui superior a aquests 50Hz.</p>
+</section>
+<section id="un-a-un" class="level2">
+<h2 class="anchored" data-anchor-id="un-a-un">Un a un</h2>
+<p>Un circuit que podria explotar la característica esmentada fins ara, de manera individual per a cada LED, seria el de la figura següent:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/circuit_16leds.png" class="img-fluid figure-img"></p>
+<figcaption>Un circuit amb 16 LEDs</figcaption>
+</figure>
+</div>
+<p>Considerant els 16 LEDs del circuit mostrat anteriorment, podríem fer el cronograma corresponent a la representació de la combinació “<code>1110 1011 1001 1011</code>”, on el bit mostrat primer és el del LED numerat <code>D1</code>; i on “1” representa “LED encès”, perquè en el circuit s’encén el LED per nivell baix. Això és mostrat a la figura següent:</p>
+<!--
+\pspicture(12,8)
+%\psgrid[gridcolor=orange,subgridcolor=yellow]
+\multido{\na=0.25+0.50,\nb=16+-1}{16}{\rput(0.5,\na){D\nb} \rput(1.3,\na){\ldots} \rput(11.2,\na){\ldots}}
+\psline(1.5,7.9)(1.5,7.6)(2.0,7.6)(2.0,7.9)(9.5,7.9)(9.5,7.6)(10.0,7.6)(10.0,7.9)(11.0,7.9)
+\psline(1.5,7.4)(2.0,7.4)(2.0,7.1)(2.5,7.1)(2.5,7.4)(10.0,7.4)(10.0,7.1)(10.5,7.1)(10.5,7.4)(11.0,7.4)
+\psline(1.5,6.9)(2.5,6.9)(2.5,6.6)(3.0,6.6)(3.0,6.9)(10.5,6.9)(10.5,6.6)(11.0,6.6)(11.0,6.9)
+\psline(1.5,6.4)(11.0,6.4)
+\psline(1.5,5.9)(3.5,5.9)(3.5,5.6)(4.0,5.6)(4.0,5.9)(11.0,5.9)
+\psline(1.5,5.4)(11.0,5.4)
+\psline(1.5,4.9)(4.5,4.9)(4.5,4.6)(5.0,4.6)(5.0,4.9)(11.0,4.9)
+\psline(1.5,4.4)(5.0,4.4)(5.0,4.1)(5.5,4.1)(5.5,4.4)(11.0,4.4)
+\psline(1.5,3.9)(5.5,3.9)(5.5,3.6)(6.0,3.6)(6.0,3.9)(11.0,3.9)
+\psline(1.5,3.4)(11.0,3.4)
+\psline(1.5,2.9)(11.0,2.9)
+\psline(1.5,2.4)(7.0,2.4)(7.0,2.1)(7.5,2.1)(7.5,2.4)(11.0,2.4)
+\psline(1.5,1.9)(7.5,1.9)(7.5,1.6)(8.0,1.6)(8.0,1.9)(11.0,1.9)
+\psline(1.5,1.4)(11.0,1.4)
+\psline(1.5,0.9)(8.5,0.9)(8.5,0.6)(9.0,0.6)(9.0,0.9)(11.0,0.9)
+\psline(1.5,0.4)(9.0,0.4)(9.0,0.1)(9.5,0.1)(9.5,0.4)(11.0,0.4)
+\psline[linestyle=dashed](1.5,0)(1.5,8)
+\psline[linestyle=dashed](9.5,0)(9.5,8)
+\endpspicture
+-->
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/crono_16leds.png" class="img-fluid figure-img"></p>
+<figcaption>Cronograma de 16 LEDs multiplexats mostrant “1110 1011 1001 1011”</figcaption>
+</figure>
+</div>
+<p>La contrapartida és que, com cada LED individual estarà apagat durant un temps (el temps que s’estigui tractant la resta de LEDs), aquest presentarà una nivell de lluminositat més baix. En funció de la relació entre el temps encès i el temps apagat, tindrem un nivell de llum efectiu determinat.</p>
+<p>Podem veure això també com un “<em>duty cicle</em>” si mirem el senyal que afecta a cada LED.</p>
+<p>Si observem el LED <code>D1</code>, aquest estarà encès (si ho ha d’estar) només 1/16 del temps. Això vol dir que el <strong>nivell de lluminositat efectiva</strong> (en mitjana) és una setzena part de la que presentaria si estigués alimentat contínuament durant tot el temps. Passarà el mateix amb qualsevol altre LED que hagi de mostrar-se encès.</p>
+<p>Aquesta reducció de lluminositat efectiva del LED pot contrarestar-se reduint la resistència limitadora del LED. En comptes de 220Ω, podríem posar una resistència 16 vegades menor (uns 13.75Ω) o, fins i tot, traient les resistències limitadores!</p>
+<p>I és que en alguns circuits, on la reducció de lluminositat efectiva és molt gran, s’eliminen les resistències limitadores i es treballa sota el supòsit que el mateix dispositiu de sortida digital tindrà algun tipus de limitació de corrent sortint. Per exemple, que limiti a 50mA per terminal. Aleshores, el LED s’encendrà durant 1/16 del temps a un nivell de lluminositat de 50mA, cosa que equivaldria a un nivell de lluminositat efectiu d’uns 3.125mA.</p>
+</section>
+<section id="en-agrupacions" class="level2">
+<h2 class="anchored" data-anchor-id="en-agrupacions">En agrupacions</h2>
+<p>Com que una reducció de 1/16 pot ser massa forta en alguns LEDs de poca lluminositat, es pot optar per agrupar els LEDs en grups d’unes poques unitats.</p>
+<p>Suposem que triem una mida de grup de 4. Aleshores els LEDs s’encendran de 4 en 4 i, globalment el temps de cicle és reduirà en una quarta part. El nivell de lluminositat efectiu serà doncs de només 1/4.</p>
+<p>Per fer això hem de controlar quin grup de LEDs pot estar encès o no, i per tant necessitem que l’alimentació ja no sigui directament la de la font d’alimentació. Requerim ara un transistor controlat per un terminal que alimenti al grup individual que s’ha d’encendre.</p>
+<p>La figura següent mostra una possible solució a l’esmentat aquí.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/multiplex4x4.png" class="img-fluid figure-img"></p>
+<figcaption>Circuit multiplexat amb grups de 4 LEDs</figcaption>
+</figure>
+</div>
+<p>Si s’observa aquest disseny, individualment cada LED està controlat per dos terminals del microprocessador: El terminal de grup (per exemple, <code>G2</code>), i el terminal de LED dins del grup (per exemple, <code>L3</code>). Així doncs, per a encendre un LED determinat hem de donar tensió baixa (un “0”) als dos terminals que adrecen el LED concret.</p>
+<p>El motiu del transistor és el de seleccionar el grup que volem adreçar, activant el grup amb un “0” en el terminal de control apropiat; mantenint a “1” la resta, evidentment.</p>
+<p>Amb un grup activat, podem seleccionar la combinació de LEDs d’aquell grup que volem encendre, posant a nivell baix els terminals corresponents <code>L1</code>, <code>L2</code>, <code>L3</code> i <code>L4</code>. Això permet activar els quatre LEDs simultàniament si es desitgés.</p>
+<p>La figura següent mostra com s’encendrien els 16 LEDs en aquesta disposició per a mostrar la combinació de “<code>1110 1011 1001 1011</code>”. De nou, un “1” indica “LED encès”. Això en aquest circuit es tradueix en una combinació determinada de nivells baixos en els terminals de selecció de grup i LED individual.</p>
+<!--
+\pspicture(11.5,4)
+%\psgrid[gridcolor=orange,subgridcolor=yellow]
+\multido{\na=0.25+0.50,\nb=4+-1}{4}{\rput(0.5,\na){L\nb}}
+\multido{\na=2.25+0.50,\nb=4+-1}{4}{\rput(0.5,\na){G\nb}}
+\multido{\na=0.25+0.50,\nb=4+-1}{8}{\rput(1.3,\na){\ldots} \rput(10.7,\na){\ldots}}
+\psline(1.5,3.9)(1.5,3.9)(1.5,3.6)(2.5,3.6)(2.5,3.9)(5.5,3.9)(5.5,3.6)(6.5,3.6)(6.5,3.9)(9.5,3.9)(9.5,3.6)(10.5,3.6)(10.5,3.9)
+\psline(1.5,3.4)(2.5,3.4)(2.5,3.1)(3.5,3.1)(3.5,3.4)(6.5,3.4)(6.5,3.1)(7.5,3.1)(7.5,3.4)(10.5,3.4)
+\psline(1.5,2.9)(3.5,2.9)(3.5,2.6)(4.5,2.6)(4.5,2.9)(7.5,2.9)(7.5,2.6)(8.5,2.6)(8.5,2.9)(10.5,2.9)
+\psline(1.5,2.4)(4.5,2.4)(4.5,2.1)(5.5,2.1)(5.5,2.4)(8.5,2.4)(8.5,2.1)(9.5,2.1)(9.5,2.4)(10.5,2.4)
+
+\psline(1.5,1.6)(10.5,1.6)
+\psline(1.5,1.4)(1.5,1.1)(2.5,1.1)(2.5,1.4)(5.5,1.4)(5.5,1.1)(6.5,1.1)(6.5,1.4)(9.5,1.4)(9.5,1.1)(10.5,1.1)(10.5,1.4)
+\psline(1.5,0.9)(1.5,0.6)(3.5,0.6)(3.5,0.9)(4.5,0.9)(4.5,0.6)(4.5,0.6)(7.5,0.6)(7.5,0.9)(8.5,0.9)(8.5,0.6)(10.5,0.6)
+\psline(1.5,0.4)(2.5,0.4)(2.5,0.1)(5.5,0.1)(5.5,0.4)(6.5,0.4)(6.5,0.1)(9.5,0.1)(9.5,0.4)(10.5,0.4)(10.5,0.1)
+\psline[linestyle=dashed](1.5,0)(1.5,4)
+\psline[linestyle=dotted](2.5,0)(2.5,4)
+\psline[linestyle=dotted](3.5,0)(3.5,4)
+\psline[linestyle=dotted](4.5,0)(4.5,4)
+\psline[linestyle=dashed](5.5,0)(5.5,4)
+\psline[linestyle=dotted](6.5,0)(6.5,4)
+\psline[linestyle=dotted](7.5,0)(7.5,4)
+\psline[linestyle=dotted](8.5,0)(8.5,4)
+\psline[linestyle=dashed](9.5,0)(9.5,4)
+\endpspicture
+-->
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/crono_16leds_grups4.png" class="img-fluid figure-img"></p>
+<figcaption>Cronograma de 16 LEDs multiplexats en grups de 4 mostrant “1110 1011 1001 1011”</figcaption>
+</figure>
+</div>
+<p>Lògicament el corrent que passa per cada transistor variarà en funció de la combinació de LEDs que s’encenen, des de cap LED (0mA) fins a 4 LEDs (4 vegades la intensitat que defineixen les resistències limitadores).</p>
+<p>En aquest cas concret, amb els dispositius mostrats, el corrent que passa per cada LED, quan s’encén, és d’uns 15mA, aproximadament.</p>
+<p>El corrent, en termes reals, variarà en funció de la combinació, però d’una manera lleugera (1mA de diferència entre 1 LED i 4 LEDs, per al cas mostrat).</p>
+<p>A més, el microprocessador hauria de ser capaç de donar individualment els 15mA per cadascun dels 4 terminals que adrecen els LEDs, i uns 1.5mA per al terminal d’activació de grup. A més, no s’ha de superar el límit global amb el corrent total, que en aquest cas seria de 4 vegades 15mA més els 1.5mA, és a dir, uns 62mA.</p>
+</section>
+<section id="leds-i-registres" class="level2">
+<h2 class="anchored" data-anchor-id="leds-i-registres">LEDs i registres</h2>
+<p>Una manera de reduir el consum de corrent del microprocessador i traspassar-lo a algun altre dispositiu podria ser tenir registres lògics que emmagatzemin la seqüència de LEDs que s’ha de mostrar. Podríem fer una construcció com la mostrada a la figura aquí:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/circuit_16leds_registres.png" class="img-fluid figure-img"></p>
+<figcaption>Circuit amb 16 LEDs a través de registres</figcaption>
+</figure>
+</div>
+<p>Es pot observar que la càrrega dels registres fa que en el microprocessador només fem servir 3 terminals: Un per a la dada, un altre per al rellotge, i un altre per a controlar el <em>reset</em> dels registres.</p>
+<p>Els registres, per la seva part, estan encadenats en cascada. La sortida de major pes (<code>Q7</code>) del primer element (<code>U1</code>) està disposada com a entrada de dades del següent element de registre (<code>U2</code>).</p>
+<p>També és important notar que en aquest sistema tots els LEDs poden estar il·luminats. Això provocaria un elevat consum que, potser, el circuit integrat de registres no podria tolerar. Pensem que 8 LEDs a 20mA genera un consum total de 160mA…</p>
+<p>Per evitar aquest problema podem triar un circuit integrat que faci la funció de “<em>driver</em>” de corrent. Aquest es veu en la forma de <code>U4</code> i <code>U5</code> en el circuit de la figura anterior, i és el circuit integrat ULN2803. Aquest circuit consta de 8 transistors NPN en configuració Darlington i és ideal per a aquest tipus de configuracions.</p>
+<p>El circuit integrat ULN2803 serà l’encarregat de lliurar als LEDs tot el corrent que demanin, i tot segons el senyal lògic present als terminals d’entrada (que són les sortides del registre de desplaçament).</p>
+<p>La figura següent mostra el cronograma associat a aquest circuit per a mostrar la seqüència binària “<code>1110 1011 1001 1011</code>”.</p>
+<!--
+\pspicture(11.5,1.5)
+%\psgrid[gridcolor=orange,subgridcolor=yellow]
+\rput(0.5,0.25){CLR} \rput(1.3,0.25){\ldots} \rput(10.7,0.25){\ldots}
+\rput(0.5,0.75){CLK} \rput(1.3,0.75){\ldots} \rput(10.7,0.75){\ldots}
+\rput(0.5,1.25){DATA} \rput(1.3,1.25){\ldots} \rput(10.7,1.25){\ldots}
+\multido{\na=1.5+0.5,\nb=1.75+0.50,\nc=2.0+0.5}{18}{\psline(\na,0.6)(\nb,0.6)(\nb,0.9)(\nc,0.9)(\nc,0.6)}
+
+\psline(1.5,1.4)(1.5,1.1)(2.5,1.1)(2.5,1.4)(3,1.4)(3,1.1)(4,1.1)(4,1.4)(5,1.4)(5,1.1)(6.5,1.1)(6.5,1.4)(7,1.4)(7,1.1)(7.5,1.1)(7.5,1.4)(8,1.4)(8,1.1)(10.5,1.1)
+\psline(1.5,0.4)(1.5,0.1)(1.6,0.1)(1.6,0.4)(9.5,0.4)(9.5,0.1)(9.6,0.1)(9.6,0.4)(10.5,0.4)
+\psline[linestyle=dashed](1.5,0)(1.5,1.5)
+\multido{\na=1.5+0.5}{19}{\psline[linestyle=dotted](\na,0)(\na,1.5)}
+\psline[linestyle=dashed](9.5,0)(9.5,1.5)
+\endpspicture
+-->
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/crono_16leds_drivers.png" class="img-fluid figure-img"></p>
+<figcaption>Cronograma de 16 LEDs amb registres i drivers mostrant “1110 1011 1001 1011”</figcaption>
+</figure>
+</div>
+<p>Noti’s que el CLR és enviat a l’inici de cada bloc d’actualització, però que en realitat seria millor no fer-lo servir. En aquest cas el registre de desplaçament 74164 fa el <em>reset</em> amb zeros; i això provocaria que, durant un breu període de temps, tots els LEDs estarien encesos.</p>
+<p>Podríem invertir aquesta situació fent que els LEDs s’encenguessin per “1”, disposant el terminal comú del <em>pack</em> de resistències a GND, i canviant la polaritat dels LEDs. Malauradament, això és impracticable si volem fer servir el circuit integrat ULN2803, perquè es tracta d’un grup de 8 Darlington tipus NPN. Hauríem de substituir-lo també per un circuit integrat Darlington però de tipus PNP.</p>
+</section>
+<section id="la-tècnica-del-charlieplexing" class="level2">
+<h2 class="anchored" data-anchor-id="la-tècnica-del-charlieplexing">La tècnica del <em>charlieplexing</em></h2>
+<p>En el cas de sistemes amb una quantitat de terminals reduït, on la mida del circuit és important, podem optar per tècniques addicionals que milloren tot això.</p>
+<p>Fins ara s’ha vist que:</p>
+<ul>
+<li>Fer servir <strong>multiplexació</strong> presenta un important avantatge: La quantitat de terminals utilitzats es redueix enormement, però no a un extrem mínim.</li>
+<li>Sí és mínim, si fem servir <strong>registres</strong>; però el consum és constant i força elevat amb, en algun cas, tots els LEDs encesos a la vegada.</li>
+<li>La multiplexació redueix l’<strong>índex de lluminositat</strong> en funció de la quantitat de LEDs que simultàniament s’encenen.</li>
+</ul>
+<p>Ens interessaria un sistema que permeti la multiplexació per l’avantatge que suposa en termes de consum d’energia, però amb la reducció màxima de terminals. Amb, evidentment, el cicle més curt possible per aprofitar el màxim d’il·luminació.</p>
+<p>Això és possible si estudiem com funciona el LED i com podem alimentar-lo.</p>
+<p>Suposem en primer lloc, dos LEDs disposats en paral·lel i amb polaritats invertides. Això es mostra a la figura següent.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/charlieplex2.png" class="img-fluid figure-img"></p>
+<figcaption>Charlieplexing amb 2 terminals</figcaption>
+</figure>
+</div>
+<p>Si cada extrem l’alimentem des d’un terminal del microprocessador, podem optar per les següents combinacions:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>T1</strong></th>
+<th><strong>T2</strong></th>
+<th><strong>Led 1</strong></th>
+<th><strong>Led 2</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td>Apagat</td>
+<td>Apagat</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0</td>
+<td><strong>Encès</strong></td>
+<td>Apagat</td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>1</td>
+<td>Apagat</td>
+<td><strong>Encès</strong></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>1</td>
+<td>Apagat</td>
+<td>Apagat</td>
+</tr>
+</tbody>
+</table>
+<p>Com es veu, les resistències en sèrie amb els terminals del microprocessador permeten limitar el corrent que passa a través dels LEDs.</p>
+<p>Que, amb dos terminals, alimentem dos LEDs no sembla gaire engrescador, però analitzant el cas de 3 terminals, la cosa canvia. La figura següent mostra una configuració de 6 LEDs controlats per només tres terminals.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/charlieplex3.png" class="img-fluid figure-img"></p>
+<figcaption>Charlieplexing amb 3 terminals</figcaption>
+</figure>
+</div>
+<p>La taula següent recull com s’haurà d’alimentar cada terminal per a aconseguir les diferents combinacions d’encesa de LEDs:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>T1</strong></th>
+<th><strong>T2</strong></th>
+<th><strong>T3</strong></th>
+<th><strong>Led 1</strong></th>
+<th><strong>Led 2</strong></th>
+<th><strong>Led 3</strong></th>
+<th><strong>Led 4</strong></th>
+<th><strong>Led 5</strong></th>
+<th><strong>Led 6</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>0</td>
+<td>Z</td>
+<td><strong>Encès</strong></td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>1</td>
+<td>Z</td>
+<td>Apagat</td>
+<td><strong>Encès</strong></td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+</tr>
+<tr class="odd">
+<td>Z</td>
+<td>1</td>
+<td>0</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td><strong>Encès</strong></td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+</tr>
+<tr class="even">
+<td>Z</td>
+<td>0</td>
+<td>1</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td><strong>Encès</strong></td>
+<td>Apagat</td>
+<td>Apagat</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>Z</td>
+<td>0</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td><strong>Encès</strong></td>
+<td>Apagat</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>Z</td>
+<td>1</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td><strong>Encès</strong></td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+<td>Apagat</td>
+</tr>
+</tbody>
+</table>
+<p>Observi’s que s’ha tingut en compte la possibilitat de què el microprocessador sigui capaç d’emetre un estat d’alta impedància a les seves sortides.</p>
+<p>La figura següent mostra la situació amb 4 terminals, que permet disposar de 12 LEDs.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/charlieplex4.png" class="img-fluid figure-img"></p>
+<figcaption>Charlieplexing amb 4 terminals</figcaption>
+</figure>
+</div>
+<p>En general, per a <span class="math inline">\(n\)</span> terminals en el microprocessador, s’obté la possibilitat d’adreçar <span class="math inline">\(n\cdot(n-1)\)</span> LEDs.</p>
+<p><span class="math display">\[  n\textrm{ terminals} \Longrightarrow n\cdot (n-1) \textrm{ LEDs}  \]</span></p>
+<p>Així, amb només 10 terminals podrem adreçar un total de 90 LEDs, per exemple.</p>
+<p>Aquests totals, fora de sorprendre’ns per veure com augmenta la quantitat de LEDs de manera increïble, ens porta a una problemàtica associada; i és que la tècnica per a adreçar aquests LEDs no deixa de ser com una multiplexació i, per tant, patirem una reducció d’il·luminació important. Haurem de triar una freqüència alta d’actualització per a recórrer, un a un, tots i cadascun dels LEDs, i fer que el període complet d’escombrat sigui suficientment alt com per a donar la sensació de persistència de la visió.</p>
+<p>No s’ha d’oblidar que, per a multiplexar una gran quantitat de LEDs, aquests romandran gran part del temps apagats; i per tant, el nivell d’il·luminació serà molt baix. Podem compensar-ho també augmentant el corrent per LED, i això pot portar-nos a anular-la directament. Això no és perillós, perquè el temps d’encesa del LED és baix i el que importa és el consum mitjà. A més, el consum del dispositiu que proporciona el senyal estarà control·lat pels seus propis mecanismes interns de protecció. Molts dispositius no poden proporcionar més de 25mA en els seus terminals gràcies als dispositius limitadors que incorporen.</p>
+<p>Un exemple d’aplicació de la tècnica de <em>charlieplexing</em> pot ser la construcció d’un rellotge amb LEDs disposats circularment, consistent en:</p>
+<ul>
+<li>60 LEDs per a indicar els minuts. Els LEDs es poden tenir encesos tots des del 0, o només aquell que sigui el del minut actual.</li>
+<li>12 LEDs bicolor per a indicar les hores. Un color servirà per indicar l’hora actual, mentre que l’altre serà sempre encès per a indicar on estan les marques quan s’estigui amb poca llum ambiental.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/charlieclock_layout.png" class="img-fluid figure-img"></p>
+<figcaption>Layout d’un rellotge amb charlieplexing</figcaption>
+</figure>
+</div>
+<p>Això comporta que s’han de controlar, en realitat, 84 LEDs (60+12+12). Podem dividir aquest total en dues meitats, per a millorar la persistència de visió i augmentar la il·luminació resultant, a més de simplificar el <em>layout</em> del circuit.</p>
+<p>Amb dos grups de 42 LEDs necessitarem 7 terminals per a cada grup. O sigui, un total de 14 terminals de microprocessador (dos grups independents de 7 terminals).</p>
+<p>Això és el mostrat a la figura anterior (<em>layout</em>); i la vista 3D resultant a les figures següents:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/charlieclock_3d_components.png" class="img-fluid figure-img"></p>
+<figcaption>Vista 3D d’un rellotge amb charlieplexing (cara components)</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/charlieclock_3d_pistes.png" class="img-fluid figure-img"></p>
+<figcaption>Vista 3D d’un rellotge amb charlieplexing (cara pistes)</figcaption>
+</figure>
+</div>
+<p>… continuarà …</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.flx\.cat");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

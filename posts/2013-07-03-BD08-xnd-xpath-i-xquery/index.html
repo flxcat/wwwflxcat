@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Fèlix">
+<meta name="description" content="Penúltima part del curs Curs BBDD i Java centrada en la construcció de consultes mitjançant XPath/XQuery.">
+
+<title>XND - XPath i XQuery – flx.cat</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8eff75af44363e7f64015f2cd3896f7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Cap resultat",
+    "search-matching-documents-text": "documents que coincideixen",
+    "search-copy-link-title": "Copia l'enllaç a la cerca",
+    "search-hide-matches-text": "Amaga les coincidències addicionals",
+    "search-more-match-text": "altra coincidència en aquest document",
+    "search-more-matches-text": "altres coincidències en aquest document",
+    "search-clear-button-title": "Neteja",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel·la",
+    "search-submit-button-title": "Envia",
+    "search-label": "Cerca"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="XND - XPath i XQuery – flx.cat">
+<meta property="og:description" content="Penúltima part del curs Curs BBDD i Java centrada en la construcció de consultes mitjançant XPath/XQuery.">
+<meta property="og:image" content="https://www.flx.cat/posts/2013-07-03-BD08-xnd-xpath-i-xquery/images/featured.jpg">
+<meta property="og:site_name" content="flx.cat">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">flx.cat</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Cerca"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Commuta la navegació" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Inici</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Quant a…</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html">8 XND: XPath/XQuery</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">XND - XPath i XQuery</h1>
+                  <div>
+        <div class="description">
+          Penúltima part del curs <a href="../2013-05-10-BD00-curs-bbdd-i-java">Curs BBDD i Java</a> centrada en la construcció de consultes mitjançant XPath/XQuery.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">bases de dades</div>
+                <div class="quarto-category">basex</div>
+                <div class="quarto-category">xpath</div>
+                <div class="quarto-category">xquery</div>
+                <div class="quarto-category">xnd</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Autor/a</div>
+      <div class="quarto-title-meta-contents">
+               <p>Fèlix </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Publicat</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">3 de juliol de 2013</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-05-10-BD00-curs-bbdd-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Curs BDDD (índex)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD01-tipus-de-bases-de-dades/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 Tipus de bases de dades</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD02-jdbc-amb-sql/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 JDBC amb SQL</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD03-ordbms-amb-oracle/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 Oracle ORDBMS</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD04-xml-java-stax-jaxb/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 StaX i JAXB</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD05-hibernate-mapatge-objecte-relacional/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 Hibernate i ORM</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD06-hibernate-i-jpa/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 Hibernate/JPA</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-02-BD07-oodbms-amb-db4o-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 db4o+Java</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">8 XND: XPath/XQuery</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD09-xnd-basex-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 XND: BaseX+Java</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En aquesta pàgina</h2>
+   
+  <ul>
+  <li><a href="#introducció" id="toc-introducció" class="nav-link active" data-scroll-target="#introducció">1 Introducció</a></li>
+  <li><a href="#installació-de-basex" id="toc-installació-de-basex" class="nav-link" data-scroll-target="#installació-de-basex">2. Instal·lació de BaseX</a></li>
+  <li><a href="#consultes-xpath" id="toc-consultes-xpath" class="nav-link" data-scroll-target="#consultes-xpath">3. Consultes XPath</a>
+  <ul class="collapse">
+  <li><a href="#recorregut-de-larbre-xml" id="toc-recorregut-de-larbre-xml" class="nav-link" data-scroll-target="#recorregut-de-larbre-xml">3.1. Recorregut de l’arbre XML</a></li>
+  <li><a href="#filtrat-de-nodes" id="toc-filtrat-de-nodes" class="nav-link" data-scroll-target="#filtrat-de-nodes">3.2. Filtrat de nodes</a></li>
+  <li><a href="#resum-de-funcions-xpathxquery-agrupades-per-concepte" id="toc-resum-de-funcions-xpathxquery-agrupades-per-concepte" class="nav-link" data-scroll-target="#resum-de-funcions-xpathxquery-agrupades-per-concepte">3.3. Resum de funcions XPath/XQuery agrupades per concepte</a></li>
+  </ul></li>
+  <li><a href="#consultes-flwor-xquery" id="toc-consultes-flwor-xquery" class="nav-link" data-scroll-target="#consultes-flwor-xquery">4. Consultes FLWOR (XQuery)</a></li>
+  <li><a href="#declaració-de-funcions-en-xquery" id="toc-declaració-de-funcions-en-xquery" class="nav-link" data-scroll-target="#declaració-de-funcions-en-xquery">5. Declaració de funcions en XQuery</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="introducció" class="level2">
+<h2 class="anchored" data-anchor-id="introducció">1 Introducció</h2>
+<p>Les <strong>bases de dades natives XML (<em>XML native database</em>)</strong> ofereixen un mecanisme adient per a la consulta sobre dades que resideixin en documents XML.</p>
+<p>En aquest sentit, les dades estan estructurades en la base de dades (que ara és un o més documents XML) en la forma d’una estructura en arbre invertit, on el seu creador haurà definit els noms dels nodes i la seva distribució:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>mondial.xml</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="mondial.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="fu">?&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="dt">&lt;!DOCTYPE</span> <span class="dt">mondial</span> SYSTEM "mondial.dtd"<span class="dt">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>&lt;<span class="kw">mondial</span>&gt;</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  &lt;<span class="kw">country</span><span class="ot"> car_code=</span><span class="st">"AND"</span><span class="ot"> area=</span><span class="st">"450"</span><span class="ot"> capital=</span><span class="st">"cty-Andorra-Andorra-la-Vella"</span><span class="ot"> memberships=</span><span class="st">"org-CE org-ECE org-Interpol org-IFRCS org-IOC org-ITU org-UN org-UNESCO org-WIPO"</span>&gt;</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    &lt;<span class="kw">name</span>&gt;Andorra&lt;/<span class="kw">name</span>&gt;</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    &lt;<span class="kw">population</span>&gt;72766&lt;/<span class="kw">population</span>&gt;</span>
+<span id="cb1-7"><a href="#cb1-7"></a>...</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    &lt;<span class="kw">border</span><span class="ot"> country=</span><span class="st">"F"</span><span class="ot"> length=</span><span class="st">"60"</span>/&gt;</span>
+<span id="cb1-9"><a href="#cb1-9"></a>    &lt;<span class="kw">border</span><span class="ot"> country=</span><span class="st">"E"</span><span class="ot"> length=</span><span class="st">"65"</span>/&gt;</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    &lt;<span class="kw">city</span><span class="ot"> id=</span><span class="st">"cty-Andorra-Andorra-la-Vella"</span><span class="ot"> is_country_cap=</span><span class="st">"yes"</span><span class="ot"> country=</span><span class="st">"AND"</span>&gt;</span>
+<span id="cb1-11"><a href="#cb1-11"></a>      &lt;<span class="kw">name</span>&gt;Andorra la Vella&lt;/<span class="kw">name</span>&gt;</span>
+<span id="cb1-12"><a href="#cb1-12"></a>      &lt;<span class="kw">longitude</span>&gt;1.3&lt;/<span class="kw">longitude</span>&gt;</span>
+<span id="cb1-13"><a href="#cb1-13"></a>      &lt;<span class="kw">latitude</span>&gt;42.3&lt;/<span class="kw">latitude</span>&gt;</span>
+<span id="cb1-14"><a href="#cb1-14"></a>      &lt;<span class="kw">population</span><span class="ot"> year=</span><span class="st">"87"</span>&gt;15600&lt;/<span class="kw">population</span>&gt;</span>
+<span id="cb1-15"><a href="#cb1-15"></a>    &lt;/<span class="kw">city</span>&gt;</span>
+<span id="cb1-16"><a href="#cb1-16"></a>  &lt;/<span class="kw">country</span>&gt;</span>
+<span id="cb1-17"><a href="#cb1-17"></a></span>
+<span id="cb1-18"><a href="#cb1-18"></a>...</span>
+<span id="cb1-19"><a href="#cb1-19"></a></span>
+<span id="cb1-20"><a href="#cb1-20"></a>  &lt;<span class="kw">desert</span><span class="ot"> id=</span><span class="st">"desert-Atacama"</span><span class="ot"> country=</span><span class="st">"RCH"</span>&gt;</span>
+<span id="cb1-21"><a href="#cb1-21"></a>    &lt;<span class="kw">name</span>&gt;Atacama&lt;/<span class="kw">name</span>&gt;</span>
+<span id="cb1-22"><a href="#cb1-22"></a>...</span>
+<span id="cb1-23"><a href="#cb1-23"></a>    &lt;<span class="kw">area</span>&gt;181300&lt;/<span class="kw">area</span>&gt;</span>
+<span id="cb1-24"><a href="#cb1-24"></a>    &lt;<span class="kw">longitude</span>&gt;-69.25&lt;/<span class="kw">longitude</span>&gt;</span>
+<span id="cb1-25"><a href="#cb1-25"></a>    &lt;<span class="kw">latitude</span>&gt;-24.5&lt;/<span class="kw">latitude</span>&gt;</span>
+<span id="cb1-26"><a href="#cb1-26"></a>  &lt;/<span class="kw">desert</span>&gt;</span>
+<span id="cb1-27"><a href="#cb1-27"></a>&lt;/<span class="kw">mondial</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>El fragment mostrat correspon a la base de dades <strong>MondialDB</strong>, que pot descarregar-se lliurament <a href="http://www.dbis.informatik.uni-goettingen.de/Mondial/mondial.xml">aquí</a> i que serà utilitzada aquí per als exemples i exercicis.</p>
+<p>Les consultes sobre XND són de natura diferents respecte de les conegudes fins ara arran de l’estructura interna d’aquests documents. Per tant, els llenguatges existents per fer-hi consultes també són diferents.</p>
+<p>Trobem així que ara no podem utilitzar llenguatges com SQL, perquè aquí no tenen sentit. Pel contrari, existeix XPath i XQuery com els llenguatges <em>estrella</em> per a l’extracció de dades d’arxius XML i XND.</p>
+<p>En concret, <strong>XPath</strong> és un llenguatge centrat en el recorregut descendent a través del XML, realitzant filtrat i agrupació, mitjançant un llenguatge senzill amb una col·lecció de funcions i operacions limitada.</p>
+<p>Per altra banda, <strong>XQuery</strong> permet construir estructures més complexes basades en un iterador (bucle) de tipus <code>for</code> en el que es coneix com <strong>construcció FLWOR</strong> (<code>for</code>-<code>let</code>-<code>where</code>-<code>order</code>-<code>result</code>).</p>
+<p>A més, existeixen diferents API disponibles per als diversos llenguatges de programació que permeten connectar amb aquest tipus de bases de dades i arxius XML per tal d’executar consultes amb aquests dos llenguatges de programació.</p>
+</section>
+<section id="installació-de-basex" class="level2">
+<h2 class="anchored" data-anchor-id="installació-de-basex">2. Instal·lació de BaseX</h2>
+<p>El primer que hem de fer és disposar d’una instal·lació d’alguna aplicació que permeti treballar en aquest entorn.</p>
+<p>De sistemes XND n’hi ha un grapat, però nosaltres ens centrarem en el producte <a href="http://www.basex.org">BaseX</a>.</p>
+<p>Aquest producte està disponible en el mateix dipòsit estàndard d’Ubuntu, de manera que només necessitem treballar des de <code>apt-get</code> per gestionar la seva instal·lació.</p>
+<p>Així doncs, els passos seran els següents:</p>
+<ol type="1">
+<li><p>Actualitzar primer el sistema operatiu:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> aptitude update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> aptitude upgrade</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Instal·lar JDK6 (si no estava instal·lat prèviament:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> aptitude install openjdk-6-jdk</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Configurar JDK6 o JDK7 com a versió per defecte, i així disposar de les dues versions instal·lades en el sistema, deixant la desitjada com a versió per defecte de línia d’ordres:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> java</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> javac</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> javadoc</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> javap</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> javah</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> javaws</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Si vostè desitja deixar JDK6 com a versió per defecte per compilar programes en línia d’ordres, només cal que així ho indiqui. Podrà comprovar quina és la versió configurada fent:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">java</span> <span class="at">-version</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Instal·lar BaseX:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> aptitude install basex</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Descarregar la base de dades de mostra <strong>MONDIAL</strong> (<em>The MONDIAL Database</em>) en format XML:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> http://www.dbis.informatik.uni-goettingen.de/Mondial/mondial.xml</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Obrir BaseX en mode gràfic:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexgui</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Crear una base de dades nova a partir de l’arxiu <code>mondial.xml</code> descarregat i amb nom “<code>mondial</code>”</p></li>
+</ol>
+<p>En aquest moment ja disposa de les eines necessàries per poder aprendre XPath/XQuery</p>
+<p>Ara pot veure com és la base de dades amb què farem proves, tot recorrent-la gràficament amb l’aplicació i observant el document associat. Observi que quan se selecciona una branca de l’arbre XML, només aquella part serà mostrada en el visor de text i quedarà marcat en el visor gràfic.</p>
+</section>
+<section id="consultes-xpath" class="level2">
+<h2 class="anchored" data-anchor-id="consultes-xpath">3. Consultes XPath</h2>
+<p><strong>XPath</strong> és, com s’ha dit, un llenguatge de consultes senzill que permet recórrer l’arbre XML de manera descendent i filtrar els elements (nodes) pels quals passem en aquest recorregut amb diversos criteris.</p>
+<p>En aquest sentit, el resultat d’una consulta XPath és, en termes generals, un document XML. Aquest resultat és la col·lecció de nodes i elements que hagin “<em>sobreviscut</em>” a aquest recorregut i filtrat descendent.</p>
+<section id="recorregut-de-larbre-xml" class="level3">
+<h3 class="anchored" data-anchor-id="recorregut-de-larbre-xml">3.1. Recorregut de l’arbre XML</h3>
+<p>La forma bàsica d’una sentència XPath s’assembla molt a la d’un camí de disc, on els <em>directoris</em> són els nodes presents al XML.</p>
+<p>El node arrel es representa com a <code>//</code>. A partir d’aquí, podem incloure un camí concret descendent per l’arbre XML, tot filtrant què volem que quedi en el resultat.</p>
+<p>Vegem alguns exemples:</p>
+<ol type="1">
+<li><p>Tot l’arbre del document:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>//mondial</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>El resultat serà tota la base de dades sencera.</p></li>
+<li><p>Tots els nodes del document:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>//*</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>El resultat, tot i semblar el mateix, conceptualment és un altre: tots els nodes que es trobin penjant de l’arrel (que en aquest cas coincideix).</p></li>
+<li><p>Tots l’arbre del document si el document és un altre:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>doc('/Users/felix/Desktop/curset/biblio.xml')//biblioteca</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observi que és possible especificar un arxiu determinat mitjançant la funció <code>doc()</code>. XPath presenta algunes funcions interessants que anirem descobrint al llarg dels exemples.</p>
+<p>Observi també com s’ha indicat el node arrel i el node <code>biblioteca</code> que és l’element inicial del XML utilitzat a l’exemple.</p></li>
+<li><p>Informació dels diferents continents:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>//mondial/continent</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Extreure només els noms dels continents:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>//mondial/continent/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>El nom de tots els països que apareixen a la base de dades:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>//mondial/country/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Vegi com el resultat ha estat l’extracció de tots els nodes <code>name</code> que pengin d’un node <code>country</code>, que pengin directament de <code>mondial</code>. Entengui que el resultat és un XML i que hem eliminat altres <em>camins</em> de l’arbre en baixar per aquesta branca, però que en cap cas hem dit que ens quedem en un o un altre país (no s’ha fet filtrat). És per això que veurà els noms de <strong>tots</strong> els països. És com si baixéssim en paral·lel per totes les branques que compleixin el camí indicat.</p></li>
+<li><p>Només els noms en format text (entrant en el text del <em>tag</em>):</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>//mondial/continent/name/text()</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Aquesta funció fa que només quedi el text que és contingut dins dels nodes que han arribat a aquell punt (nodes <code>name</code>). Com que BaseX no gestiona el formatat, veurem el text tot seguit, però en realitat el que tenim és una col·lecció (llista) de cadenes de text.</p></li>
+<li><p>Informació millor presentada:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>string-join(//mondial/continent/name/text(), ', ')</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Aquesta funció uneix la llista de texts obtinguda posant caràcters de coma entre cada parell, retornant una única cadena de text de resultat.</p></li>
+<li><p>Llistat de conceptes presents a la base de dades:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>distinct-values(//mondial/*/node-name())</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observem diversos punts a comentar aquí:</p>
+<ul>
+<li><p>Per una banda, el caràcter <code>*</code> farà de comodí per indicar que en aquest punt estem baixant un nivell dins del XML, però no ens importa com es digui en node concret per on baixem aquest nivell. I pensi que estem indicant que s’ha de baixar un i només un nivell. <strong>No representa una quantitat arbitrària de nivells, sinó que no ens importa com es digui <em>el</em> nivell</strong>.</p></li>
+<li><p>Tot i que no ens importa quin node baixem, igualment volem aplicar-hi una funció. En concret, la funció <code>node-name()</code> retorna el nom del node del node en què estiguem situats. Així doncs, si hem baixat per <code>country</code>, el nom serà “country”, i si hem baixat per <code>river</code>, serà “river”.</p></li>
+<li><p>El <code>distinct-values()</code> és necessari per eliminar duplicats en el resultat obtingut, fent que només es mostri una vegada cadascun dels conceptes trobats.</p></li>
+</ul></li>
+</ol>
+</section>
+<section id="filtrat-de-nodes" class="level3">
+<h3 class="anchored" data-anchor-id="filtrat-de-nodes">3.2. Filtrat de nodes</h3>
+<p>Quan volem filtrar nodes en l’arbre, ho farem indicant entre claudàtors <code>[]</code> una expressió que representi un criteri de filtrat. Quan l’expressió indicada es compleixi, aquell node “<em>passarà</em>” el filtre i romandrà al resultat de la consulta.</p>
+<p>Els filtres podem posar-los en qualsevol node d’un recorregut descendent com els vistos fins ara, de tal manera que podem combinar filtres diferents en nivells diferents del nostre recorregut.</p>
+<p>Observi el següent exemple:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[name='Spain']/province[name='Catalonia']/city/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>En aquest cas, el recorregut que fem és, en realitat, <code>//mondial/country/province/city/name</code>. És a dir, baixem pels nodes de l’arbre XML fins al nom de les ciutats de les províncies dels països.</p>
+<p>Però no volem tots els països, així que afegim el filtre sobre el nom del país en el nivell de <code>country</code>. El criteri és clar: Només volem aquell país que es diu “<em>Spain</em>”. Un cop aquest filtrat s’hagi efectuat, només quedarà un node país per baixar i continuarà el processament del camí.</p>
+<p>En el nivell de província, tornem a aplicar un filtre sobre el nom de la província, de manera que només quedi aquella amb nom “<em>Catalonia</em>”.</p>
+<p>Ara bé, observi que, en realitat, el filtre ha fet un descens per l’arbre XML paral·lel al que s’estava fent per obtenir la informació resultant. Quan indiquem que miri el <code>name</code> en els dos casos, s’està baixant a aquell node per comprovar si es compleix o no. I, de fet, podríem baixar més d’un nivell si volguéssim.</p>
+<p>A més, podem també filtrar pel valor d’un atribut d’un node, posant el signe <code>@</code> davant del nom de l’atribut.</p>
+<p>Els operadors que podem utilitzar per escriure aquests filtres són els següents:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Operador</th>
+<th style="text-align: left;">Descripció</th>
+<th style="text-align: left;">Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>|</code></td>
+<td style="text-align: left;">Calcula la unió de dos conjunts</td>
+<td style="text-align: left;"><code>//llibres | //cds</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>+</code></td>
+<td style="text-align: left;">Suma</td>
+<td style="text-align: left;"><code>6 + 4</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: left;">Resta</td>
+<td style="text-align: left;"><code>6 - 4</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>*</code></td>
+<td style="text-align: left;">Multiplicació</td>
+<td style="text-align: left;"><code>6 * 4</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>div</code></td>
+<td style="text-align: left;">Divisió</td>
+<td style="text-align: left;"><code>8 div 4</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>=</code></td>
+<td style="text-align: left;">Igualtat</td>
+<td style="text-align: left;"><code>preu=9.80</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>!=</code></td>
+<td style="text-align: left;">Diferent</td>
+<td style="text-align: left;"><code>preu!=9.80</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>&lt;</code></td>
+<td style="text-align: left;">Menor que</td>
+<td style="text-align: left;"><code>preu&lt;9.80</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>&lt;=</code></td>
+<td style="text-align: left;">Menor o igual</td>
+<td style="text-align: left;"><code>preu&lt;=9.80</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>&gt;</code></td>
+<td style="text-align: left;">Major que</td>
+<td style="text-align: left;"><code>preu&gt;9.80</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>&gt;=</code></td>
+<td style="text-align: left;">Major o igual</td>
+<td style="text-align: left;"><code>preu&gt;=9.80</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>or</code></td>
+<td style="text-align: left;">o</td>
+<td style="text-align: left;"><code>preu=9.80 or preu=9.70</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>and</code></td>
+<td style="text-align: left;">i</td>
+<td style="text-align: left;"><code>preu&gt;9.00 and preu&lt;9.90</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>mod</code></td>
+<td style="text-align: left;">Mòdul (residu)</td>
+<td style="text-align: left;"><code>5 mod 2</code></td>
+</tr>
+</tbody>
+</table>
+<p>Vegem ara uns quants exemples:</p>
+<ol type="1">
+<li><p>Informació específica d’un país, cercada pel valor d’un node fill:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[name='Spain']</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Això funciona perquè dins del <em>tag</em> <code>&lt;country&gt;</code> hi ha un altre anomenat <code>&lt;name&gt;</code> amb el text corresponent al nom del país.</p></li>
+<li><p>Informació específica d’un país, cercada a través d’un atribut:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[@car_code='E']</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Nom dels rius que consten a Espanya</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>//mondial/river[@country="E"]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Llistat dels països amb més de 50 milions d’habitants:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[population&gt;50000000]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Diferents formes de govern dels països amb més de 50 milions d’habitants:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>distinct-values(//mondial/country[population&gt;50000000]/government)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Quantitat de països a la base de dades:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>count(//mondial/country)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Aquí veu que existeixen funcions d’agregació com <code>count()</code>, <code>sum()</code>, <code>max()</code>, etc. Vegi la llista de funcions al final de l’article.</p></li>
+<li><p>Quantitat de ciutats espanyoles:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>count(//mondial/country[name='Spain']/province/city)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Quantitat de diferents formes de govern dels països de més de 50 milions d’habitants:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>count(distinct-values(//mondial/country[population&gt;50000000]/government))</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Nom de les ciutats espanyoles:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[name='Spain']/province/city/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Ciutats espanyoles amb més de 200.000 habitants:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[name='Spain']/province/city[population&gt;200000]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Noms de província espanyoles:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[name='Spain']/province/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Països d’Europa:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[encompassed/@continent='europe']/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O també:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[encompassed[@continent='europe']]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I és que podem aplicar filtres sobre filtres!</p></li>
+<li><p>Rius de països europeus:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>//mondial/river[@country=//mondial/country[encompassed/@continent='europe']/@car_code]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I és que podem fer també subconsultes!</p></li>
+<li><p>Rius europeus amb una longitud de, com a mínim, la meitat de longitud que el riu més llarg de tot el mon:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>//mondial/river[</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    @country=//mondial/country[encompassed/@continent='europe']/@car_code </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    and </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    length&gt;=max(//mondial/river/length) div 2</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observi com, per filtrar els rius europeus, s’ha fet que el codi de país sigui un dels presents a la llista de la subconsulta de països europeus. La igualtat com a condició és, en realitat, com un <code>IN</code> de SQL. És a dir, si un dels dos elements és una llista, el que fa és buscar el valor <em>dins</em> de la llista.</p></li>
+<li><p>La quantitat d’habitants de la ciutat espanyola amb més habitants:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>max(//mondial/country[name='Spain']/province/city/population)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>La ciutat espanyola amb més habitants:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[name='Spain']/province/city[population=max(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    //mondial/country[name='Spain']/province/city/population)]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O també:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>//mondial/country[name='Spain']/province/city[population=max(</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    ../../province/city/population)]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observi’s que estem fent una subconsulta i que la subconsulta pot ser relativa al punt on s’aplica el filtrat (segon cas).</p></li>
+<li><p>Rius amb nom començat amb la lletra ‘G’):</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>//mondial/river[matches(name,'^G.*')]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>La funció <code>matches(text, expressió_regular)</code> permet verificar expressions contra expressions regulars estàndard (tipus <code>grep</code>).</p></li>
+<li><p>Nom de totes les ciutats de més d’un milió habitants (independentment de si el país està subdividit en províncies o no):</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>//mondial/country/descendant::city[population&gt;1000000]/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>L’operador <code>descendant::node</code> indica explorar tots i cadascun dels camins inferiors que continguin el node indicat, independentment del seu nivell dins de l’arbre. Així doncs, ens permet buscar un node fill per sota d’un punt de l’arbre quan no sabem en quin nivell de profunditat es troba.</p></li>
+</ol>
+<p>Amb tot, pot comprovar que les consultes que es poden arribar a escriure cobriran gran part dels requeriments d’extracció d’informació que necessitarem per construir vistes d’usuari. Això ja ens està bé, però de tant en tant ens trobem amb casos específics que requereixen d’alguna cosa més que el recorregut descendent amb filtrat.</p>
+</section>
+<section id="resum-de-funcions-xpathxquery-agrupades-per-concepte" class="level3">
+<h3 class="anchored" data-anchor-id="resum-de-funcions-xpathxquery-agrupades-per-concepte">3.3. Resum de funcions XPath/XQuery agrupades per concepte</h3>
+<p>Quant a les funcions presentades ara, tingui present que algunes poden aplicar-se sobre el node actual, mentre que d’altres només accepten el pas per argument. No s’ha indicat aquí quin cas és cadascun per reduir la complexitat del llistat, tot i que els casos en què s’aplica un o l’altre cas són en general força evidents. Per exemple: <code>//biblioteca/llibre[position()&gt;3]/text()</code></p>
+<p><strong>Funcions sobre els accessors:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:node-name(node)</code></td>
+<td style="text-align: left;">Retorna el nom del node indicat</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:nilled(node)</code></td>
+<td style="text-align: left;">Retorna cert si el node és nul</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:data(item.item,...)</code></td>
+<td style="text-align: left;">Pren una seqüència i retorna la seqüència de valors atòmics</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:base-uri(node)</code></td>
+<td style="text-align: left;">Retorna el valor de la propietat <code>base-uri</code> del node indicat</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:document-uri(node)</code></td>
+<td style="text-align: left;">Retorna el valor de la propietat <code>document-uri</code> del node indicat</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions d’error i traça:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:error([error[,descripció[,objecte-error]]])</code></td>
+<td style="text-align: left;">Genera i retorna un error</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:trace(valor,etiqueta)</code></td>
+<td style="text-align: left;">Usat per depurar consultes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions sobre valors numèrics:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:number(arg)</code></td>
+<td style="text-align: left;">Retorna el valor numèric de l’argument</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:abs(num)</code></td>
+<td style="text-align: left;">Retorna el valor absolut</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:ceiling(num)</code></td>
+<td style="text-align: left;">Retorna l’enter més petit que és major o igual a l’argument</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:floor(num)</code></td>
+<td style="text-align: left;">Retorna l’enter més gran que és menor o igual a l’argument</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:round(num)</code></td>
+<td style="text-align: left;">Arrodoneix a l’enter més proper</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:round-half-to-even(num)</code></td>
+<td style="text-align: left;">Arrodoneix a l’enter més proper que sigui parell</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions sobre valors de text:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:string(arg)</code></td>
+<td style="text-align: left;">Retorna el valor de text de l’argument</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:codepoints-to-string(int,int,...)</code></td>
+<td style="text-align: left;">Retorna una cadena a partit d’una seqüència de codis numèrics de caràcter</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:string-to-codepoints(string)</code></td>
+<td style="text-align: left;">Retorna la seqüència de codis de caràcter corresponent a la cadena</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:codepoint-equal(comp1,comp2)</code></td>
+<td style="text-align: left;">Cert si els texts són iguals segons Unicode</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:compare(comp1,comp2[,joc_caracters])</code></td>
+<td style="text-align: left;">Compara les cadenes seguint el joc de caràcters indicat. Retorna -1, 0 o 1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:concat(string,string)</code></td>
+<td style="text-align: left;">Retorna la concatenació de les cadenes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:string-join(seqüència,sep)</code></td>
+<td style="text-align: left;">Retorna una cadena que conté els ítems indicats amb el separador indicat</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:substring(string,inici[,long])</code></td>
+<td style="text-align: left;">Treu una subcadena d’una cadena</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:string-length(string)</code></td>
+<td style="text-align: left;">Retorna la quantitat de caràcters de la cadena</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:normalize-space(string)</code></td>
+<td style="text-align: left;">Elimina espais sobrants de la cadena (inicial, final i repetits)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:normalize-unicode()</code></td>
+<td style="text-align: left;">Normalitza seguint les normes Unicode</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:upper-case(string)</code></td>
+<td style="text-align: left;">Converteix la cadena a majúscules</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:lower-case(string)</code></td>
+<td style="text-align: left;">Converteix la cadena a minúscules</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:translate(string1,string2,string3)</code></td>
+<td style="text-align: left;">Substitueix en <code>string1</code> cada caràcter de <code>string2</code> pel corresponent de <code>string3</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:escape-uri(string,esc-res)</code></td>
+<td style="text-align: left;">Escapa la cadena seguint les normes per a URIs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:contains(string1,string2)</code></td>
+<td style="text-align: left;">Retorna cert si la primera cadena conté el text de la segona</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:starts-with(string1,string2)</code></td>
+<td style="text-align: left;">Retorna cert si la primera cadena comença amb el text de la segona</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:ends-with(string1,string2)</code></td>
+<td style="text-align: left;">Retorna cert si la primera cadena acaba amb el text de la segona</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:substring-before(string1,string2)</code></td>
+<td style="text-align: left;">Extreu la part prèvia de la primera cadena respecte on apareix la segona</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:substring-after(string1,string2)</code></td>
+<td style="text-align: left;">Extreu la part posterior de la primera cadena respecte on apareix la segona</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:matches(string,regexp)</code></td>
+<td style="text-align: left;">Retorna cert si la cadena compleix l’expressió regular indicada</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:replace(string,regexp,replace)</code></td>
+<td style="text-align: left;">Substitueix les troballes de l’expressió regular per la cadena de substitució</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:tokenize(string,regexp)</code></td>
+<td style="text-align: left;">Retalla la cadena utilitzant l’expressió regular com a recerca de separador</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions sobre URIs:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:resolve-uri(relative,base)</code></td>
+<td style="text-align: left;">Resol la URI a partir de la base i la part relativa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions sobre valors booleans:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:boolean(arg)</code></td>
+<td style="text-align: left;">Retorna el valor booleà de l’argument indicat</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:not(arg)</code></td>
+<td style="text-align: left;">Avalua el contrari de l’argument</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:true()</code></td>
+<td style="text-align: left;">És el valor cert</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:false()</code></td>
+<td style="text-align: left;">És el valor fals</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions sobre valors data-hora i intervals:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:dateTime(date,time)</code></td>
+<td style="text-align: left;">Converteix els arguments en una data i hora</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:years-from-duration(dur)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els anys de l’interval</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:months-from-duration(dur)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els mesos de l’interval</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:days-from-duration(dur)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els dies de l’interval</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:hours-from-duration(dur)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa les hores de l’interval</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:minutes-from-duration(dur)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els minuts de l’interval</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:seconds-from-duration(dur)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els segons de l’interval</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:years-from-dateTime(datetime)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els anys de la data/hora</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:months-from-dateTime(datetime)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els mesos de la data/hora</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:days-from-dateTime(datetime)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els dies de la data/hora</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:hours-from-dateTime(datetime)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa les hores de la data/hora</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:minutes-from-dateTime(datetime)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els minuts de la data/hora</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:seconds-from-dateTime(datetime)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els segons de la data/hora</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:timezone-from-dateTime(datetime)</code></td>
+<td style="text-align: left;">Retorna el fus horari de la data/hora</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:years-from-date(date)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els anys de la data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:months-from-date(date)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els mesos de la data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:days-from-date(date)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els dies de la data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:timezone-from-date(date)</code></td>
+<td style="text-align: left;">Retorna el fus horari de la data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:hours-from-time(time)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa les hores de la hora</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:minutes-from-time(time)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els minuts de la hora</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:seconds-from-time(time)</code></td>
+<td style="text-align: left;">Retorna l’enter que representa els segons de la hora</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:timezone-from-time(time)</code></td>
+<td style="text-align: left;">Retorna el fus horari de la hora</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:adjust-dateTime-to-timezone(datetime,timezone)</code></td>
+<td style="text-align: left;">Associa el fus horari a la data/hora</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:adjust-date-to-timezone(datetime,timezone)</code></td>
+<td style="text-align: left;">Associa el fus horari a la data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:adjust-time-to-timezone(datetime,timezone)</code></td>
+<td style="text-align: left;">Associa el fus horari a la hora</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions sobre nodes:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:name(nodeset)</code></td>
+<td style="text-align: left;">Retorna el nom del primer node del conjunt</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:local-name(nodeset)</code></td>
+<td style="text-align: left;">Retorna el nom del primer node del conjunt sense el prefix del <em>namespace</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:namespace-uri(nodeset)</code></td>
+<td style="text-align: left;">Retorna el URI del <em>namespace</em> del primer node del conjunt</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:lang(lang)</code></td>
+<td style="text-align: left;">Retorna cert si l’idioma del node actual correspon a l’especificat. S’indica com a text (<code>"en"</code>)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:root(node)</code></td>
+<td style="text-align: left;">Retorna el node arrel de l’arbre a què pertany el node indicat</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions sobre seqüències:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:index-of(seqüència, item)</code></td>
+<td style="text-align: left;">Retorna la posició de l’element cercat a la seqüència de recerca</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:remove(seqüència, pos)</code></td>
+<td style="text-align: left;">Elimina l’element situat a la posició indicada</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:empty(seqüència)</code></td>
+<td style="text-align: left;">Retorna cert si l’argument és una seqüència buida</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:exists(seqüència)</code></td>
+<td style="text-align: left;">Retorna cert si l’argument no és una seqüència buida</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:distinct-values(seqüència)</code></td>
+<td style="text-align: left;">Retorna la seqüència neta de duplicats</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:insert-before(seqüència,pos,item)</code></td>
+<td style="text-align: left;">Insereix l’element indicat just abans de la posició especificada</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:reverse(seqüència)</code></td>
+<td style="text-align: left;">Inverteix l’ordre dels elements de la seqüència</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:subsequence(seqüència,pos,len)</code></td>
+<td style="text-align: left;">Extreu part d’una seqüència</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:unordered(seqüència)</code></td>
+<td style="text-align: left;">Retorna els elements en un ordre dependent de la implementació</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions sobre cardinalitat de seqüències:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:zero-or-one(seqüència)</code></td>
+<td style="text-align: left;">Retorna l’argument si conté zero o un element</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:one-or-more(seqüència)</code></td>
+<td style="text-align: left;">Retorna l’argument si conté un element com a mínim</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:exactly-one(seqüència)</code></td>
+<td style="text-align: left;">Retorna l’argument si conté exactament un sol element</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions d’igualtat de seqüències:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:deep-equal(param1,param2)</code></td>
+<td style="text-align: left;">Retorna cert si els arguments són exactament iguals dins de les seves jerarquies</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions d’agregació:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:count(seqüència)</code></td>
+<td style="text-align: left;">Retorna la quantitat d’elements</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:avg(seqüència)</code></td>
+<td style="text-align: left;">Retorna el valor mitjà dels elements de la seqüència</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:max(seqüència)</code></td>
+<td style="text-align: left;">Retorna el valor màxim dels elements de la seqüència</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:min(seqüència)</code></td>
+<td style="text-align: left;">Retorna el valor mínim dels elements de la seqüència</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:sum(seqüència)</code></td>
+<td style="text-align: left;">Retorna el total de sumar els elements de la seqüència</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Funcions sobre contexts:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:position()</code></td>
+<td style="text-align: left;">Retorna l’índex de l’element en el seu entorn</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:last()</code></td>
+<td style="text-align: left;">Retorna l’índex de l’últim element en el seu entorn</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:current-dateTime()</code></td>
+<td style="text-align: left;">Retorna la data/hora actual</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:current-date()</code></td>
+<td style="text-align: left;">Retorna la data actual</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:current-time()</code></td>
+<td style="text-align: left;">Retorna la hora actual</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:implicit-timezone()</code></td>
+<td style="text-align: left;">Retorna el fus horari implícit</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fn:default-collation()</code></td>
+<td style="text-align: left;">Retorna el joc de caràcters actual</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fn:static-base-uri()</code></td>
+<td style="text-align: left;">Retorna el valor de <code>base-uri</code> actual</td>
+</tr>
+</tbody>
+</table>
+<p>Les funcions matemàtiques científiques estan definides en el <em>namespace</em> <code>math</code>, i per tant, quan són invocades, cal esmentar-ho explícitament. Per exemple: <code>math:sqrt(42)</code>.</p>
+<p><strong>Funcions matemàtiques científiques:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>math:pi()</code></td>
+<td style="text-align: left;">Representa una aproximació al valor de <span class="math inline">\(\pi\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>math:exp(x)</code></td>
+<td style="text-align: left;">Retorna el valor de <span class="math inline">\(e^x\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>math:exp10(x)</code></td>
+<td style="text-align: left;">Retorna el valor de <span class="math inline">\(10^x\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>math:log(x)</code></td>
+<td style="text-align: left;">Retorna el logaritme natural de l’argument</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>math:log10(x)</code></td>
+<td style="text-align: left;">Retorna el logaritme en base 10 de l’argument</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>math:pow(x,y)</code></td>
+<td style="text-align: left;">Retorna el valor de <span class="math inline">\(x^y\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>math:sqrt(x)</code></td>
+<td style="text-align: left;">Retorna l’arrel quadrada de l’argument</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>math:sin(x)</code></td>
+<td style="text-align: left;">Retorna el sinus de l’angle subministrat</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>math:cos(x)</code></td>
+<td style="text-align: left;">Retorna el cosinus de l’angle subministrat</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>math:tan(x)</code></td>
+<td style="text-align: left;">Retorna la tangent de l’angle subministrat</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>math:asin(x)</code></td>
+<td style="text-align: left;">Retorna l’angle aplicant la funció inversa del sinus</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>math:acos(x)</code></td>
+<td style="text-align: left;">Retorna l’angle aplicant la funció inversa del cosinus</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>math:atan(x)</code></td>
+<td style="text-align: left;">Retorna l’angle aplicant la funció inversa de la tangent</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>math:atan2(y,x)</code></td>
+<td style="text-align: left;">Retorna l’angle aplicant la funció inversa de la tangent sobre (y/x)</td>
+</tr>
+</tbody>
+</table>
+<p>Els tipus de dades presents a XPath/XQuery són: <code>xs:float</code>, <code>xs:double</code>, <code>xs:decimal</code>, <code>xs:integer</code>, <code>xs:long</code>, <code>xs:int</code>, <code>xs:short</code>, <code>xs:byte</code>, <code>xs:unsignedLong</code>, <code>xs:unsignedInt</code>, <code>xs:unsignedShort</code>, <code>xs:unsignedByte</code>, <code>xs:duration</code>, <code>xs:dateTime</code>, <code>xs:date</code>, <code>xs:time</code>, entre d’altres</p>
+<p>Per a l’especificació d’arguments de les funcions, poden utilitzar-se els elements addicionals a més dels tipus de dades presentats:</p>
+<p><strong>Especificació d’elements en arguments de funcions:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tipus d’element</th>
+<th style="text-align: left;">Permet</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>node()</code></td>
+<td style="text-align: left;">Qualsevol node</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>element()</code></td>
+<td style="text-align: left;">Qualsevol element de node</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>element(nom)</code></td>
+<td style="text-align: left;">L’element de node amb el nom indicat</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>attribute()</code></td>
+<td style="text-align: left;">Qualsevol atribut de node</td>
+</tr>
+</tbody>
+</table>
+<p>I pot indicar-se també la cardinalitat dels arguments:</p>
+<p><strong>Indicadors de cardinalitat per als arguments:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Indicador</th>
+<th style="text-align: left;">Significat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">cap (blanc)</td>
+<td style="text-align: left;">exactament un element</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>?</code></td>
+<td style="text-align: left;">Zero o un element</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>+</code></td>
+<td style="text-align: left;">Un o més elements</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>*</code></td>
+<td style="text-align: left;">Qualsevol quantitat d’elements (zero o més)</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="consultes-flwor-xquery" class="level2">
+<h2 class="anchored" data-anchor-id="consultes-flwor-xquery">4. Consultes FLWOR (XQuery)</h2>
+<p>XQuery ofereix un mecanisme de consultes més avançat que es munta sobre XPath. En concret, quan treballem amb XQuery, treballem amb la construcció <code>FLWOR</code>:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>FLWOR (XQuery) <code>FLWOR</code> = <code>for</code> - <code>let</code> - <code>where</code> - <code>order by</code> - <code>return</code></p>
+</div>
+</div>
+<p>Aquestes construccions permeten fer el recorregut per un arbre XML i executar alguna tasca sobre cadascun dels elements trobats, incloent l’aplicació de filtrat i càlcul d’expressions. A més, incorpora la possibilitat d’aplicar ordenació dels resultats.</p>
+<p>Un FLWOR, com a mínim, ha de contenir el iterador de bucle <code>for</code> i un <code>return</code> per obtenir algun resultat. Els altres tres elements (<code>let</code>, <code>where</code> i <code>order by</code> són opcionals).</p>
+<p>Analitzem les diferents parts:</p>
+<ul>
+<li><p>Amb la clàusula <code>for</code> especifiquem el conjunt d’elements que volem recórrer. La notació és:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>for $variable in //...consulta...XPath...</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Per tant, indiquem quina variable volem utilitzar per emmagatzemar els diferents elements trobats i la consulta XPath que ens generi la llista d’elements. Aquí podem posar una consulta XPath tant complexa com les vistes fins ara.</p></li>
+<li><p>Amb la clàusula <code>let</code> podem indicar assignacions i càlculs en forma d’expressions avaluades. Normalment s’utilitza sintaxi XPath i podem utilitzar la variable de bucle o variables definides amb <code>let</code>. Podem disposar més d’un <code>let</code> si així ho volem.</p>
+<p>Per exemple:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>for $pais in //mondial/country</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    let $num_ciutats := count($pais/descendant::city)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    let $tot_pobl := sum($pais/descendant::city/population)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    let $percent := $tot_pobl div $pais/population</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    ...</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Amb la clàusula <code>where</code> afegirem filtres sobre la llista d’iteració, de manera que els elements del <code>for</code> que no compleixin la condició del <code>where</code> seran omesos en el bucle:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>for $pais in //mondial/country</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    let $num_ciutats := count($pais/descendant::city)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    let $tot_pobl := sum($pais/descendant::city/population)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    let $percent := $tot_pobl div $pais/population</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    where $pais/encompassed/@continent='europe'</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    ...</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Amb la clàusula <code>order by</code> ordenem el resultat del <code>for</code>. Per tant, especifiquem l’ordre de recorregut del bucle:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>for $pais in //mondial/country</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    let $nom := $pais/name/text()</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    let $num_ciutats := count($pais/descendant::city)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    let $tot_pobl := sum($pais/descendant::city/population)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    let $percent := $tot_pobl div $pais/population * 100</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    where $pais/encompassed/@continent='europe'</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    order by $percent ascending</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    ...</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Amb la clàusula <code>return</code> indicarem què s’ha de mostrar com a resultat com a <strong>resposta a cada iteració</strong> (<strong>no</strong> a tot el bucle). El resultat ha de ser un únic node XML o una primitiva bàsica (com una cadena o un enter) per a cada iteració executada. El <code>return</code> s’executarà, per tant, <em>n</em> vegades:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>for $pais in //mondial/country</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    let $nom := $pais/name/text()</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    let $num_ciutats := count($pais/descendant::city)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    let $tot_pobl := sum($pais/descendant::city/population)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    let $percent := $tot_pobl div $pais/population * 100</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    where $pais/encompassed/@continent='europe'</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    order by $percent ascending</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    return &lt;pais&gt; {$nom} : {$percent} &lt;/pais&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+<p>Vegem ara tot un seguit d’exemples de XQuery que demostren algunes particularitats destacables:</p>
+<ol type="1">
+<li><p>Nom de les províncies espanyoles:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>for $p in //mondial/country[name='Spain']/province</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    return $p/name</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Extracció de la llista de ciutats de cada província espanyola:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>for $p in //mondial/country[name='Spain']/province</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    let $nom := $p/name/text()</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    let $ciutats := string-join($p/city/name, ', ')</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    return &lt;provincia&gt; {$nom}: {$ciutats} &lt;/provincia&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Llista dels països que tenen més d’un 1% de la població mundial total, ordenats per població descendent i mostrant els resultats en format XML:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>for $c in //mondial/country</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    let $n := $c/name/text()</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    let $p := $c/population/text()</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    where $p&gt;=sum(//mondial/country/population)*0.01</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    order by number($p) descending</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    return &lt;pais nom='{$n}'&gt;{$p}&lt;/pais&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Nom de les províncies espanyoles, amb població i quantitat de ciutats, ordenats per quantitat de ciutats en ordre descendent, amb resultat en format XML:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>for $p in //mondial/country[name='Spain']/province</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    let $nom := $p/name</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    let $pop := $p/population</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    let $num := &lt;count&gt; {count($p/city)} &lt;/count&gt;</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    order by $num descending</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    return &lt;provincia&gt; {$nom} {$pop} {$num} &lt;/provincia&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Redreçament de la informació de les províncies, amb cada província amb atributs de nom i població i llista de ciutats interna, amb una entrada per a cada ciutat:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>for $p in //mondial/country[name='Spain']/province</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    let $nom := $p/name/text()</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    let $pop := $p/population/text()</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    let $cities := &lt;cities&gt; {</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>        for $c in $p/city/name/text() </span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>            return &lt;city&gt; {$c} &lt;/city&gt;</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>        } &lt;/cities&gt;</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    return &lt;provincia nom='{$nom}' population='{$pop}'&gt; {$cities} &lt;/provincia&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</section>
+<section id="declaració-de-funcions-en-xquery" class="level2">
+<h2 class="anchored" data-anchor-id="declaració-de-funcions-en-xquery">5. Declaració de funcions en XQuery</h2>
+<p>És possible definir funcions pròpies per a ser utilitzades en les nostres consultes XQuery. La forma de fer-ho és mitjançant la següent sintaxi:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>declare function nom_de_la_funció($var1 as tipus, $var2 as tipus, ...) as tipus {</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    codi de la funció</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>XQuery accepta construccions diverses en el bloc de codi, com <code>let</code>, <code>for</code> i fins i tot estructures <code>if ... then ... else ...</code>.</p>
+<p>A més, les funcions solen definir-se en un espai de funcions concret. Normalment l’espai serà el local a la consulta (espai de l’usuari). Això es fa indicant el nom de la funció amb una especificació <code>local:</code> prèvia al nom de la funció.</p>
+<p>Vegem ara alguns exemples que demostren diferents situacions útils en la construcció de funcions XQuery:</p>
+<ol type="1">
+<li><p>Funció que calcula arrel d’índex N a partir de l’índex i el radicand:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>declare function local:sqrtN($i as xs:double, $r as xs:double) as xs:double {</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    let $x := math:pow($r, 1 div $i)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    return $x</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>local:sqrtN(3, 125)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Funció que retorna la primera paraula de la cadena indicada</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>declare function local:primera-paraula($cad as xs:string) as xs:string {</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    let $paraula := substring-before($cad, ' ')</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    return $paraula</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>local:primera-paraula('Ola k ase')</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Funció recursiva per al factorial (i exemple de <code>if</code>)</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>declare function local:factorial($n as xs:integer) as xs:integer {</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    if ($n&lt;=1)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    then $n</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    else $n*local:factorial($n - 1)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>local:factorial(7)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Marge de població (diferència de població entre el país més habitat i el menys)</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>declare function local:marge($seq as element()*) as xs:double {</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    let $a := min($seq)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    let $b := max($seq)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    return ($b - $a)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>local:marge(//mondial/country/population)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Quantitat de ciutats per país</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>declare function local:numciutats($c as element(country)*) as xs:double {</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    let $n := count($c/descendant::city)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    return $n</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>local:numciutats(//mondial/country[name='Spain'])</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.flx\.cat");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Fèlix">
+<meta name="description" content="Segona part del curs Curs BBDD i Java centrada en la connexió d’un llenguatge d’alt nivell com Java amb un motor de bases de dades a través de connectors JDBC per a l’extracció i inserció de dades en bases de dades relacionals i amb l’execució de sentències SQL tradicionals.">
+
+<title>JDBC amb SQL – flx.cat</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8eff75af44363e7f64015f2cd3896f7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Cap resultat",
+    "search-matching-documents-text": "documents que coincideixen",
+    "search-copy-link-title": "Copia l'enllaç a la cerca",
+    "search-hide-matches-text": "Amaga les coincidències addicionals",
+    "search-more-match-text": "altra coincidència en aquest document",
+    "search-more-matches-text": "altres coincidències en aquest document",
+    "search-clear-button-title": "Neteja",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel·la",
+    "search-submit-button-title": "Envia",
+    "search-label": "Cerca"
+  }
+}</script>
+
+
+<meta property="og:title" content="JDBC amb SQL – flx.cat">
+<meta property="og:description" content="Segona part del curs Curs BBDD i Java centrada en la connexió d’un llenguatge d’alt nivell com Java amb un motor de bases de dades a través de connectors JDBC per a l’extracció i inserció de dades en bases de dades relacionals i amb l’execució de sentències SQL tradicionals.">
+<meta property="og:image" content="https://www.flx.cat/posts/2013-06-29-BD02-jdbc-amb-sql/images/featured.jpg">
+<meta property="og:site_name" content="flx.cat">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">flx.cat</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Cerca"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Commuta la navegació" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Inici</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Quant a…</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../posts/2013-06-29-BD02-jdbc-amb-sql/index.html">2 JDBC amb SQL</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">JDBC amb SQL</h1>
+                  <div>
+        <div class="description">
+          Segona part del curs <a href="../2013-05-10-BD00-curs-bbdd-i-java">Curs BBDD i Java</a> centrada en la connexió d’un llenguatge d’alt nivell com Java amb un motor de bases de dades a través de connectors JDBC per a l’extracció i inserció de dades en bases de dades relacionals i amb l’execució de sentències SQL tradicionals.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">bases de dades</div>
+                <div class="quarto-category">rdbms</div>
+                <div class="quarto-category">mysql</div>
+                <div class="quarto-category">java</div>
+                <div class="quarto-category">jdbc</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Autor/a</div>
+      <div class="quarto-title-meta-contents">
+               <p>Fèlix </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Publicat</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">29 de juny de 2013</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-05-10-BD00-curs-bbdd-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Curs BDDD (índex)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD01-tipus-de-bases-de-dades/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 Tipus de bases de dades</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD02-jdbc-amb-sql/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">2 JDBC amb SQL</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD03-ordbms-amb-oracle/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 Oracle ORDBMS</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD04-xml-java-stax-jaxb/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 StaX i JAXB</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD05-hibernate-mapatge-objecte-relacional/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 Hibernate i ORM</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD06-hibernate-i-jpa/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 Hibernate/JPA</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-02-BD07-oodbms-amb-db4o-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 db4o+Java</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 XND: XPath/XQuery</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD09-xnd-basex-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 XND: BaseX+Java</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En aquesta pàgina</h2>
+   
+  <ul>
+  <li><a href="#connectors-jdbc" id="toc-connectors-jdbc" class="nav-link active" data-scroll-target="#connectors-jdbc">1. Connectors JDBC</a></li>
+  <li><a href="#ús-dels-connectors" id="toc-ús-dels-connectors" class="nav-link" data-scroll-target="#ús-dels-connectors">2. Ús dels connectors</a></li>
+  <li><a href="#sobre-els-resultset" id="toc-sobre-els-resultset" class="nav-link" data-scroll-target="#sobre-els-resultset">3. Sobre els <code>ResultSet</code></a></li>
+  <li><a href="#execució-de-consultes-de-modificació-de-dades-dml" id="toc-execució-de-consultes-de-modificació-de-dades-dml" class="nav-link" data-scroll-target="#execució-de-consultes-de-modificació-de-dades-dml">4. Execució de consultes de modificació de dades (DML)</a></li>
+  <li><a href="#modificació-de-dades-des-de-consulta-updatable" id="toc-modificació-de-dades-des-de-consulta-updatable" class="nav-link" data-scroll-target="#modificació-de-dades-des-de-consulta-updatable">5. Modificació de dades des de consulta <code>UPDATABLE</code></a></li>
+  <li><a href="#preparació-de-consultes-amb-preparestatement" id="toc-preparació-de-consultes-amb-preparestatement" class="nav-link" data-scroll-target="#preparació-de-consultes-amb-preparestatement">6. Preparació de consultes amb <code>prepareStatement()</code></a></li>
+  <li><a href="#extracció-de-les-metadates-de-la-consulta" id="toc-extracció-de-les-metadates-de-la-consulta" class="nav-link" data-scroll-target="#extracció-de-les-metadates-de-la-consulta">7. Extracció de les metadates de la consulta</a></li>
+  <li><a href="#dao-components-daccés-a-dades" id="toc-dao-components-daccés-a-dades" class="nav-link" data-scroll-target="#dao-components-daccés-a-dades">8. DAO (Components d’accés a dades)</a>
+  <ul class="collapse">
+  <li><a href="#arquitectura-n-tier-programació-per-capes" id="toc-arquitectura-n-tier-programació-per-capes" class="nav-link" data-scroll-target="#arquitectura-n-tier-programació-per-capes">8.1. Arquitectura n-tier (programació per capes)</a></li>
+  <li><a href="#capa-de-presentació-presentation-tier" id="toc-capa-de-presentació-presentation-tier" class="nav-link" data-scroll-target="#capa-de-presentació-presentation-tier">8.2. Capa de presentació (<em>Presentation tier</em>)</a></li>
+  <li><a href="#capa-de-lògica-de-negoci-logicalbusiness-tier" id="toc-capa-de-lògica-de-negoci-logicalbusiness-tier" class="nav-link" data-scroll-target="#capa-de-lògica-de-negoci-logicalbusiness-tier">8.3. Capa de lògica de negoci (<em>Logical/Business tier</em>)</a></li>
+  <li><a href="#capa-de-dades-data-tier" id="toc-capa-de-dades-data-tier" class="nav-link" data-scroll-target="#capa-de-dades-data-tier">8.4. Capa de dades (<em>Data tier</em>)</a></li>
+  <li><a href="#comparació-amb-larquitectura-mvc" id="toc-comparació-amb-larquitectura-mvc" class="nav-link" data-scroll-target="#comparació-amb-larquitectura-mvc">8.5. Comparació amb l’arquitectura MVC</a></li>
+  <li><a href="#concepte-de-dao" id="toc-concepte-de-dao" class="nav-link" data-scroll-target="#concepte-de-dao">8.6. Concepte de DAO</a></li>
+  </ul></li>
+  <li><a href="#problemàtica-del-jdbc" id="toc-problemàtica-del-jdbc" class="nav-link" data-scroll-target="#problemàtica-del-jdbc">9. Problemàtica del JDBC</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="connectors-jdbc" class="level2">
+<h2 class="anchored" data-anchor-id="connectors-jdbc">1. Connectors JDBC</h2>
+<p>Els connectors JDBC permeten utilitzar les bases de dades dels fabricants més importants des de les nostres aplicacions Java.</p>
+<p>Un connector JDBC està pensat per a només una família de base de dades. Així doncs, existeix un connector JDBC per a MySQL, un altre per Oracle, un altre per a Microsoft SQL Server, etc.</p>
+<p>En aquest tema farem proves connectant contra una base de dades MySQL local. S’assumeix disposar del MySQL correctament instal·lat i operatiu.</p>
+<p>És responsabilitat del programador descarregar el connector JDBC que s’apliqui a la seva versió de Java i instal·lar-la apropiadament o fer ús de la configuració per defecte en casos com les distribucions de Linux.</p>
+<p>En concret, si s’utilitza una distribució Ubuntu moderna (les proves presentades aquí estan fetes amb Ubuntu &gt;11.10, amb openjdk versió 6 o 7), podrem instal·lar el connector JDBC per a MySQL simplement escrivint:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo aptitude install libmysql-java</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Quan disposem del connector ja instal·lat, l’única diferència respecte a la compilació i execució de programes Java és que, quan executem el programa, si el connector no està copiat al directori de treball, hem d’especificar-lo en la ruta de cerca <code>CLASSPATH</code>. En el cas particular, podrem escriure:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> javac LlistatPersones.java</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> java <span class="at">-cp</span> .:/usr/share/mysql-connector-java.jar LlistatPersones</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com es veu, l’especificació amb el modificador <code>-cp</code> permet indicar el directori actual (<code>.</code>) i la ubicació de l’arxiu comprimit <code>mysql-connector-java.jar</code> que està en un directori del sistema, separant els camins amb el caràcter “<code>:</code>”.</p>
+</section>
+<section id="ús-dels-connectors" class="level2">
+<h2 class="anchored" data-anchor-id="ús-dels-connectors">2. Ús dels connectors</h2>
+<p>Els connectors JDBC requereixen d’un seguit de passos pràctics a l’hora d’usar-se en Java:</p>
+<ol type="1">
+<li><p><strong>Invocar la recerca de la classe</strong> relacionada amb el connector. Això es fa amb una crida com la següent:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Class</span><span class="op">.</span><span class="fu">forName</span><span class="op">(</span> <span class="st">"com.mysql.jdbc.Driver"</span> <span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Això dependrà, lògicament, del connector específic que estiguem utilitzant.</p>
+<p>Aquest pas podria generar una excepció de <em>classe no trobada</em> que ha de ser atesa.</p></li>
+<li><p><strong>Obtenir una connexió amb el servidor</strong>, utilitzant les credencials adients. Això sol fer-se escrivint una línia com la següent:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> url <span class="op">=</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Connection</span> conn <span class="op">=</span> <span class="bu">DriverManager</span><span class="op">.</span><span class="fu">getConnection</span><span class="op">(</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">"jdbc:mysql://localhost/hr"</span><span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">"hr_user"</span><span class="op">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">"hr_pass"</span> <span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com veu, el primer paràmetre de la crida a la funció conté el nom del servidor (o la IP) i el nom de la base de dades. Després s’indicaran l’usuari i la contrasenya en els altres dos arguments de la crida.</p>
+<p>Aquest pas podria generar una excepció d’<em>impossible contactar</em> que ha de ser atesa.</p></li>
+<li><p>Un cop tenim una connexió establerta, podem utilitzar-la per a <strong>realitzar una consulta</strong>. Només cal definir un <code>Statement</code> i executar-lo:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> sql <span class="op">=</span> <span class="st">"SELECT * FROM employees"</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Statement</span> stmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">createStatement</span><span class="op">();</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSet</span> rs <span class="op">=</span> stmt<span class="op">.</span><span class="fu">executeQuery</span><span class="op">(</span> sql <span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>L’objecte <code>ResultSet</code> obtingut permetrà recórrer les files de resultat de la consulta executada, així com modificar valors en la taula original, si la consulta és senzilla.</p></li>
+<li><p>També podem <strong>executar ordres SQL</strong> d’execució (no consultes) que no generaran taules de resultat. Aquí tindrem ordres SQL com <code>UPDATE</code>, <code>INSERT</code>, <code>DELETE</code>, <code>CREATE TABLE</code>, etc. Per invocar aquest tipus d’ordre SQL només cal fer:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> sql <span class="op">=</span> <span class="st">"UPDATE employees SET salary=12345 WHERE employeeId=103"</span><span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Statement</span> stmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">createStatement</span><span class="op">();</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>stmt<span class="op">.</span><span class="fu">execute</span><span class="op">(</span> sql <span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>S’hauran d’atendre les possibles excepcions de tipus <code>java.sql.SQLException</code> que s’hi puguin produir.</p></li>
+<li><p>Un cop hem realitzat totes les tasques necessàries amb una consulta, hem d’<strong>alliberar</strong> (tancar) <strong>la consulta</strong>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rs<span class="op">.</span><span class="fu">close</span><span class="op">();</span>    <span class="co">// Si és una consulta SELECT</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>stmt<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>I quan hem acabat de realitzar totes les tasques amb la base de dades, podrem <strong>tancar la connexió</strong> establerta amb ella:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>conn<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</section>
+<section id="sobre-els-resultset" class="level2">
+<h2 class="anchored" data-anchor-id="sobre-els-resultset">3. Sobre els <code>ResultSet</code></h2>
+<p>Quan invoquem una consulta SQL que demani un bolcat de dades (consultes tipus <code>SELECT</code>), hem vist que hem d’invocar el mètode <code>Statement.executeQuery(...)</code>.</p>
+<p>Aquest mètode ens retorna un objecte de tipus <code>ResultSet</code> que contindrà la taula de resultats de la consulta.</p>
+<p>Per recórrer aquesta taula, ho farem línia a línia (fila a fila), mitjançant una estructura clàssica com la següent:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSet</span> rs <span class="op">=</span> stmt<span class="op">.</span><span class="fu">executeQuery</span><span class="op">(</span> sql <span class="op">);</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span><span class="op">(</span> rs<span class="op">.</span><span class="fu">next</span><span class="op">()</span> <span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> id <span class="op">=</span> rs<span class="op">.</span><span class="fu">getInt</span><span class="op">(</span><span class="st">"employeeId"</span><span class="op">);</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span> nom <span class="op">=</span> rs<span class="op">.</span><span class="fu">getString</span><span class="op">(</span><span class="st">"firstname"</span><span class="op">);</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span> cognoms <span class="op">=</span> rs<span class="op">.</span><span class="fu">getString</span><span class="op">(</span><span class="st">"lastname"</span><span class="op">);</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span> id <span class="op">+</span> <span class="st">": "</span> <span class="op">+</span> cognoms <span class="op">+</span> <span class="st">", "</span> <span class="op">+</span> nom <span class="op">);</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>rs<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observi que es fa ús de la funció <code>ResultSet.next()</code> per anar recorrent tota la taula de resultats. Amb la fila activa, podem extreure els valors de les columnes fent crides a les funcions <code>ResultSet.getInt(...)</code> o <code>ResultSet.getString(...)</code>.</p>
+<p>Existeix tota una col·lecció de funcions en la classe <code>ResultSet</code> que permet recórrer verticalment la taula (moure’s entre les files) com <code>first()</code>, <code>last()</code>, etc.</p>
+<p>De la mateixa manera existeix tota una col·lecció de mètodes per obtenir les dades en diferents tipus: <code>getInt()</code>, <code>getString()</code>, <code>getDate()</code>, etc.</p>
+<p>Independentment, també podem modificar els valors de la taula resultant. Això s’analitzarà en un exemple posterior. I és que existeixen mètodes com <code>setInt()</code> o <code>setString()</code> i la funció <code>updateRow()</code> que actualitza la taula en la base de dades original. Amb tot, per utilitzar aquesta funcionalitat, s’ha d’especificar que aquesta consulta sigui de tipus <em>actualitzable</em>.</p>
+</section>
+<section id="execució-de-consultes-de-modificació-de-dades-dml" class="level2">
+<h2 class="anchored" data-anchor-id="execució-de-consultes-de-modificació-de-dades-dml">4. Execució de consultes de modificació de dades (DML)</h2>
+<p>Per al cas d’executar ordres SQL de manipulació de dades (les que s’anomenen comunament DML), en comptes de fer servir el mètode <code>Statement.executeSQL(...)</code>, farem servir <code>Statement.execute(...)</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Observi ara l’exemple de curs número 1.</p>
+</div>
+</div>
+</section>
+<section id="modificació-de-dades-des-de-consulta-updatable" class="level2">
+<h2 class="anchored" data-anchor-id="modificació-de-dades-des-de-consulta-updatable">5. Modificació de dades des de consulta <code>UPDATABLE</code></h2>
+<p>Podem modificar les dades directament sobre una consulta de tipus <code>SELECT</code> i després demanar que les dades modificades s’incorporin a l’origen de dades (la taula original). Això permet agilitzar l’accés i modificació de les dades des del programa, sense haver d’executar ordres SQL diverses per a cada operació.</p>
+<p>Per aconseguir-ho hem de realitzar una consulta estàndard de selecció (<code>SELECT</code>), però marcar la consulta com a <strong>actualitzable</strong>. Aleshores executem la consulta normalment i rebem el resultat del <code>SELECT</code> en un objecte <code>ResultSet</code> com abans.</p>
+<p>La diferència és que mentre recorrem la taula de dades obtinguda, podem executar mètodes de modificació d’aquestes dades amb crides a <code>ResultSet.updateInt(...)</code> o <code>ResultSet.updateString(...)</code>, per exemple.</p>
+<p>Un cop hem realitzat totes les modificacions que necessitem, simplement executarem <code>ResultSet.updateRow()</code> per enregistrar els canvis de la fila modificada en la taula original de la base de dades:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> sql <span class="op">=</span> <span class="st">"SELECT * FROM employees"</span><span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">Statement</span> stmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">createStatement</span><span class="op">(</span> <span class="bu">ResultSet</span><span class="op">.</span><span class="fu">TYPE_SCROLL_INSENSITIVE</span><span class="op">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                                       <span class="bu">ResultSet</span><span class="op">.</span><span class="fu">CONCUR_UPDATABLE</span> <span class="op">);</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSet</span> rs <span class="op">=</span> stmt<span class="op">.</span><span class="fu">executeQuery</span><span class="op">(</span> sql <span class="op">);</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span><span class="op">(</span> rs<span class="op">.</span><span class="fu">next</span><span class="op">()</span> <span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">float</span> salary  <span class="op">=</span> rs<span class="op">.</span><span class="fu">getFloat</span><span class="op">(</span> <span class="st">"salary"</span> <span class="op">);</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span> salary <span class="op">&lt;</span> <span class="dv">10000</span> <span class="op">)</span> salary <span class="op">*=</span> <span class="fl">1.03</span><span class="op">;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> salary <span class="op">*=</span> <span class="fl">1.035</span><span class="op">;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  rs<span class="op">.</span><span class="fu">updateFloat</span><span class="op">(</span> <span class="st">"salary"</span><span class="op">,</span> salary <span class="op">);</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  rs<span class="op">.</span><span class="fu">updateRow</span><span class="op">();</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>rs<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>stmt<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Els canvis són incorporats immediatament a la base de dades i són accessibles a posteriors consultes de selecció.</p>
+</section>
+<section id="preparació-de-consultes-amb-preparestatement" class="level2">
+<h2 class="anchored" data-anchor-id="preparació-de-consultes-amb-preparestatement">6. Preparació de consultes amb <code>prepareStatement()</code></h2>
+<p>Podem configurar consultes parametritzades de qualsevol tipus (selecció, DML, etc.), és a dir, construir consultes que reben dades provinents de variables de Java que incorporem a la sentència.</p>
+<p>Per fer-ho, Java ens ofereix la classe <code>PreparedStatement</code> que funciona exactament igual que <code>Statement</code> des del punt de vista de l’execució de sentències SQL, però que accepta la parametrització de la consulta.</p>
+<p>Observi el següent exemple:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">PreparedStatement</span> pstmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">prepareStatement</span><span class="op">(</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SELECT COUNT(*) AS total FROM employees WHERE firstname=? AND lastname=?"</span> <span class="op">);</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>pstmt<span class="op">.</span><span class="fu">setString</span><span class="op">(</span> <span class="dv">1</span><span class="op">,</span> firstname <span class="op">);</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>pstmt<span class="op">.</span><span class="fu">setString</span><span class="op">(</span> <span class="dv">2</span><span class="op">,</span> lastname <span class="op">);</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSet</span> rs <span class="op">=</span> pstmt<span class="op">.</span><span class="fu">executeQuery</span><span class="op">();</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Veurà que la consulta SQL, ara construïda sobre un objecte de tipus <code>PreparedStatement</code> i obtinguda amb una crida a <code>Connection.prepareStatement(...)</code>, rep una cadena SQL convencional on s’han omès l’usuari i la contrasenya, i s’ha escrit en el seu lloc un caràcter <code>?</code>. Observi que tampoc hi ha cometes simples ni dobles encerclant l’interrogant.</p>
+<p>Després es canvien els interrogants fent crides a <code>PreparedStatement.setString(...)</code> per modificar les dades en les posicions 1 i 2 (així és com fem referència als interrogants).</p>
+</section>
+<section id="extracció-de-les-metadates-de-la-consulta" class="level2">
+<h2 class="anchored" data-anchor-id="extracció-de-les-metadates-de-la-consulta">7. Extracció de les metadates de la consulta</h2>
+<p>Tota consulta, un cop executada, genera un objecte <code>ResultSet</code> amb les dades obtingudes. Però si necessitem saber quantes columnes hem obtingut i quins són els seus tipus de dada, haurem d’accedir al que s’anomena les <em>metadates</em> del <code>ResultSet</code>.</p>
+<p>Per obtenir les metadates, simplement haurem d’executar una crida a la funció <code>ResultSet.getMetaData()</code> sobre el <code>ResultSet</code> obtingut de la consulta i obtindrem un objecte <code>ResultSetMetaData</code> amb la informació:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSetMetaData</span> rsmd <span class="op">=</span> rs<span class="op">.</span><span class="fu">getMetaData</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Amb aquest objecte podem descobrir moltes característiques relacionades amb les columnes obtingudes en aquell <code>ResultSet</code>:</p>
+<ul>
+<li>Amb <code>ResultSetMetaData.getColumnCount()</code> obtindrem la quantitat de columnes obtingudes</li>
+<li>Amb <code>ResultSetMetaData.getColumnName(idx)</code> obtindrem el nom (o àlies) associat a la columna indicada numèricament. I tingui present que <strong>comença a comptar a partir de 1</strong>.</li>
+<li>Amb <code>ResultSetMetaData.getColumnDisplaySize(idx)</code> obtindrem la mida màxima de totes les dades d’aquella columna, permetent, per exemple, saber l’amplada de columna que s’haurà de deixar per pantalla per mostrar tota la taula correctament.</li>
+<li>Amb <code>ResultSetMetaData.getColumnTypeName(idx)</code> obtindrem el tipus de dada de la columna demanada, sent normalment cadenes en nomenclatura MySQL: “<code>INTEGER</code>”, “<code>DATE</code>”, “<code>CHAR</code>”, etc.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Observi ara l’exemple de curs número 2.</p>
+</div>
+</div>
+<p>Si investiga el codi font, veurà que s’ha incorporat la decisió de justificar a esquerra o dreta el text obtingut a partir del tipus de dada de cada columna, i mitjançant crides a les funcions <code>padLeft()</code> i <code>padRight()</code> definides al programa.</p>
+</section>
+<section id="dao-components-daccés-a-dades" class="level2">
+<h2 class="anchored" data-anchor-id="dao-components-daccés-a-dades">8. DAO (Components d’accés a dades)</h2>
+<p>Un <strong>component d’accés a dades (DAO, <em>Data Access Object</em>)</strong> és un mecanisme de disseny de <em>software</em> àmpliament utilitzat en el desenvolupament de programari.</p>
+<p>Parteix de la idea que, en realitat, quan volem disposar de diferents objectes que es vinculin amb orígens de dades, poden existir múltiples mecanismes de persistència.</p>
+<p>Veurem més endavant que <strong>JPA (<em>Java Persistence API</em>)</strong> ens proveeix d’un mecanisme apte per a realitzar l’abstracció de <strong>classes POJO</strong> cap a un motor de dades determinat. I fins i tot utilitzarem <strong>Hibernate</strong> com a intermediari per a construir aplicacions sobre JPA.</p>
+<p>Hibernate ens oferirà el mecanisme ideal per al disseny d’una aplicació que connecti contra un motor de base de dades específic, i construïrem l’aplicació en funció del motor triat. Bé, en tot cas configurem Hibernate per treballar amb l’origen de dades específic (nom del servidor de base de dades, port de servei, nom d’usuari, contrasenya).</p>
+<p>A més, hem de disposar d’un <strong>connector JDBC</strong> específic per al motor concret que utilitzem.</p>
+<p>Tot aquest castell de cartes és útil i funciona, però no és l’únic patró de disseny que es fa en l’actualitat.</p>
+<section id="arquitectura-n-tier-programació-per-capes" class="level3">
+<h3 class="anchored" data-anchor-id="arquitectura-n-tier-programació-per-capes">8.1. Arquitectura n-tier (programació per capes)</h3>
+<p>En l’àmbit de l’enginyeria del <em>software</em>, l’arquitectura multi-capa (<em>multi-tier architecture</em>) (també coneguda com a “arquitectura <em>n-tier</em>” és un arquitectura de disseny de programació que consta de tres capes o elements separats des del punt de vista lògic.</p>
+<p>L’arquitectura més habitual és la de tres capes (<strong><em>3-tier</em></strong>):</p>
+<ul>
+<li><strong>Presentació (<em>presentation layer</em>)</strong></li>
+<li><strong>Processament de l’aplicació, també coneguda com a capa de lògica de negoci (<em>logical/business layer</em>)</strong></li>
+<li><strong>Funcions de manipulació de dades (<em>data layer</em>)</strong></li>
+</ul>
+<p>Aquesta arquitectura de disseny ens permet construir aplicacions on cadascun dels elements pugui ser desenvolupat separadament, o substituït completament, sense haver de modificar res de cap de les altres capes. Per exemple, en cas d’un canvi de sistema operatiu només caldrà adequar la capa de presentació, o si es canvia el sistema d’emmagatzematge de dades només s’haurà de canviar la capa de dades.</p>
+<p>L’estructura de tres capes va ser desenvolupada originàriament per John J. Donovan en Open Environment Corporation (OEC) a Cambridge, Massachusetts.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Overview_of_a_three-tier_application.png" class="img-fluid figure-img"></p>
+<figcaption>Aspecte general d’una aplicació 3-tier</figcaption>
+</figure>
+</div>
+</section>
+<section id="capa-de-presentació-presentation-tier" class="level3">
+<h3 class="anchored" data-anchor-id="capa-de-presentació-presentation-tier">8.2. Capa de presentació (<em>Presentation tier</em>)</h3>
+<p>És la capa més alta de l’aplicació. Mostra la informació a l’usuari com a resultat de les accions que realitza i les dades que demana. Comunica amb la capa de lògica de negoci com a resposta de les accions dels usuaris.</p>
+<p>Comunament serà una pàgina web o la pantalla principal i els formularis secundaris d’una aplicació de plataforma.</p>
+</section>
+<section id="capa-de-lògica-de-negoci-logicalbusiness-tier" class="level3">
+<h3 class="anchored" data-anchor-id="capa-de-lògica-de-negoci-logicalbusiness-tier">8.3. Capa de lògica de negoci (<em>Logical/Business tier</em>)</h3>
+<p>Aquesta capa controla realment la funcionalitat de l’aplicació, realitzar el processament detallat de les accions demanades per l’usuari a la capa de presentació, enviant o rebent dades de la capa de dades situada per sota.</p>
+</section>
+<section id="capa-de-dades-data-tier" class="level3">
+<h3 class="anchored" data-anchor-id="capa-de-dades-data-tier">8.4. Capa de dades (<em>Data tier</em>)</h3>
+<p>Aquesta capa consisteix en la connexió amb els servidors de bases de dades i/o orígens d’informació i dades. Aquí és on s’obté i processa la informació. Aquesta capa manté les dades d’una manera neutral i independent de l’aplicació i la lògica de l’aplicació.</p>
+<p>Fer aquesta separació permet l’escalabilitat i la millora de l’eficiència de les aplicacions, a més de permetre l’existència (i potser coexistència simultània) de diversos orígens de dades.</p>
+</section>
+<section id="comparació-amb-larquitectura-mvc" class="level3">
+<h3 class="anchored" data-anchor-id="comparació-amb-larquitectura-mvc">8.5. Comparació amb l’arquitectura MVC</h3>
+<p>L’arquitectura <strong>MVC (<em>Model-View-Controller</em>)</strong> és un model de tres capes semblant al presentat fins ara, però que incorpora una petita diferència: en el cas de MVC, la comunicació entre capes pot realitzar-se directament entre la capa de dades (model) i la de presentació (vista); mentre que en el cas 3-tier, no és permesa la comunicació entre dades i presentació (sempre s’ha de passar a través de la capa de processament).</p>
+</section>
+<section id="concepte-de-dao" class="level3">
+<h3 class="anchored" data-anchor-id="concepte-de-dao">8.6. Concepte de DAO</h3>
+<p>Evidentment no és temari d’aquest tema (ni d’aquest curs com a conjunt) parlar de les capes de presentació i de processament. Del que sí hem de parlar és de la <strong>capa d’accés a dades (DAL, <em>Data Access Layer</em>)</strong>.</p>
+<p>Aquesta capa, tal i com s’ha esmentat, és l’encarregada de la persistència de dades en els medis i amb els mitjans requerits i/o disponibles per al correcte funcionament de l’aplicació.</p>
+<p>Això es desglossa en diversos tipus d’implementació que dependran del model de dades triat. Aquests models poden ser combinats i en poden haver més d’un en una mateixa aplicació.</p>
+<p>Els models de dades més utilitzats avui dia són:</p>
+<ul>
+<li>Fitxers de disc, amb formats estàndard coneguts i/o propietaris</li>
+<li>Dades residents en bases de dades relacionals</li>
+<li>Dades residents en bases de dades orientades a objectes</li>
+<li>Documents residents en una bases de dades natives XML</li>
+</ul>
+<p>La metodologia utilitzada comunament per implementar la capa d’accés a dades (DAL) és la de construir una col·lecció d’objectes (tot sovint a través d’interfícies) que representin objectes que permetin accedir a la informació ubicada en aquells dipòsits d’informació.</p>
+<p>Aquests objectes, coneguts com a <strong>objectes d’accés a dades (DAO, <em>Data Access Objects</em>)</strong>, són en realitat l’objectiu d’aquesta unitat formativa.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Un DAO és un objecte POJO que representa una unitat d’informació tancada des d’un punt de vista conceptual, i que implementa les operacions CRUD a més d’altres mètodes més específics d’objecte específic.</p>
+</div>
+</div>
+<p>Les operacions CRUD són les habituals de tot element d’informació: <em>Create</em>, <em>Read</em>, <em>Update</em> i <em>Delete</em> (crear, llegir, editar i eliminar).</p>
+<p>En una aplicació, hi ha tants DAO com models. És a dir, en una base de dades relacional, per cada taula haurà un DAO associat (tot i que un sol DAO pot cobrir més d’una taula o entitat).</p>
+<p>L’avantatge d’usar DAO és la separació senzilla però rigorosa entre les parts d’una aplicació que preferiblement haurien de ser independents unes d’altres, i que poden evolucionar o canviar separadament. Així doncs, es podria canviar la lògica de negoci d’una aplicació sense tocar ni una sola línia de codi de les interfícies DAO, i viceversa. Igual respecte a la capa de presentació.</p>
+<p>Els seus grans avantatges són:</p>
+<ul>
+<li>Pot ser usat en un gran nombre d’aplicacions, allà on es requereixi d’un magatzem d’informació.</li>
+<li>Amaguen els detalls de la implementació de l’emmagatzematge de la resta de l’aplicació.</li>
+<li>Actuen com a intermediari entre l’aplicació i la base de dades. Mouen dades entre els objectes i els orígens d’informació.</li>
+<li>Permeten que els canvis en els mecanismes de persistència no afectin moltes àrees de l’aplicació.</li>
+</ul>
+<p>Des del punt de vista específica del llenguatge Java, els DAO poden implementar-se de moltes maneres: des de simples interfícies que separen l’accés a dades de la lògica de l’aplicació; fins a llibreries i productes comercials: JPA, JDO, Enterprise Java Beans (J2EE), TopLink, Doctrine, Hibernate, iBATIS, Apache OpenJPA, etc.</p>
+<p>L’ús de DAO en entorns Java hauria de comportar:</p>
+<ul>
+<li>Un augment de l’eficiència i rendiment de la capa de dades, perquè ara es torna reutilitzable, i</li>
+<li>Capacitat de modificar els DAO sense alterar altres parts de l’aplicació.</li>
+</ul>
+<p>De vegades necessitarem també dels <strong>DTO (<em>Data Transfer Object</em>)</strong>, també denominats <strong>VO (<em>Value Object</em>)</strong>. Són utilitzats pels DAO per a transportar les dades des de la base de dades fins a la capa de lògica de negoci i viceversa. Malgrat això, normalment són els mateixos DAO que són moguts des de i cap a la capa de lògica.</p>
+<p>El patró de disseny DAO consisteix en algunes classes factoria, interfícies DAO i algunes classes DAO que implementin aquelles interfícies:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/model_dao.png" class="img-fluid figure-img"></p>
+<figcaption>Model DAO</figcaption>
+</figure>
+</div>
+<p>Els DAO són els objectes primaris d’aquest patró de disseny. Aquest objecte abstreu la implementació d’accés a dades dels altres objectes per habilitar l’accés transparent a la base de dades o unitat d’emmagatzematge.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Observi ara l’exemple de curs número 3.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="problemàtica-del-jdbc" class="level2">
+<h2 class="anchored" data-anchor-id="problemàtica-del-jdbc">9. Problemàtica del JDBC</h2>
+<p>Què passa si, mitjançant l’exemple número 3, intenta aplicar el procés de canvi de sou al treballador amb <code>employeeId=100</code>?</p>
+<p>La solució és fer que els POJO no facin referència als <code>id</code> d’altres taules, sinó que les referències entre taules es resolguin directament a objectes de les classes associades.</p>
+<p>Així doncs, el POJO <code>Employee</code> hauria de ser així:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Employee <span class="op">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> employeeId<span class="op">;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span> firstname<span class="op">;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span> lastname<span class="op">;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span> email<span class="op">;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span> phoneINT<span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">Date</span> hireDate<span class="op">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  Job job<span class="op">;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">float</span> salary<span class="op">;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">float</span> commissionPct<span class="op">;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  Employee manager<span class="op">;</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  Department department<span class="op">;</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">...</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observi que ara aquells camps que són clau forana a altres taules han estat substituïts per objectes referenciats adecuadament des d’aquest. Així, si tenim un determinat treballador <code>e1</code>, si apliquem <code>e1.getDepartment()</code> el que obtindríem seria tot un objecte de la classe <code>Department</code> amb què podrem treballar normalment.</p>
+<p>Aquesta idea, que resulta evident ara que ha estat presentada, incorpora una gran problemàtica si intenta dur-se a terme amb simples consultes SQL a través de JDBC. Els motius són diversos:</p>
+<ul>
+<li>Hauríem de mantenir en memòria gran part (o tota) la base de dades, perquè un treballador tindrà un cap, que al seu torn tindrà un altre, etc. El mateix amb la resta d’elements de la base de dades.</li>
+<li>Hem d’escriure moltíssimes línies de codi per obtenir pocs (o cap) avantatges només per tenir els objectes en memòria.</li>
+<li>Un <strong>canvi en les dades</strong> no és reflectit en la base de dades de cap manera. Hauríem de programar una funció que bolqués les dades de nou a la taula atenent als canvis que s’hi descobreixin, fent també el programa molt més complex i llarg.</li>
+<li>Les <strong>dades quedaran desactualitzades</strong> si la base de dades canvia la informació de les taules degut a l’execució d’ordres SQL provinents d’altres programes i/o usuaris concurrents. Això no podem atacar-ho d’una manera neta i definitiva, sent un <strong>greu problema en el disseny de la base de dades i el seu ús</strong>.</li>
+</ul>
+<p>Per tant, fora de programes que accedeixen a la informació de manera immediata, realitzen llistats o executen ordres SQL de gestió de la informació, l’ús de JDBC queda lluny de ser solució en una manipulació intensiva i continuada de les dades de la base de dades, on el programa hagi d’accedir a blocs d’informació amplis i treballar en paral·lel amb multitud de taules i usuaris concurrents.</p>
+<p>Veurem, com a solució, altres tècniques al llarg d’aquest curs. Bàsicament mitjançat JPA i Hibernate.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.flx\.cat");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

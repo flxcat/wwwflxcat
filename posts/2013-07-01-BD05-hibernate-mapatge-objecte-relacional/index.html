@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Fèlix">
+<meta name="description" content="Cinquena part del curs Curs BBDD i Java on s’analitzarà com realitzar mapatge objecte-relacional entre objectes d’un llenguatge orientat a objectes d’alt nivell (Java) amb bases de dades relacionals tradicionals i les tècniques associades per a l’extracció i inserció de dades en aquests casos.">
+
+<title>Hibernate i el mapatge objecte-relacional – flx.cat</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8eff75af44363e7f64015f2cd3896f7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Cap resultat",
+    "search-matching-documents-text": "documents que coincideixen",
+    "search-copy-link-title": "Copia l'enllaç a la cerca",
+    "search-hide-matches-text": "Amaga les coincidències addicionals",
+    "search-more-match-text": "altra coincidència en aquest document",
+    "search-more-matches-text": "altres coincidències en aquest document",
+    "search-clear-button-title": "Neteja",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel·la",
+    "search-submit-button-title": "Envia",
+    "search-label": "Cerca"
+  }
+}</script>
+
+
+<meta property="og:title" content="Hibernate i el mapatge objecte-relacional – flx.cat">
+<meta property="og:description" content="Cinquena part del curs Curs BBDD i Java on s’analitzarà com realitzar mapatge objecte-relacional entre objectes d’un llenguatge orientat a objectes d’alt nivell (Java) amb bases de dades relacionals tradicionals i les tècniques associades per a l’extracció i inserció de dades en aquests casos.">
+<meta property="og:image" content="https://www.flx.cat/posts/2013-07-01-BD05-hibernate-mapatge-objecte-relacional/images/featured.jpg">
+<meta property="og:site_name" content="flx.cat">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">flx.cat</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Cerca"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Commuta la navegació" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Inici</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Quant a…</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../posts/2013-07-01-BD05-hibernate-mapatge-objecte-relacional/index.html">5 Hibernate i ORM</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Hibernate i el mapatge objecte-relacional</h1>
+                  <div>
+        <div class="description">
+          Cinquena part del curs <a href="../2013-05-10-BD00-curs-bbdd-i-java">Curs BBDD i Java</a> on s’analitzarà com realitzar mapatge objecte-relacional entre objectes d’un llenguatge orientat a objectes d’alt nivell (Java) amb bases de dades relacionals tradicionals i les tècniques associades per a l’extracció i inserció de dades en aquests casos.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">bases de dades</div>
+                <div class="quarto-category">rdbms</div>
+                <div class="quarto-category">mysql</div>
+                <div class="quarto-category">java</div>
+                <div class="quarto-category">jdbc</div>
+                <div class="quarto-category">hibernate</div>
+                <div class="quarto-category">jpa</div>
+                <div class="quarto-category">criteria</div>
+                <div class="quarto-category">hql</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Autor/a</div>
+      <div class="quarto-title-meta-contents">
+               <p>Fèlix </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Publicat</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">1 de juliol de 2013</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-05-10-BD00-curs-bbdd-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Curs BDDD (índex)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD01-tipus-de-bases-de-dades/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 Tipus de bases de dades</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD02-jdbc-amb-sql/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 JDBC amb SQL</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD03-ordbms-amb-oracle/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 Oracle ORDBMS</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD04-xml-java-stax-jaxb/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 StaX i JAXB</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD05-hibernate-mapatge-objecte-relacional/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">5 Hibernate i ORM</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD06-hibernate-i-jpa/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 Hibernate/JPA</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-02-BD07-oodbms-amb-db4o-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 db4o+Java</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 XND: XPath/XQuery</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD09-xnd-basex-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9 XND: BaseX+Java</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En aquesta pàgina</h2>
+   
+  <ul>
+  <li><a href="#introducció-al-mapatge-objecte-relacional" id="toc-introducció-al-mapatge-objecte-relacional" class="nav-link active" data-scroll-target="#introducció-al-mapatge-objecte-relacional">1. Introducció al mapatge objecte-relacional</a></li>
+  <li><a href="#hibernate" id="toc-hibernate" class="nav-link" data-scroll-target="#hibernate">2. Hibernate</a></li>
+  <li><a href="#enllaçatinstallació-de-hibernate" id="toc-enllaçatinstallació-de-hibernate" class="nav-link" data-scroll-target="#enllaçatinstallació-de-hibernate">3. Enllaçat/instal·lació de Hibernate</a></li>
+  <li><a href="#configuració-de-hibernate" id="toc-configuració-de-hibernate" class="nav-link" data-scroll-target="#configuració-de-hibernate">4. Configuració de Hibernate</a></li>
+  <li><a href="#exemples-de-hibernate" id="toc-exemples-de-hibernate" class="nav-link" data-scroll-target="#exemples-de-hibernate">5. Exemples de Hibernate</a></li>
+  <li><a href="#exemple-dús-amb-definicions-xml" id="toc-exemple-dús-amb-definicions-xml" class="nav-link" data-scroll-target="#exemple-dús-amb-definicions-xml">6. Exemple d’ús amb definicions XML</a></li>
+  <li><a href="#exemple-dús-amb-definicions-per-annotations" id="toc-exemple-dús-amb-definicions-per-annotations" class="nav-link" data-scroll-target="#exemple-dús-amb-definicions-per-annotations">7. Exemple d’ús amb definicions per annotations</a></li>
+  <li><a href="#persistència-dobjectes-a-la-base-de-dades" id="toc-persistència-dobjectes-a-la-base-de-dades" class="nav-link" data-scroll-target="#persistència-dobjectes-a-la-base-de-dades">8. Persistència d’objectes a la base de dades</a></li>
+  <li><a href="#construccions-de-consultes-sql-hql-i-criteria" id="toc-construccions-de-consultes-sql-hql-i-criteria" class="nav-link" data-scroll-target="#construccions-de-consultes-sql-hql-i-criteria">9. Construccions de consultes SQL, HQL i Criteria</a>
+  <ul class="collapse">
+  <li><a href="#consultes-amb-sql" id="toc-consultes-amb-sql" class="nav-link" data-scroll-target="#consultes-amb-sql">9.1. Consultes amb SQL</a></li>
+  <li><a href="#consultes-amb-criteria" id="toc-consultes-amb-criteria" class="nav-link" data-scroll-target="#consultes-amb-criteria">9.2. Consultes amb <code>Criteria</code></a></li>
+  <li><a href="#consultes-amb-hql" id="toc-consultes-amb-hql" class="nav-link" data-scroll-target="#consultes-amb-hql">9.3. Consultes amb HQL</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="introducció-al-mapatge-objecte-relacional" class="level2">
+<h2 class="anchored" data-anchor-id="introducció-al-mapatge-objecte-relacional">1. Introducció al mapatge objecte-relacional</h2>
+<p>Havíem vist en l’activitat anterior que utilitzar JDBC per accedir a les dades allotjades a una base de dades és una tècnica vàlida i funcional.</p>
+<p>Malgrat tot, havíem vist que malauradament presenta un seguit d’inconvenients. Un d’ells és el fet que per associar objectes Java amb entrades de taules de base de dades, l’obtenció i actualització de les dades dels objectes i de la base de dades s’ha de realitzar manualment programant crides específiques a sentències SQL de tipus <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code> o <code>DELETE</code> (les operacions que anomenàvem <strong>CRUD</strong>).</p>
+<p>Això és més incòmode encara quan pensem en el procés d’importació i exportació de dades entre la base de dades i els objectes Java en memòria, on hem de programar bucles que realitzin fila a fila (i objecte a objecte) la importació o exportació de dades.</p>
+<p>Una tècnica que redueix l’impacte en la longitud dels nostres programes i millora la redacció de codi és el <strong>mapatge objecte-relacional (<em>Object-Relational Mapping</em>, ORM)</strong>. Aquesta tècnica permet associar objectes Java amb dades de les taules d’una base de dades externa. El mapatge ens permet indicar la correspondència a nivell de camps de taula amb els atributs equivalents d’objecte, de manera que s’automatitza bona part del procés de traducció, eliminant una part de la programació necessària que faríem amb JDBC.</p>
+</section>
+<section id="hibernate" class="level2">
+<h2 class="anchored" data-anchor-id="hibernate">2. Hibernate</h2>
+<p>El producte lliure <strong>Hibernate</strong> és un API compatible que podem utilitzar per efectuar tasques de mapatge ORM.</p>
+<p>Utilitzarem una classe <strong>POJO (<em>Plain Old Java Object</em>)</strong> com a receptacle de les files que provenen de la base de dades, i indicarem a Hibernate que utilitzi aquesta classe per associar-la a la taula de la qual traurem la informació.</p>
+<p>El cas concret de Hibernate ens ofereix diverses alternatives per tal de realitzar el mapatge, entre les que destaquen dues:</p>
+<ul>
+<li><p>A través d’un arxiu de definició XML que indica quins atributs de la classe POJO corresponen a quines columnes de la taula.</p></li>
+<li><p>A través d’anotacions sobre les classes POJO de dades, afegint indicacions que Java utilitzarà per obtenir les associacions d’atributs de classe a columnes de taula.</p></li>
+</ul>
+<p>A més, en el cas concret de Hibernate, se’ns ofereixen tècniques especials per accedir a la informació, construir consultes SQL, o fins i tot un llenguatge propi de consultes anomenat HQL.</p>
+</section>
+<section id="enllaçatinstallació-de-hibernate" class="level2">
+<h2 class="anchored" data-anchor-id="enllaçatinstallació-de-hibernate">3. Enllaçat/instal·lació de Hibernate</h2>
+<p>Per a què una aplicació faci ús del API de Hibernate, haurem de disposar de les classes corresponents en un lloc accessible del sistema. Per tant, s’haurà de descarregar des d’Internet la versió més adient (normalment la més moderna).</p>
+<p>Aleshores haurem de disposar dels arxius <code>JAR</code> de la distribució de Hibernate al mateix directori de les nostres classes, o bé en un lloc al què apuntarem mitjançant el <code>CLASSPATH</code> en compilar i en executar.</p>
+<p>Hibernate ens ofereix multitud de funcionalitats, però nosaltres només utilitzarem les funcionalitats bàsiques. Per tant, hem d’investigar els arxius JAR que apareixen en el directori <code>required</code> del <em>pack</em> d’arxius descarregats.</p>
+<p>Així doncs, necessitarem els arxius bàsics (requerits) de Hibernate, el connector a la base de dades i també haurem de descarregar la versió adient del API <strong>log4j</strong> (si volem ajustar paràmetres del <em>logging</em>).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En el moment d’escriure aquestes notes s’ha treballat amb <strong>Hibernate-4.1.8</strong> i <strong>log4j-1.2.17</strong>.</p>
+</div>
+</div>
+<p>Per tant, tenim els següents arxius:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>antlr-2.7.7.jar                                </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dom4j-1.6.1.jar                                </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>hibernate-commons-annotations-4.0.1.Final.jar  </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>hibernate-core-4.1.8.Final.jar                 </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>hibernate-jpa-2.0-api-1.0.1.Final.jar           </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>javassist-3.15.0-GA.jar                         </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>jboss-logging-3.1.0.GA.jar</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>jboss-transaction-api_1.1_spec-1.0.0.Final.jar</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>log4j-1.2.17.jar</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>mysql-connector-java.jar</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Si disposem els arxius en un directori anomenat <code>libs</code>, aleshores podrem compilar manualment els programes Java fent:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">javac</span> <span class="at">-cp</span> .:libs/<span class="pp">*</span> Classe.java</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I executar el programa fent:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">java</span> <span class="at">-cp</span> .:libs/<span class="pp">*</span> Classe</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observi que l’especificació del <code>CLASSPATH</code> amb el modificador <code>-cp</code> accepta més d’un camí a arxius o directoris, i en el cas d’arxius JAR és molt més còmode utilitzar el caràcter <code>*</code> per indicar tots els arxius JAR del directori en qüestió.</p>
+</section>
+<section id="configuració-de-hibernate" class="level2">
+<h2 class="anchored" data-anchor-id="configuració-de-hibernate">4. Configuració de Hibernate</h2>
+<p>Quan una aplicació requereix de l’ús de la funcionalitat que ofereix Hibernate, s’ha de configurar l’accés a dades que se li demanarà. Això normalment es fa utilitzant un arxiu de configuració escrit en XML i amb nom per defecte <code>hibernate.cfg.xml</code>. Aquest arxiu conté les directives principals que permeten a Hibernate localitzar i connectar amb el servidor de base de dades i configurar també com s’accedeixen als objectes.</p>
+<p>En un cas general, aquest arxiu prendrà la forma següent:</p>
+<p><strong>Arxiu hibernate.cfg.xml de mostra</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>hibernate.cfg.xml</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="hibernate.cfg.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">'1.0'</span><span class="ot"> encoding=</span><span class="st">'utf-8'</span><span class="fu">?&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="dt">&lt;!DOCTYPE</span> <span class="dt">hibernate-configuration</span> PUBLIC</span>
+<span id="cb4-3"><a href="#cb4-3"></a>          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"</span>
+<span id="cb4-4"><a href="#cb4-4"></a>          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd"<span class="dt">&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>&lt;<span class="kw">hibernate-configuration</span>&gt;</span>
+<span id="cb4-6"><a href="#cb4-6"></a>  &lt;<span class="kw">session-factory</span>&gt;</span>
+<span id="cb4-7"><a href="#cb4-7"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"connection.url"</span>&gt;jdbc:mysql://localhost/hr&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-8"><a href="#cb4-8"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"connection.username"</span>&gt;hr_user&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"connection.password"</span>&gt;hr_pass&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-10"><a href="#cb4-10"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"connection.driver_class"</span>&gt;com.mysql.jdbc.Driver&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-11"><a href="#cb4-11"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"dialect"</span>&gt;org.hibernate.dialect.MySQLDialect&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-12"><a href="#cb4-12"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"show_sql"</span>&gt;false&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-13"><a href="#cb4-13"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"format_sql"</span>&gt;false&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-14"><a href="#cb4-14"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"use_sql_comments"</span>&gt;false&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-15"><a href="#cb4-15"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"generate_statistics"</span>&gt;false&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-16"><a href="#cb4-16"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"hbm2ddl.auto"</span>&gt;validate&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-17"><a href="#cb4-17"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"connection.pool_size"</span>&gt;1&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-18"><a href="#cb4-18"></a>    &lt;<span class="kw">property</span><span class="ot"> name=</span><span class="st">"current_session_context_class"</span>&gt;thread&lt;/<span class="kw">property</span>&gt;</span>
+<span id="cb4-19"><a href="#cb4-19"></a> </span>
+<span id="cb4-20"><a href="#cb4-20"></a>    <span class="co">&lt;!-- Mapping files will go here.... --&gt;</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a>    ...</span>
+<span id="cb4-22"><a href="#cb4-22"></a></span>
+<span id="cb4-23"><a href="#cb4-23"></a>  &lt;/<span class="kw">session-factory</span>&gt;</span>
+<span id="cb4-24"><a href="#cb4-24"></a>&lt;/<span class="kw">hibernate-configuration</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>S’ha indicat a les quatre primeres propietats el lloc on es configura el servidor, el nom de la base de dades, el nom de l’usuari i la contrasenya. Observarà que la sintaxi és la mateixa que en les cadenes JDBC de connexió a base de dades.</p>
+<p>En el punt que s’ha indicat amb punts suspensius farem esment de les classes i altres elements que haurà de tenir present Hibernate per a l’aplicació concreta que estiguem escrivint. Els exemples mostrats posteriorment indicaran exemples d’ús i com s’omple en cada cas.</p>
+<p>A més, Hibernate generarà un gran volum d’informació de registre i depuració a través de la consola. Si vol desactivar-la haurà de configurar el paquet <strong>log4j</strong> per a què redueixi (o elimini) la sortida de depuració pel terminal.</p>
+<p>Una de les múltiples formes de fer-ho és a través d’una línia de codi com aquesta:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>org<span class="op">.</span><span class="fu">apache</span><span class="op">.</span><span class="fu">log4j</span><span class="op">.</span><span class="fu">Logger</span><span class="op">.</span><span class="fu">getLogger</span><span class="op">(</span><span class="st">"org.Hibernate"</span><span class="op">)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span><span class="fu">setLevel</span><span class="op">(</span>org<span class="op">.</span><span class="fu">apache</span><span class="op">.</span><span class="fu">log4j</span><span class="op">.</span><span class="fu">Level</span><span class="op">.</span><span class="fu">FATAL</span><span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com veu s’ha fixat el nivell de <em>logging</em> a <code>FATAL</code>, que correspon a errors fatals que normalment avortaran l’execució de l’aplicació. Els possibles cassos que presenta aquesta enumeració són: <code>ALL</code>, <code>DEBUG</code>, <code>ERROR</code>, <code>FATAL</code>, <code>INFO</code>, <code>OFF</code> o <code>WARN</code>. Cadascun d’ells fixa un nivell de generació de <em>logging</em> diferent.</p>
+<p>Una altra tècnica, que permet modificar el comportament sense haver d’escriure codi específic, es mitjançant l’arxiu de propietats <code>log4j.properties</code>. Aquest arxiu permet configurar el paquet <code>log4j</code> en diversos paràmetres.</p>
+<p>Un exemple de configuració de <code>log4j</code> mitjançant arxiu de propietats podria ser el mostrat tot seguit:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>log4j.properties</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="log4j.properties"><pre class="sourceCode numberSource plain number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>#Log to Console as STDOUT</span>
+<span id="cb6-2"><a href="#cb6-2"></a>log4j.appender.stdout=org.apache.log4j.ConsoleAppender</span>
+<span id="cb6-3"><a href="#cb6-3"></a>log4j.appender.stdout.Target=System.out</span>
+<span id="cb6-4"><a href="#cb6-4"></a>log4j.appender.stdout.layout=org.apache.log4j.PatternLayout</span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a>#Root Logger</span>
+<span id="cb6-7"><a href="#cb6-7"></a>log4j.rootLogger=FATAL, stdout</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exemples-de-hibernate" class="level2">
+<h2 class="anchored" data-anchor-id="exemples-de-hibernate">5. Exemples de Hibernate</h2>
+<p>En aquesta part parlarem dels 2 projectes que mostren la funcionalitat bàsica de Hibernate amb uns exemples d’ús senzills.</p>
+<p>Els dos exemples mostren, cadascun, diferents formes d’establir els mapatges objecte-relacionals:</p>
+<ul>
+<li>El primer (exemple número 6) mostra com realitzar el mapatge mitjançant arxiu XML</li>
+<li>El segon (exemple número 7) mostra com fer-ho a través d’<em>annotations</em>.</li>
+</ul>
+<p>Tots dos exemples utilitzen la mateixa base de dades <code>hr</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>L’arxiu <code>hr_mysql.sql</code> li permet recuperar la base de dades <code>hr</code> al seu estat original. Recordi que pot executar l’ordre <code>source</code> per executar aquell arxiu SQL manualment des del client de consola de MySQL</p>
+</div>
+</div>
+<p>A més, tots dos exemples fixen un nivell de <em>logging</em> al cas <code>FATAL</code>, mitjançant un arxiu anomenat <code>log4j.properties</code> com el mostrat prèviament i que estarà disponible juntament amb els arxius de codi font de Java, dins del <code>CLASSPATH</code> de l’aplicació.</p>
+<p>En tots dos casos es contemplaran quatre programes (ubicats en quatre classes amb els seus corresponents mètodes <code>main()</code>:</p>
+<ul>
+<li>El primer fa un llistat de tots els treballadors, ordenats pel cognom.</li>
+<li>El segon mostra, per a cada treballador, en quin departament treballa i la informació del cap de dit departament.</li>
+<li>El tercer pregunta a l’usuari el <code>id</code> d’un treballador i mostra informació relacionada (arbre jeràrquic de caps i informació del seu departament).</li>
+<li>El quart pregunta per un <code>id</code> de treballador i li augmenta el sou en una quantitat sol·licitada també a l’usuari.</li>
+</ul>
+</section>
+<section id="exemple-dús-amb-definicions-xml" class="level2">
+<h2 class="anchored" data-anchor-id="exemple-dús-amb-definicions-xml">6. Exemple d’ús amb definicions XML</h2>
+<p>El primer exemple mostrat correspon a un cas d’ús de Hibernate amb mapatge ORM realitzat mitjançant arxiu XML de definició de mapatge.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Observi ara l’exemple número 6</p>
+</div>
+</div>
+<p>Els arxius font que trobarà al directori són:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>06_hibernate_config_xml/</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    |-- src</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    |     |-- com.flx.ex06</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    |     |     |-- DAOHibernateTest1.java</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    |     |     |-- DAOHibernateTest2.java</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    |     |     |-- DAOHibernateTest3.java</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    |     |     \-- DAOHibernateTest4.java</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    |     |-- com.flx.ex06.model</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    |     |     |-- Department.java</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    |     |     |-- Employee.java</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    |     |     \-- HrDAOHibernate.java</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    |     \-- mappings</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    |           |-- Department.hbm.xml</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    |           \-- Employee.hbm.xml</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    |-- hibernate.cfg.xml</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    \-- log4j.properties</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Passem ara a descriure’ls un a un, tot destacant els fets més importants:</p>
+<ul>
+<li><p>Classes <code>com.flx.ex06.model.Employee.java</code> i <code>com.flx.ex06.model.Department.java</code>, que són els POJO bàsics per a les dades de les files de les taules. Aquestes classes són simples POJOs amb tots els atributs declarats, i els mètodes <em>getter</em> i <em>setter</em> associats.</p></li>
+<li><p>Arxius <code>mappings/Department.hbm.xml</code> i <code>mappings/Employee.hbm.xml</code> que defineixen els mapatges concrets per a les taules i objectes associats en cada cas.</p>
+<p>Fixi’s que en aquests arxius s’indica quina classe està associada a quina taula de la base de dades, i posteriorment indiquem els noms dels camps que són utilitzats a la base de dades i al POJO associat. Comprovarà que les definicions de les claus primàries (els camps <code>employeeId</code> a la classe <code>Employee</code>, i <code>departmentId</code> a la classe <code>Department</code>) són una mica més complexes que simplement esmentar els seus noms. Pot descobrir que es marca com a generació automàtica d’identificadors, tal i com les taules d’una base de dades real.</p></li>
+<li><p>Arxiu <code>hibernate.cfg.xml</code> que configura Hibernate i indica quins són els arxius de mapatge objecte-relacional que es volen efectuar.</p>
+<p>Aquest arxiu ja s’havia comentat anteriorment, ara ens hem de centrar en les darreres línies, on declarem que vagi a buscar els arxius XML de definició del mapatge per a les classes <code>Employee</code> i <code>Department</code>.</p></li>
+<li><p>Arxiu <code>log4j.properties</code> per inhabilitar (configurar) la sortida de missatges (<em>logging</em>) per pantalla excepte en els casos d’error fatal.</p></li>
+<li><p>Els programes de prova són <code>com.flx.ex06.DAOHibernateTest1</code> fins a <code>com.flx.ex06.DAOHibernateTest4</code>.</p></li>
+<li><p>Classe <code>com.flx.ex06.model.HrDAOHibernate</code> amb la definició del DAO que serveix per accedir al model de dades.</p>
+<p>Aquesta classe incorpora el mètode <code>getSession()</code> per establir la connexió a la base de dades i poder treballar amb ella. El procediment que conté s’ha de fer sempre així. A més, utilitza una tècnica mitjançant la qual no crea una sessió cada vegada que es crida, sinó que només establirà la connexió la primera vegada i després reutilitzarà la connexió establerta a partir d’aquell moment. Si l’aplicació no és molt exigent en rendiment i concurrència, ja és una bona tria.</p>
+<p>La classe, a més, conté els mètodes que es faran servir en els programes de mostra, amagant la implementació interna de la seva funcionalitat.</p></li>
+</ul>
+<p>Els detalls sobre la manera d’escriure les consultes es deixa per al final del tema.</p>
+</section>
+<section id="exemple-dús-amb-definicions-per-annotations" class="level2">
+<h2 class="anchored" data-anchor-id="exemple-dús-amb-definicions-per-annotations">7. Exemple d’ús amb definicions per annotations</h2>
+<p>Una variant interessant és la declaració del mapatge per anotacions (<em>annotations</em>), on en comptes de definir les associacions per arxiu XML, simplement introduirem unes marques especialitzades que indiquin directives a Hibernate per detectar automàticament el mapatge sobre la classe POJO.</p>
+<p>El segon grup d’exemples mostrat correspon a un cas d’ús de Hibernate amb mapatge ORM realitzat mitjançant <em>annotations</em> sobre les classes POJO.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Observi ara l’exemple número 7</p>
+</div>
+</div>
+<p>Els arxius font que trobarà al directori són:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>07_hibernate_config_annotations/</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    |-- src</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    |     |-- com.flx.ex07</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    |     |     |-- DAOHibernateTest1.java</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    |     |     |-- DAOHibernateTest2.java</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    |     |     |-- DAOHibernateTest3.java</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    |     |     \-- DAOHibernateTest4.java</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    |     \-- com.flx.ex07.model</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    |           |-- Department.java</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    |           |-- Employee.java</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    |           \-- HrDAOHibernate.java</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    |-- hibernate.cfg.xml</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    \-- log4j.properties</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observarà que ara no apareix un arxiu de definició de mapatge, perquè ja està inclòs en les classes <code>Employee</code> i <code>Department</code>. Observi com estan definides ara aquestes classes POJO.</p>
+<p>Fixi’s que apareixen <em>annotations</em> que indiquen fets transcendents per al mapatge ORM.</p>
+<p>En concret, l’anotació <code>@Entity</code> indica que aquesta classe és una entitat que s’ha d’associar a taula de base de dades, mentre que <code>@Table(name="nom_de_taula")</code> indica que el nom de la taula a associar és l’indicat com a argument. Així es pot indicar quina taula correspon a quina entitat.</p>
+<p>Després només calen afegir les anotacions <code>@Id</code> i <code>@GeneratedValue</code> sobre el mètode <em>getter</em> de l’atribut que sigui clau primària de la taula. Això és així per permetre la generació automàtica de valors en aquest camp.</p>
+<p>Com veu, les anotacions necessàries en una classe POJO senzilla són ben poques, i força lògiques.</p>
+<p>En el cas concret dels atributs que són claus foranes, observi que s’han establert les <em>unions</em> de taula a través de codi com el següent:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="at">@ManyToOne</span><span class="op">(</span>fetch<span class="op">=</span>FetchType<span class="op">.</span><span class="fu">LAZY</span><span class="op">)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">@JoinColumn</span><span class="op">(</span>name<span class="op">=</span><span class="st">"departmentId"</span><span class="op">)</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> Department <span class="fu">getDepartment</span><span class="op">()</span> <span class="op">{</span> <span class="cf">return</span> department<span class="op">;</span> <span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Aquestes estructures d’anotació permeten vincular objectes entre taules diferents. Indiquem el nom del camp (<code>departmentId</code>) que serà el de clau forana sobre l’atribut que s’obtindrà una vegada resolta la unió de taules (<code>department</code>).</p>
+<p>L’especificació <code>FetchType.LAZY</code> indica a Hibernate que no cal que es resolgui la unió de taules i es busqui el registre referenciat a menys que sigui imprescindible (es consulti el seu valor). L’alternativa és indicar <code>FetchType.EAGER</code>, que intenta resoldre les relacions sempre que pugui.</p>
+<p>Ara, només caldrà configurar Hibernate per tal que utilitzi les anotacions fetes sobre la classe model. Això ho fem des de l’arxiu <code>hibernate.cfg.xml</code>, on veurà que simplement esmentem les classes POJO que defineixen els nostres objectes de dades.</p>
+<p>Amb tot, els programes de prova són <strong>exactament iguals, línia a línia</strong>. I és que les dues formes de treballar són intercanviables (i es podrien mesclar si es volgués). Tot i que és força habitual treballar sempre amb un mateix esquema dins de la mateixa aplicació.</p>
+<p>El fet que no hi hagi canvis en el codi és un dels punts forts de Hibernate, que permet canviar (i fins i tot combinar) de model de mapatge ORM segons convingui al desenvolupador.</p>
+</section>
+<section id="persistència-dobjectes-a-la-base-de-dades" class="level2">
+<h2 class="anchored" data-anchor-id="persistència-dobjectes-a-la-base-de-dades">8. Persistència d’objectes a la base de dades</h2>
+<p>Hibernate, cada vegada que ha de <em>portar</em> una entitat de dades des de la base de dades al domini dels objectes Java, manté una referència a l’entitat original en les taules des d’on s’ha extret. Això, en notació Hibernate, es diu que l’objecte està <strong><em>managed</em></strong>.</p>
+<p>Quan un objecte és <em>managed</em> si volem modificar-lo, simplement haurem de cridar al mètode <code>Session.update(objecte)</code>, de la mateixa manera que si volem eliminar-lo de la base de dades, només caldrà cridar el mètode <code>Session.delete(objecte)</code>. Hibernate farà tota la resta.</p>
+<p>Una característica interessant de Hibernate és que ens permet evitar l’ús de sentències SQL en multitud de situacions:</p>
+<ul>
+<li>Quan volem inserir a la taula un nou registre a partir d’un objecte existent, utilitzem el mètode <code>Session.save(objecte)</code> i Hibernate s’encarregarà de generar l’ordre <code>INSERT</code> adient.</li>
+<li>Quan volem eliminar de la taula un registre existent que tenim associat en un objecte, utilitzarem el mètode <code>Session.delete(objecte)</code>, i Hibernate generarà l’ordre <code>DELETE</code> corresponent.</li>
+<li>Quan volem modificar un registre de la taula, utilitzarem el mètode <code>Session.update(objecte)</code>, i Hibernate generarà l’ordre <code>UPDATE</code> adequada.</li>
+</ul>
+<p>A més, Hibernate ens ofereix el control de transaccions bàsic, de manera que els canvis no es faran efectius definitivament en la base de dades mentre no tanquem la transacció. Les transaccions normalment es delimiten així:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Transaction tx <span class="op">=</span> session<span class="op">.</span><span class="fu">beginTransaction</span><span class="op">();</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>tx<span class="op">.</span><span class="fu">commit</span><span class="op">();</span>  <span class="co">// tx.rollback();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Això també es pot programar així:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>session<span class="op">.</span><span class="fu">beginTransaction</span><span class="op">();</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>session<span class="op">.</span><span class="fu">getTransaction</span><span class="op">().</span><span class="fu">commit</span><span class="op">();</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">// session.getTransaction().rollback();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Per tant, tota l’operativa està protegida pels mecanismes convencionals de transaccions.</p>
+<p>Per altra banda, observi que no hem de fer cap procediment especial per controlar la replicació de dades entre memòria i base de dades. Quan tanquem una transacció amb la crida <code>commit()</code> les dades són portades des de memòria a la base de dades sense que sigui necessari codificar cap procediment especial.</p>
+</section>
+<section id="construccions-de-consultes-sql-hql-i-criteria" class="level2">
+<h2 class="anchored" data-anchor-id="construccions-de-consultes-sql-hql-i-criteria">9. Construccions de consultes SQL, HQL i Criteria</h2>
+<p>Quan volem realitzar una consulta de selecció (<code>SELECT</code>) és quan tenim moltes més opcions i possibilitats.</p>
+<p>Les tres opcions més importants que ofereix Hibernate són:</p>
+<ul>
+<li>Enviar sentències SQL construïdes manualment (<em>native SQL query</em>)</li>
+<li>Utilitzar un objecte <code>Criteria</code> per construir la sentència SQL a través de mètodes específics</li>
+<li>Utilitzar el llenguatge HQL propi de Hibernate per construir la sentència SQL</li>
+</ul>
+<section id="consultes-amb-sql" class="level3">
+<h3 class="anchored" data-anchor-id="consultes-amb-sql">9.1. Consultes amb SQL</h3>
+<p>Per generar una consulta SQL amb Hibernate, només hem d’escriure la sentència SQL dins d’una crida a la funció <code>Session.createSQLQuery()</code>. Aquest mètode ens retorna un objecte <code>SQLQuery</code>, al qual podem demanar el resultat de la seva execució invocant <code>SQLQuery.list()</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>SQLQuery q <span class="op">=</span> session<span class="op">.</span><span class="fu">createSQLQuery</span><span class="op">(</span><span class="st">"SELECT * FROM employees"</span><span class="op">);</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">[]&gt;</span> result <span class="op">=</span> q<span class="op">.</span><span class="fu">list</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>El valor retornat és una llista de files, on cada fila és un <em>array</em> indexat que ens permetrà accedir a les diferents columnes de resultat. Haurem d’utilitzar meta-dades per descobrir els tipus dels diferents elements en temps d’execució.</p>
+<p>Això no és res més que una consulta com les que realitzàvem amb JDBC. Per associar i obtenir objectes a partir de la base de dades hem d’utilitzar una altra via: hem de cridar el mètode <code>SQLQuery.addEntity()</code> per indicar l’entitat que s’espera rebre d’aquesta consulta i així obtenir la llista d’objectes ja en la forma que ens interessa:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>SQLQuery q <span class="op">=</span> session<span class="op">.</span><span class="fu">createSQLQuery</span><span class="op">(</span><span class="st">"SELECT * FROM employees"</span><span class="op">)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">addEntity</span><span class="op">(</span>Employee<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="at">@SuppressWarnings</span><span class="op">(</span><span class="st">"unchecked"</span><span class="op">)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> result <span class="op">=</span> q<span class="op">.</span><span class="fu">list</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observi que s’ha fet una referència a la classe de l’entitat amb l’operador <code>Employee.class</code>.</p>
+<p>Observarà també que s’ha afegit la línia <code>@SuppressWarnings("unchecked")</code> per demanar al compilador de Java que no generi un avís sobre la transformació de tipus que es produeix en l’obtenció de la llista de resultats de la consulta (aquesta directiva només afecta a la línia immediatament a continuació o el bloc iniciat en ella). Malauradament no hi ha una altra manera ràpida i senzilla per evitar l’aparició d’aquest missatge d’avís generat pel compilador i s’ha de recórrer a aquest mètode “<em>brut</em>” per evitar-lo: els avisos són normalment signes d’un mal disseny o d’una possible font de problemes a la llarga. En aquest cas malauradament no depèn de nosaltres sinó de la forma en què Hibernate està codificat amb la funció <code>SQLQuery.list()</code>.</p>
+<p>Sigui com sigui ara disposem de la llista d’objectes ubicats en memòria i podem utilitzar tota la potència de Java per manipular-los en memòria i realitzar les operacions necessàries de la nostra aplicació.</p>
+</section>
+<section id="consultes-amb-criteria" class="level3">
+<h3 class="anchored" data-anchor-id="consultes-amb-criteria">9.2. Consultes amb <code>Criteria</code></h3>
+<p>Hibernate ens ofereix un mecanisme molt interessant per no fer servir consultes SQL en el llenguatge natiu de la base de dades. De fet, no té sentit fer consultes en SQL natiu en un entorn que ens permet no dependre del motor concret de base de dades utilitzat!</p>
+<p>Així doncs, una primera solució és la que es mostra aquí. En ella, tota consulta es fonamenta en l’ús d’un seguit de mètodes que pengen de la classe <code>Criteria</code> i que ens permeten anar construint la consulta a passos.</p>
+<p>Vegem un exemple:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Criteria c <span class="op">=</span> session<span class="op">.</span><span class="fu">createCriteria</span><span class="op">(</span>Employee<span class="op">.</span><span class="fu">class</span><span class="op">)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span><span class="fu">add</span><span class="op">(</span>Restrictions<span class="op">.</span><span class="fu">or</span><span class="op">(</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                        Restrictions<span class="op">.</span><span class="fu">like</span><span class="op">(</span><span class="st">"lastname"</span><span class="op">,</span> <span class="st">"K%"</span><span class="op">),</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                        Restrictions<span class="op">.</span><span class="fu">like</span><span class="op">(</span><span class="st">"lastname"</span><span class="op">,</span> <span class="st">"M%"</span><span class="op">)</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                    <span class="op">)).</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span><span class="fu">add</span><span class="op">(</span>Restrictions<span class="op">.</span><span class="fu">isNotNull</span><span class="op">(</span><span class="st">"commissionPct"</span><span class="op">))</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span><span class="fu">addOrder</span><span class="op">(</span>Order<span class="op">.</span><span class="fu">asc</span><span class="op">(</span><span class="st">"lastname"</span><span class="op">));</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="at">@SuppressWarnings</span><span class="op">(</span><span class="st">"unchecked"</span><span class="op">)</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> c<span class="op">.</span><span class="fu">list</span><span class="op">();</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observi com es van afegint elements a la consulta <code>Criteria</code> mitjançant el mètode <code>add()</code> i que disposem d’una gran col·lecció de paràmetres de filtrat de registres basats en la classe <code>Restrictions</code>. Consulti la documentació oficial per a més informació.</p>
+</section>
+<section id="consultes-amb-hql" class="level3">
+<h3 class="anchored" data-anchor-id="consultes-amb-hql">9.3. Consultes amb HQL</h3>
+<p>Les consultes que utilizen el llenguatge <strong>HQL (<em>Hibernate Query Language</em>)</strong> tenen una dinàmica semblant a la de SQL estàndard, però modifica lleugerament algunes expressions en alguns casos concrets.</p>
+<p>El procediment per construir una sentència HQL i executar-la pot ser tant senzill com el següent cas:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> hql <span class="op">=</span> <span class="st">"SELECT e FROM employees e WHERE lastname LIKE 'K%'"</span><span class="op">;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="at">@SuppressWarnings</span><span class="op">(</span><span class="st">"unchecked"</span><span class="op">)</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> session<span class="op">.</span><span class="fu">createQuery</span><span class="op">(</span>hql<span class="op">).</span><span class="fu">list</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Fins i tot podem realitzar tasques d’assignació de paràmetres, com:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> hql <span class="op">=</span> <span class="st">"SELECT e FROM employees e WHERE lastname= :cognom"</span><span class="op">;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="at">@SuppressWarnings</span><span class="op">(</span><span class="st">"unchecked"</span><span class="op">)</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> session<span class="op">.</span><span class="fu">createQuery</span><span class="op">(</span>hql<span class="op">)</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">setParameter</span><span class="op">(</span><span class="st">"unnom"</span><span class="op">,</span> <span class="st">"King"</span><span class="op">)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">list</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Amb HQL també podem realitzar <code>INSERT</code>, <code>DELETE</code> i <code>UPDATE</code>, amb també una sintaxi semblant a l’estàndard SQL:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> hql <span class="op">=</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"UPDATE employees e SET e.firstname = :nomNou WHERE e.firstname = :nomAntic"</span><span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> updatedEntities <span class="op">=</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    session<span class="op">.</span><span class="fu">createQuery</span><span class="op">(</span> hql <span class="op">)</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">setString</span><span class="op">(</span> <span class="st">"nomNou"</span><span class="op">,</span> <span class="st">"Steven"</span> <span class="op">)</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">setString</span><span class="op">(</span> <span class="st">"nomAntic"</span><span class="op">,</span> <span class="st">"Stefan"</span> <span class="op">)</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">executeUpdate</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Consulti la documentació de JBoss/Hibernate per a més informació sobre HQL.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.flx\.cat");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

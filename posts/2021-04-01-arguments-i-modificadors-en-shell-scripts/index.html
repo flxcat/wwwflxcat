@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Fèlix">
+<meta name="description" content="Recull de bones pràctiques en la construcció de shell-scripts amb uns exemples d’ús on es volen arguments, modificadors amb i sense arguments, així com variants de modificadors amb nom llarg i nom curt. Es tracta d’un punt de partida en la construcció de shell scripts de qualitat.">
+
+<title>Arguments i modificadors en shell-scripts – flx.cat</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8eff75af44363e7f64015f2cd3896f7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Cap resultat",
+    "search-matching-documents-text": "documents que coincideixen",
+    "search-copy-link-title": "Copia l'enllaç a la cerca",
+    "search-hide-matches-text": "Amaga les coincidències addicionals",
+    "search-more-match-text": "altra coincidència en aquest document",
+    "search-more-matches-text": "altres coincidències en aquest document",
+    "search-clear-button-title": "Neteja",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel·la",
+    "search-submit-button-title": "Envia",
+    "search-label": "Cerca"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background-image: url(images/featured.png);
+background-size: cover;
+      }
+</style>
+
+
+<meta property="og:title" content="Arguments i modificadors en shell-scripts – flx.cat">
+<meta property="og:description" content="Recull de bones pràctiques en la construcció de shell-scripts amb uns exemples d’ús on es volen arguments, modificadors amb i sense arguments, així com variants de modificadors amb nom llarg i nom curt. Es tracta d’un punt de partida en la construcció de shell scripts de qualitat.">
+<meta property="og:image" content="https://www.flx.cat/posts/2021-04-01-arguments-i-modificadors-en-shell-scripts/images/featured.png">
+<meta property="og:site_name" content="flx.cat">
+<meta property="og:image:height" content="960">
+<meta property="og:image:width" content="1280">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">flx.cat</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Cerca"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Commuta la navegació" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Inici</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Quant a…</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Arguments i modificadors en shell-scripts</h1>
+                  <div>
+        <div class="description">
+          Recull de bones pràctiques en la construcció de <em>shell-scripts</em> amb uns exemples d’ús on es volen arguments, modificadors amb i sense arguments, així com variants de modificadors amb nom llarg i nom curt. Es tracta d’un punt de partida en la construcció de <em>shell scripts</em> de qualitat.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Linux</div>
+                <div class="quarto-category">featured</div>
+                <div class="quarto-category">shell</div>
+                <div class="quarto-category">script</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Autor/a</div>
+      <div class="quarto-title-meta-contents">
+               <p>Fèlix </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Publicat</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">1 d’abril de 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En aquesta pàgina</h2>
+   
+  <ul>
+  <li><a href="#requeriments" id="toc-requeriments" class="nav-link active" data-scroll-target="#requeriments">Requeriments</a></li>
+  <li><a href="#cas-bàsic--h---help" id="toc-cas-bàsic--h---help" class="nav-link" data-scroll-target="#cas-bàsic--h---help">Cas bàsic <code>-h</code>, <code>--help</code></a></li>
+  <li><a href="#getopts-al-rescat" id="toc-getopts-al-rescat" class="nav-link" data-scroll-target="#getopts-al-rescat"><code>getopts</code> al rescat!</a></li>
+  <li><a href="#i-què-passa-amb-les-opcions-llargues" id="toc-i-què-passa-amb-les-opcions-llargues" class="nav-link" data-scroll-target="#i-què-passa-amb-les-opcions-llargues">I què passa amb les opcions llargues?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="requeriments" class="level2">
+<h2 class="anchored" data-anchor-id="requeriments">Requeriments</h2>
+<p>Un <strong>bon <em>shell-script</em></strong>, o si més no aquell que incorpori unes quantes variacions del seu objectiu original, haurà de presentar <strong>diversos <em>switch</em></strong> (modificadors).</p>
+<p>Alguns d’aquests modificadors potser necessiten un <strong>valor o dada</strong> que els acompanyi (número de línies, color, longitud, ruta d’arxiu, etc.).</p>
+<p>Fins i tot voldrem que els modificadors presentin diversos <strong>noms alternatius</strong>. Normalment una variant curta per als més comuns o utilitzats. Per exemple, si hem de definir un modificador de color, potser triarem el nom llarg <code>--color</code>, i per al cas curt una simple <code>-c</code> ja ens bastaria.</p>
+<p>El <em>shell-script</em> <strong>potser també rebrà arguments convencionals</strong>, que no venen donats o emmarcats en un modificador, sinó que seran posicionals. Per exemple, si el programa sempre rep el nom d’un arxiu com a únic argument.</p>
+</section>
+<section id="cas-bàsic--h---help" class="level2">
+<h2 class="anchored" data-anchor-id="cas-bàsic--h---help">Cas bàsic <code>-h</code>, <code>--help</code></h2>
+<p>Evidentment la forma d’implementar aquest cas és simple, podríem mirar el valor del primer argument i comparar-lo manualment amb les cadenes corresponents a aquests modificadors. Si hi són, mostrem l’ajuda. Si no hi són, el programa no els ha rebut i podem executar la seva funció principal:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>example1.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="example1.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">function</span><span class="fu"> showHelp()</span> <span class="kw">{</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="va">PROGNAME</span><span class="op">=</span><span class="kw">`</span><span class="fu">basename</span> <span class="va">$0</span><span class="kw">`</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$PROGNAME</span><span class="st"> [-h|--help]"</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="co"># ... echo more help text</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">}</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="ot">==</span> <span class="st">"-h"</span> <span class="ot">-o</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="ot">==</span> <span class="st">"--help"</span> <span class="bu">]</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="cf">then</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>  <span class="ex">showHelp</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>  <span class="bu">exit</span> 0</span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="cf">fi</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># Rest of the script...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Aquesta implementació la deixaria només per al cas en què:</p>
+<ol type="1">
+<li>El programa <strong>NO</strong> rep cap argument d’entrada (executa un procés fix, com un backup o una neteja d’arxius)</li>
+<li>Només volem donar un <strong>ÚNIC</strong> modificador d’ajuda que ens “recordi” què fa el programa i què esperar d’ell</li>
+</ol>
+<p>I és que en el cas de diversos modificadors amb o sense dada, caldria programar un analitzador que comprovi els següents casos:</p>
+<ul>
+<li>Sense modificador: <code>programa</code></li>
+<li>Amb modificador : <code>programa --color red</code></li>
+<li>Amb modificador curt : <code>programa -c red</code></li>
+<li>Amb el modificador mal escrit : <code>programa --color</code> o <code>programa -c</code></li>
+<li>Amb el modificador d’ajuda: <code>programa -h</code> o <code>programa --help</code></li>
+<li>Amb el modificador i un argument posicional: <code>programa -c red "Hello"</code></li>
+<li>Només l’argument posicional: <code>programa "Hello"</code></li>
+<li>…</li>
+</ul>
+<p>Com es pot veure les opcions es disparen, sense pensar en el cas que s’hagi intentat escriure un modificador inexistent, que existeixin diversos modificadors que es puguin donar en qualsevol ordre, etc… I tot només mirant <code>$1</code>, <code>$2</code>, … Una barbaritat!</p>
+</section>
+<section id="getopts-al-rescat" class="level2">
+<h2 class="anchored" data-anchor-id="getopts-al-rescat"><code>getopts</code> al rescat!</h2>
+<p>La <strong>utilitat <code>getopts</code></strong> normalment la trobarem com a <em>shell built-in</em>, és a dir, com a comanda integrada dins de la mateixa shell i no com a programa extern. Algunes implementacions de <em>shell</em> poden requerir que s’instal·li separadament, però ve integrada en la majoria de <em>shells</em> modernes.</p>
+<p>Aquesta utilitat ens permet <strong>analitzar fàcilment</strong> els modificadors, quan aquests són d’un sol caràcter (modificadors curts), i normalment la trobem en blocs de codi com aquest:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>example2.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="example2.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">function</span><span class="fu"> showHelp()</span> <span class="kw">{</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="va">PROGNAME</span><span class="op">=</span><span class="kw">`</span><span class="fu">basename</span> <span class="va">$0</span><span class="kw">`</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$PROGNAME</span><span class="st"> [-h] [-v] [-c color]"</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="co"># echo more help</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="kw">}</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="va">COLOR</span><span class="op">=</span>transparent</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="va">VERBOSITY</span><span class="op">=</span>0</span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="cf">while</span> <span class="bu">getopts</span> <span class="st">"hvc:"</span> <span class="va">opt</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="cf">do</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>  <span class="cf">case</span> <span class="va">$opt</span> <span class="kw">in</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>    <span class="ss">h</span><span class="kw">)</span>	<span class="ex">showHelp</span><span class="kw">;</span> <span class="bu">exit</span><span class="cf">;;</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a>    <span class="ss">v</span><span class="kw">)</span>  <span class="va">VERBOSITY</span><span class="op">=</span>1<span class="cf">;;</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a>    <span class="ss">c</span><span class="kw">)</span>	<span class="va">COLOR</span><span class="op">=</span><span class="st">"</span><span class="va">$OPTARG</span><span class="st">"</span><span class="cf">;;</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>    <span class="pp">?</span><span class="kw">)</span>	<span class="ex">showHelp</span><span class="kw">;</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a>        <span class="bu">exit</span> 2<span class="cf">;;</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a>  <span class="cf">esac</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="cf">done</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="bu">echo</span> <span class="st">"Verbosity level: </span><span class="va">$VERBOSITY</span><span class="st">"</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="bu">echo</span> <span class="st">"Requested color: </span><span class="va">$COLOR</span><span class="st">"</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="bu">shift</span> <span class="va">$(($OPTIND</span> <span class="op">-</span> <span class="dv">1</span><span class="va">))</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="bu">echo</span> <span class="st">"Remaining arguments are: </span><span class="va">$*</span><span class="st">"</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co"># Here goes more code...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Aquest programa tal i com està ara mateix ens permetrà executar-lo de les següents maneres:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>programa -h</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>programa -v</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>programa -c red</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>programa -c red image.png</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>programa -v -c red image.png</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>programa -vc red image.png</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>És a dir, que ens acceptarà qualsevol de les combinacions habituals a què estem acostumats en programes i <em>scripts</em> de Linux, amb opcions curtes que podem escriure juntes (<code>-vc red</code> és equivalent a <code>-v -c red</code>). El programa mostrat també accepta arguments addicionals, que seran posicionals (<code>$1</code>, <code>$2</code>, …) i que seran la resta que quedi després de treure les opcions.</p>
+<p><strong>Però com és que funciona així?</strong> Què són <code>OPTARG</code> i <code>OPTIND</code>? Què representa la línia del <code>while</code>? Analitzem com funciona:</p>
+<ul>
+<li><code>getopts</code> permet l’execució <code>while</code> tal i com es mostra, rebent dos arguments: una <strong>cadena</strong> que especifica les opcions curtes que volem analitzar i el <strong>nom d’una variable</strong> de <em>shell</em> que és on es guardarà l’opció “descoberta”.</li>
+<li>En <strong>cada iteració del <code>while</code></strong> la variable <code>opt</code> (el nom es podria canviar si es desitgés) valdrà un dels modificadors passats per l’usuari al programa, per això hem fet un <code>case</code> per analitzar quin dels modificadors és i fer l’acció que correspongui.</li>
+<li>El <strong>primer argument</strong> de <code>getopts</code> conté els <strong>modificadors permesos</strong>, tots seguits. Com que volem els modificadors <code>-h</code>, <code>-v</code> i <code>-c</code>, els indiquem seguits. El <strong>signe de <code>:</code></strong> indica que el modificador anterior (en aquest cas la <code>c</code>) rebrà un argument. Això vol dir que podríem haver escrit la cadena de modificadors com s’ha fet (<code>hvc:</code>) o en un altre ordre (<code>c:hv</code>, <code>hc:v</code> o <code>vc:h</code>, per exemple). L’important és que el dos punts sempre segueixi la <code>c</code>, per indicar que aquest modificador requereix d’un argument.</li>
+<li>Quan un modificador té argument (indicat pel signe <code>:</code> en la cadena de modificadors de <code>getopts</code>), disposarem d’aquest argument en la variable d’entorn <strong><code>OPTARGS</code></strong>. Per això veieu que s’extreu el color mitjançant aquesta variable. <code>getopts</code> s’encarrega de gestionar-la.</li>
+<li>L’altra variable que <code>getopts</code> gestiona per nosaltres és <strong><code>OPTIND</code></strong>, que és un índex que apunta al següent argument passat al programa que s’haurà d’analitzar. Així podem saber en quin punt exacte de la llista d’arguments està analitzant en tot moment.</li>
+<li>Usem <strong><code>OPTIND</code></strong> per “saltar” fins a ell i eliminar així tots els modificadors i valors indicats i quedar-nos amb la resta d’arguments del programa, que correspondran als arguments posicionals clàssics (el nom de l’arxiu a processar, el directori on fer l’operació, la cadena de text a tractar, etc.).</li>
+</ul>
+</section>
+<section id="i-què-passa-amb-les-opcions-llargues" class="level1">
+<h1>I què passa amb les opcions llargues?</h1>
+<p>La utilitat <code>getopts</code> malauradament no és capaç de gestionar modificadors llargs. Però podem fer un “<strong>truc</strong>” bastant interessant, tot i que ens fa més llarga l’escriptura del <em>shell script</em>. Ho veurem amb el mateix exemple ara ampliat:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>example3.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="example3.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">function</span><span class="fu"> showHelp()</span> <span class="kw">{</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="va">PROGNAME</span><span class="op">=</span><span class="kw">`</span><span class="fu">basename</span> <span class="va">$0</span><span class="kw">`</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$PROGNAME</span><span class="st"> [-h|--help] [-v|--verbose] [-c|--color color]"</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># ...</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="kw">}</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="va">COLOR</span><span class="op">=</span>transparent</span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="va">VERBOSITY</span><span class="op">=</span>0</span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="cf">while</span> <span class="bu">getopts</span> <span class="st">"hvc:-:"</span> <span class="va">opt</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="cf">do</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="cf">case</span> <span class="va">$opt</span> <span class="kw">in</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>    <span class="ss">-</span><span class="kw">)</span>  <span class="cf">case</span> <span class="st">"</span><span class="va">${OPTARG}</span><span class="st">"</span> <span class="kw">in</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>          <span class="ss">help</span><span class="kw">)</span>     <span class="ex">showHelp</span><span class="kw">;</span> <span class="bu">exit</span><span class="cf">;;</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>          <span class="ss">verbose</span><span class="kw">)</span>  <span class="va">VERBOSITY</span><span class="op">=</span>1<span class="cf">;;</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>          <span class="ss">color</span><span class="kw">)</span>      </span>
+<span id="cb4-16"><a href="#cb4-16"></a>            <span class="va">COLOR</span><span class="op">=</span><span class="st">"</span><span class="va">${</span><span class="op">!</span><span class="va">OPTIND}</span><span class="st">"</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>            <span class="va">OPTIND</span><span class="op">=</span><span class="va">$((</span> <span class="va">$OPTIND</span> <span class="op">+</span> <span class="dv">1</span> <span class="va">))</span><span class="cf">;;</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="pp">*</span><span class="kw">)</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="bu">echo</span> <span class="st">"Unknown option '--</span><span class="va">${OPTARG}</span><span class="st">'"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="bu">exit</span> <span class="at">-1</span><span class="cf">;;</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="cf">esac;;</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>    <span class="ss">h</span><span class="kw">)</span>	<span class="ex">showHelp</span><span class="kw">;</span> <span class="bu">exit</span><span class="cf">;;</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a>    <span class="ss">v</span><span class="kw">)</span>  <span class="va">VERBOSITY</span><span class="op">=</span>1<span class="cf">;;</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a>    <span class="ss">c</span><span class="kw">)</span>	<span class="va">COLOR</span><span class="op">=</span><span class="st">"</span><span class="va">$OPTARG</span><span class="st">"</span><span class="cf">;;</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="pp">*</span><span class="kw">)</span>	<span class="bu">echo</span> <span class="st">"Unknown option '-</span><span class="va">$opt</span><span class="st">'"</span> <span class="op">&gt;&amp;</span><span class="dv">2</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="bu">exit</span> <span class="at">-1</span><span class="cf">;;</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="cf">esac</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a><span class="cf">done</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a><span class="bu">echo</span> <span class="st">"Verbosity level: </span><span class="va">$VERBOSITY</span><span class="st">"</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a><span class="bu">echo</span> <span class="st">"Requested color: </span><span class="va">$COLOR</span><span class="st">"</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="bu">shift</span> <span class="va">$(($OPTIND</span> <span class="op">-</span> <span class="dv">1</span><span class="va">))</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a><span class="bu">echo</span> <span class="st">"Remaining arguments are: </span><span class="va">$*</span><span class="st">"</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a><span class="co"># ...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ara el programa podrà executar-se amb totes les formes i variants (combinades o no):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>programa --help</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>programa --verbose --color blue image.png</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>programa -v --color blue image.png</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dependrà de com vulguem que el programa estigui definit que farem una combinació o altra dels <code>case</code> tant per a la part de modificadors “llargs” com a la part de modificadors “curts”. Dit d’una altra manera: ningú ens obliga a implementar els modificadors en els dos modes. Podem crear modificadors només curts, modificadors només llargs i modificadors que tinguin les dues variants. Tot dependrà de nosaltres.</p>
+<p>Observi’s que ara s’utilitza <code>OPTARG</code> per a analitzar les opcions llargues, perquè quan escrivim <code>--color</code> en realitat ho processarà com un modificador curt <code>--</code> que ha rebut com a argument la cadena <code>color</code>. De la mateixa manera, usem <code>OPTIND</code> per treure la dada subministrada després a través de la indexació <code>${!OPTIND}</code> com a argument del modificador, i incrementem aquest comptador per saltar l’argument ja capturat.</p>
+<p>Veiem doncs una manera bastant senzilla de crear <em>shell scripts</em> que compleixin amb un <strong>mínim estàndard de qualitat</strong> en la forma en què donem opcions i variacions a l’usuari, apropant els nostres <em>scripts</em> una mica al que s’esperaria d’un programa de <em>shell</em> mínimament professional.</p>
+<p>Ara ja sabeu com fer correctament l’estructuració d’un <em>shell script</em> de qualitat… però encara us quedarà donar sentit al programa i fer la funcionalitat original que teniu pensada!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.flx\.cat");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

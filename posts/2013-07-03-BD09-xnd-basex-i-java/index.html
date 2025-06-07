@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Fèlix">
+<meta name="description" content="Darrera part del curs Curs BBDD i Java centrada en la connexió de Java amb un sistema de bases de dades natives XND. En concret, s’estudiarà la connexió BaseX - Java a través de diferents mètodes de connexió.">
+
+<title>XND, BaseX i Java – flx.cat</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8eff75af44363e7f64015f2cd3896f7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Cap resultat",
+    "search-matching-documents-text": "documents que coincideixen",
+    "search-copy-link-title": "Copia l'enllaç a la cerca",
+    "search-hide-matches-text": "Amaga les coincidències addicionals",
+    "search-more-match-text": "altra coincidència en aquest document",
+    "search-more-matches-text": "altres coincidències en aquest document",
+    "search-clear-button-title": "Neteja",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel·la",
+    "search-submit-button-title": "Envia",
+    "search-label": "Cerca"
+  }
+}</script>
+
+
+<meta property="og:title" content="XND, BaseX i Java – flx.cat">
+<meta property="og:description" content="Darrera part del curs Curs BBDD i Java centrada en la connexió de Java amb un sistema de bases de dades natives XND. En concret, s’estudiarà la connexió BaseX - Java a través de diferents mètodes de connexió.">
+<meta property="og:image" content="https://www.flx.cat/posts/2013-07-03-BD09-xnd-basex-i-java/images/featured.jpg">
+<meta property="og:site_name" content="flx.cat">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">flx.cat</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Cerca"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Commuta la navegació" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Inici</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Quant a…</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../posts/2013-07-03-BD09-xnd-basex-i-java/index.html">9 XND: BaseX+Java</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Commuta la navegació de la barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">XND, BaseX i Java</h1>
+                  <div>
+        <div class="description">
+          Darrera part del curs <a href="../2013-05-10-BD00-curs-bbdd-i-java">Curs BBDD i Java</a> centrada en la connexió de Java amb un sistema de bases de dades natives XND. En concret, s’estudiarà la connexió BaseX - Java a través de diferents mètodes de connexió.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">bases de dades</div>
+                <div class="quarto-category">basex</div>
+                <div class="quarto-category">xpath</div>
+                <div class="quarto-category">xquery</div>
+                <div class="quarto-category">xnd</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Autor/a</div>
+      <div class="quarto-title-meta-contents">
+               <p>Fèlix </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Publicat</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">3 de juliol de 2013</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-05-10-BD00-curs-bbdd-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Curs BDDD (índex)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD01-tipus-de-bases-de-dades/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 Tipus de bases de dades</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD02-jdbc-amb-sql/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2 JDBC amb SQL</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD03-ordbms-amb-oracle/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 Oracle ORDBMS</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-06-29-BD04-xml-java-stax-jaxb/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4 StaX i JAXB</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD05-hibernate-mapatge-objecte-relacional/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5 Hibernate i ORM</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-01-BD06-hibernate-i-jpa/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6 Hibernate/JPA</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-02-BD07-oodbms-amb-db4o-i-java/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 db4o+Java</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8 XND: XPath/XQuery</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/2013-07-03-BD09-xnd-basex-i-java/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">9 XND: BaseX+Java</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En aquesta pàgina</h2>
+   
+  <ul>
+  <li><a href="#connexió-amb-bases-de-dades-natives-xml" id="toc-connexió-amb-bases-de-dades-natives-xml" class="nav-link active" data-scroll-target="#connexió-amb-bases-de-dades-natives-xml">1. Connexió amb bases de dades natives XML</a></li>
+  <li><a href="#gestió-bàsica-duna-base-de-dades-basex" id="toc-gestió-bàsica-duna-base-de-dades-basex" class="nav-link" data-scroll-target="#gestió-bàsica-duna-base-de-dades-basex">2. Gestió bàsica d’una base de dades BaseX</a>
+  <ul class="collapse">
+  <li><a href="#gestió-de-bases-de-dades" id="toc-gestió-de-bases-de-dades" class="nav-link" data-scroll-target="#gestió-de-bases-de-dades">2.1. Gestió de bases de dades</a></li>
+  <li><a href="#gestió-dusuaris" id="toc-gestió-dusuaris" class="nav-link" data-scroll-target="#gestió-dusuaris">2.2. Gestió d’usuaris</a></li>
+  <li><a href="#gestió-de-privilegis" id="toc-gestió-de-privilegis" class="nav-link" data-scroll-target="#gestió-de-privilegis">2.3. Gestió de privilegis</a></li>
+  <li><a href="#ordres-relacionades-amb-les-còpies-de-seguretat" id="toc-ordres-relacionades-amb-les-còpies-de-seguretat" class="nav-link" data-scroll-target="#ordres-relacionades-amb-les-còpies-de-seguretat">2.4. Ordres relacionades amb les còpies de seguretat</a></li>
+  <li><a href="#ordres-relacionats-amb-els-índexs" id="toc-ordres-relacionats-amb-els-índexs" class="nav-link" data-scroll-target="#ordres-relacionats-amb-els-índexs">2.5. Ordres relacionats amb els índexs</a></li>
+  <li><a href="#ordres-relacionats-amb-les-consultes-de-dades-amb-xquery" id="toc-ordres-relacionats-amb-les-consultes-de-dades-amb-xquery" class="nav-link" data-scroll-target="#ordres-relacionats-amb-les-consultes-de-dades-amb-xquery">2.6. Ordres relacionats amb les consultes de dades amb XQuery</a></li>
+  </ul></li>
+  <li><a href="#connexió-per-a-consultes-xquery-amb-java" id="toc-connexió-per-a-consultes-xquery-amb-java" class="nav-link" data-scroll-target="#connexió-per-a-consultes-xquery-amb-java">3. Connexió per a consultes XQuery amb Java</a>
+  <ul class="collapse">
+  <li><a href="#connexió-local-directa" id="toc-connexió-local-directa" class="nav-link" data-scroll-target="#connexió-local-directa">3.1. Connexió local directa</a></li>
+  <li><a href="#connexió-remota-a-través-de-classes-client" id="toc-connexió-remota-a-través-de-classes-client" class="nav-link" data-scroll-target="#connexió-remota-a-través-de-classes-client">3.2. Connexió remota a través de classes client</a></li>
+  <li><a href="#mètode-a-través-de-classe-wrapper" id="toc-mètode-a-través-de-classe-wrapper" class="nav-link" data-scroll-target="#mètode-a-través-de-classe-wrapper">3.3. Mètode a través de classe wrapper</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="connexió-amb-bases-de-dades-natives-xml" class="level2">
+<h2 class="anchored" data-anchor-id="connexió-amb-bases-de-dades-natives-xml">1. Connexió amb bases de dades natives XML</h2>
+<p>És evident que una base de dades nativa XML (<strong>XND</strong> a partir d’ara) no és el mateix que una base de dades relacional (BDR a partir d’ara). El magatzem de dades és diferent, tant en estructuració lògica com física:</p>
+<ul>
+<li><p><strong>Des d’un punt de vista lògic</strong>, el model de la base de dades és diferent en cada cas: en el cas de BDR la informació es disposa en taules que representen unitats (entitats) i s’estableixen relacions entre dites entitats. En el cas de XND, la informació es disposa en unes estructures jeràrquiques on la informació ja es mostra relacionada, tota entremesclada i resolta. Potser hem de vincular certes parts d’aquests arbres jeràrquics, però la idea és minimitzar aquest tipus de resolucions.</p></li>
+<li><p><strong>Des d’un punt de vista físic</strong>, els arxius que representen les dades estan estructurats de manera diferent, perquè en el cas de les bases de dades BDR el mateix SGBDR (Sistema Gestor de B.D. relacional) construeix i manté les codificacions i estructures internes dels arxius involucrats, tot decidint si una taula de dades ha d’estar partida en un o més arxius, o si aquest partiment es realitza dins d’un únic arxiu combinant múltiples objectes o no. En una XND, pel contrari, l’emmagatzematge és una col·lecció d’arxius XML que poden ser editats i consultats per altres mitjans, i no només a través de l’accés per XND.</p></li>
+</ul>
+<p>És per això que ara la concepció del “<em>servidor de base de dades</em>” també canviarà, i és que ara només s’ha d’encarregar de manipular un o més arxius XML, realitzant consultes i algunes modificacions puntuals. Vist així, la base de dades XND pren més la forma d’un mòdul ple de funcions que no un servidor en el sentit tradicional del terme.</p>
+<p>Tot i això, certs productes XND prenen la forma de mòdul o llibreria, mentre que d’altres prenen la forma de servei de xarxa:</p>
+<ul>
+<li><p><strong>XND com a llibreria</strong>: Aquí, l’accés i manipulació de la informació no requereix d’una connexió de xarxa, sinó que la llibreria implementa l’accés controlat a les dades de la base de dades XND a través de classes i/o funcions.</p></li>
+<li><p><strong>XND a través de connexió de xarxa</strong>: Seguint el model tradicional, la base de dades XND disposa d’una aplicació servidor que, en ser iniciada, obre un port i permet connexions locals i/o remotes per atendre peticions d’accés sobre la base de dades.</p></li>
+</ul>
+<p>En el cas de BaseX que estudiem, el model utilitzat és el segon i existeix un servidor que ofereix el servei de xarxa per accedir a la base de dades XND.</p>
+<p>En concret, BaseX ens ofereix els següent mecanismes per operar amb la base de dades:</p>
+<ul>
+<li><p>Una aplicació gràfica que connecta directament amb la base de dades: <code>basexgui</code></p></li>
+<li><p>Una aplicació de consola que connecta directament amb la base de dades: <code>basex</code></p></li>
+<li><p>Un servidor que obre un port i accepta connexions remotes: <code>basexserver</code></p></li>
+<li><p>Un client de consola que connecta amb un servidor BaseX remot per executar-hi ordres: <code>basexclient</code></p></li>
+</ul>
+<p>El que ens interessa aquí és <code>basexserver</code> que, en ser iniciat, obre un port d’accés que permet la interacció amb el servidor de la manera tradicional gràcies a connexions remotes o locals a través del subsistema de xarxa.</p>
+<p>Per tant, necessitem iniciar el servidor, i això ho fem des de la consola escrivint el nom de l’ordre del servidor.</p>
+<p>També podem iniciar-lo en mode daemon escrivint:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexserver</span> <span class="at">-S</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Un cop iniciat el servidor, podem realitzar connexions amb ell des del client <code>basexclient</code> o des de llenguatges de programació com farem nosaltres des de Java.</p>
+<p>Si mai hem d’aturar el servidor manualment, ho farem mitjançant l’ordre de consola:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexserver</span> stop</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Si hem de fer proves des d’un client remot al servidor amb què volem connectar, necessitarem iniciar sessió remota. Així, per exemple, per connectar amb un servidor BaseX en marxa situat a una IP 192.168.1.1, amb usuari “usuari” i contrasenya “1234”, simplement hem d’escriure:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexclient</span> <span class="at">-n192.168.1.1</span> <span class="at">-Uusuari</span> <span class="at">-P1234</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Així iniciarem una sessió interactiva per executar ordres sobre el servidor XND.</p>
+<p>D’igual manera, per realitzar tasques sobre el servidor XND, però des de llenguatges d’alt nivell com Java, necessitarem algun tipus de llibreria que ens ofereixi la infraestructura per a connectar, tot especificant també la IP, el nom d’usuari i la contrasenya d’aquell usuari.</p>
+<p>Un cop iniciada una sessió d’execució d’ordres, BaseX és molt semblant a qualsevol altre sistema servidor, tot i que el seu llenguatge té característiques pròpies.</p>
+</section>
+<section id="gestió-bàsica-duna-base-de-dades-basex" class="level2">
+<h2 class="anchored" data-anchor-id="gestió-bàsica-duna-base-de-dades-basex">2. Gestió bàsica d’una base de dades BaseX</h2>
+<p>Veurem aquí tot un seguit d’ordres que són importants per entendre l’operativa bàsica amb bases de dades XND en la seva implementació pròpia BaseX.</p>
+<p>Els exemples i passos mostrats són tots des del client <code>basexclient</code>, assumint que un servidor <code>basexserver</code> està en execució i que estem connectats amb un usuari amb prou privilegis com per fer les operacions aquí indicades.</p>
+<p>Tingui present que, tot just instal·lat, BaseX configura un usuari amb nom “<code>admin</code>” i contrasenya “<code>admin</code>”, de manera que podem connectar amb dit usuari per iniciar la interacció amb el servidor. Si ho fem en la mateixa màquina que el servidor, no cal indicar res a la línia d’ordres.</p>
+<p>A més, es recomana utilitzar el <em>wrapper</em> <code>rlwrap</code> per fer que l’execució de l’ordre sigui més còmoda (memòria de línies antigues, correcte funcionament de les fletxes del cursor, etc.):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Username: admin</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Password: admin</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>Try "help" to get more information.</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>&gt; </span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Les ordres que accepta BaseX des d’aquesta interfície són moltes i de natura molt variada:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&gt; help</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Try "help [...]" to get info on a specific command.</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ADD (TO [path]) [input]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    Add document to database.</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>ALTER [DATABASE|USER] [...]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    Alter database name or user password.</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>CHECK [input]</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    Open or create database.</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>CLOSE </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    Close current database.</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>COPY [name] [newname]</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    Copy database.</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>CREATE [BACKUP|DATABASE|EVENT|INDEX|USER] [...]</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    Create database, index or user.</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>CS [query]</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    Run XQuery and set result as new context set.</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>DELETE [path]</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    Delete documents from database.</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>DROP [BACKUP|DATABASE||EVENTINDEX|USER] [...]</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    Drop database, index or user.</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>EXIT </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    Exit application.</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>EXPORT [path]</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    Export database to XML.</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>FIND [keywords]</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    Run a keyword query.</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>FLUSH </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    Flush database.</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>GET [option]</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    Show global option.</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>GRANT [NONE|READ|WRITE|CREATE|ADMIN] (ON [database]) TO [user]</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    Grant user permissions.</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>HELP ([command])</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    Get help on BaseX commands.</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>INFO ([DATABASE|INDEX|STORAGE])</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    Show information on current database.</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>KILL [name]</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    Kill user sessions.</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>LIST ([path])</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    List databases or documents in database.</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>OPEN [path]</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    Open database.</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>OPTIMIZE (ALL)</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    Optimize the database.</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>PASSWORD ([password])</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    Change password.</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>RENAME [path] [newpath]</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    Rename document paths in database.</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>REPLACE [path] [input]</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    Replace documents in database.</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>REPO [DELETE|INSTALL|LIST]</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    Install, delete or list packages.</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>RESTORE [name-(date)]</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    Restore database.</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>RETRIEVE [path]</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    Retrieve raw data.</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>RUN [path]</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    Run file as XQuery.</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>SET [option] ([value])</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    Set global options.</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>SHOW [BACKUPS|DATABASES|EVENTS|SESSIONS|USERS]</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>    Show server information.</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>STORE (TO [path]) [input]</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    Store raw data.</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>XQUERY [query]</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    Run XQuery.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Tractarem ara les més destacables, tot agrupant-les en diversos grups:</p>
+<ul>
+<li>Ordres de gestió de bases de dades</li>
+<li>Ordres de gestió d’usuaris</li>
+<li>Ordres de gestió de privilegis</li>
+<li>Ordres relacionades amb les còpies de seguretat</li>
+<li>Ordres relacionats amb els índexs</li>
+<li>Ordres relacionats amb les consultes de dades</li>
+</ul>
+<section id="gestió-de-bases-de-dades" class="level3">
+<h3 class="anchored" data-anchor-id="gestió-de-bases-de-dades">2.1. Gestió de bases de dades</h3>
+<p>Podem manipular les bases de dades existents amb totes les ordres que ens ofereix BaseX al respecte, i que no són poques:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 70%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ordre</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>ADD (TO [path]) [input]</code></td>
+<td style="text-align: left;">Afegir el document a la base de dades</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>ALTER DATABASE [...]</code></td>
+<td style="text-align: left;">Modificar el nom de la base de dades</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>CHECK [input]</code></td>
+<td style="text-align: left;">Obre o crea una base de dades</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>CLOSE</code></td>
+<td style="text-align: left;">Tanca la base de dades oberta actualment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>COPY [name] [newname]</code></td>
+<td style="text-align: left;">Copia la base de dades</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>CREATE DATABASE [...]</code></td>
+<td style="text-align: left;">Crea una base de dades nova</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>DELETE [path]</code></td>
+<td style="text-align: left;">Elimina documents de la base de dades</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>DROP DATABASE</code></td>
+<td style="text-align: left;">Elimina una base de dades sencera</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>EXPORT [path]</code></td>
+<td style="text-align: left;">Exporta la base de dades a un arxiu XML</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>FLUSH</code></td>
+<td style="text-align: left;">Fixa els canvis pendents a la base de dades</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>INFO DATABASE</code></td>
+<td style="text-align: left;">Mostra informació de la base de dades activa</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>LIST ([path])</code></td>
+<td style="text-align: left;">Llista bases de dades i/o documents</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>OPEN [path]</code></td>
+<td style="text-align: left;">Obre una base de dades</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>OPTIMIZE (ALL)</code></td>
+<td style="text-align: left;">Optimitza la base de dades</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>RENAME [path] [newpath]</code></td>
+<td style="text-align: left;">Canviar camins a arxius de la base de dades</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>REPLACE [path] [input]</code></td>
+<td style="text-align: left;">Substitueix documents de la base de dades</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>SHOW DATABASES</code></td>
+<td style="text-align: left;">Mostra informació sobre les bases de dades existents</td>
+</tr>
+</tbody>
+</table>
+<p>Observi les següents ordres que mostren l’ús bàsic d’una sessió d’administració de base de dades XND:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Username: admin</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>Password: admin</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>Try "help" to get more information.</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>&gt; CREATE DATABASE mondial ./mondial.xml</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>Database 'mondial' created in 1816.36 ms.</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>&gt; CLOSE</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>Database 'mondial' was closed.</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>&gt; SHOW DATABASES</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>0 opened database(s).</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>&gt; LIST</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>Name     Resources  Size     Input Path               </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>----------------------------------------------------</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>mondial  1          2165975  /home/felix/mondial.xml  </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>test     2          4645     /home/felix/testDB       </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>2 Databases.</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>&gt; OPEN mondial</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>Database 'mondial' opened in 7.47 ms.</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>&gt; CREATE DATABASE prova</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>Database 'prova' created in 44.56 ms.</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>&gt; ADD mondial.xml</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>Path "mondial.xml" added in 1125.91 ms.</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>&gt; LIST prova</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>Input Path   Type  Content-Type     Size   </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>-----------------------------------------</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>mondial.xml  xml   application/xml  89486  </span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>1 Resources.</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>&gt; INFO</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>General Information</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    Version: 7.0.2</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    Database Path: /home/felix/BaseXData</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    Used Main Memory: 1558 KB</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>Resource Properties</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    Whitespace Chopping: ON</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>Indexes</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    Path Summary: ON</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    Text Index: ON</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    Attribute Index: ON</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    Full-Text Index: OFF</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>&gt; INFO DATABASE</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>Database Properties</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    Name: prova</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    Size: 1839 KB</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    Nodes: 89486</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    Resources: 1</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    Timestamp: 12.03.2013 08:36:02</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>Resource Properties</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>    Timestamp: 12.03.2013 08:36:20</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    Encoding: UTF-8</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>    Whitespace Chopping: ON</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>Indexes</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>    Up-to-date: false</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>    Path Summary: ON</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>    Text Index: OFF</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>    Attribute Index: OFF</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>    Full-Text Index: OFF</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>&gt; OPTIMIZE</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>Database 'prova' optimized in 548.67 ms.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="gestió-dusuaris" class="level3">
+<h3 class="anchored" data-anchor-id="gestió-dusuaris">2.2. Gestió d’usuaris</h3>
+<p>Les ordres relacionades amb la gestió dels usuaris són les següents:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ordre</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>ALTER USER [...]</code></td>
+<td style="text-align: left;">Alter user password</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>CREATE USER [...]</code></td>
+<td style="text-align: left;">Createuser</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>DROP USER [...]</code></td>
+<td style="text-align: left;">Drop user</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>KILL [name]</code></td>
+<td style="text-align: left;">Kill user sessions</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>PASSWORD ([password])</code></td>
+<td style="text-align: left;">Change password</td>
+</tr>
+</tbody>
+</table>
+<p>Les ordres mostrades permeten una gestió simple però efectiva dels usuaris. Observi aquests exemples d’ús:</p>
+<ol type="1">
+<li><p>Primer de tot definirem un usuari nou anomenat “<code>usuari</code>” amb contrasenya “<code>1234</code>”. Per introduir la contrasenya directament en línia d’ordres de BaseX necessitem calcular el <em>hash</em> MD5 de la contrasenya, perquè ens requereix introduir-la d’aquesta manera. Per tant, primer obtindrem la contrasenya des de consola amb l’eina <code>md5sum</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="at">-n</span> <span class="st">"1234"</span> <span class="kw">|</span> <span class="fu">md5sum</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">81dc9bdb52d04dc20036dbd8313ed055</span>  <span class="at">-</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I aleshores entrem amb l’usuari administrador i creem efectivament l’usuari:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Username: admin</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Password: admin</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>Try "help" to get more information.</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER usuari 81dc9bdb52d04dc20036dbd8313ed055</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>User 'usuari' created.</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>&gt; EXIT</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Enjoy life.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Ara intentem comprovar si l’usuari creat pot iniciar sessió:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Username: usuari</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>Password: 1234</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>Try "help" to get more information.</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>&gt; OPEN prova</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>READ permission needed.</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>&gt; EXIT</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>See you.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com veu, es pot iniciar sessió, però no es tenen privilegis d’accés a cap base de dades (més endavant es veurà com modificar privilegis).</p></li>
+<li><p>Ara definirem un altre usuari que voldrem que sigui administrador de la base de dades i algun altre usuari:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Username: ·admin</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>Password: ·admin</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>Try "help" to get more information.</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER admin2 </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>Password: ·1234</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>User 'admin2' created.</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>&gt; ALTER USER admin2 </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>Password: ·jA7sh$12@</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>Password of user 'admin2' changed.</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER alu01 81dc9bdb52d04dc20036dbd8313ed055</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>User 'alu01' created.</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER alu02 81dc9bdb52d04dc20036dbd8313ed055</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>User 'alu02' created.</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER alu03 81dc9bdb52d04dc20036dbd8313ed055</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>User 'alu03' created.</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER alu04 81dc9bdb52d04dc20036dbd8313ed055</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>User 'alu04' created.</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER alu05 81dc9bdb52d04dc20036dbd8313ed055</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>User 'alu05' created.</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER alu06 81dc9bdb52d04dc20036dbd8313ed055</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>User 'alu06' created.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com veu, es mostra com hem de canviar una contrasenya d’un usuari existent, a més de com introduir-la sense que es vegi per pantalla.</p></li>
+<li><p>Eliminem un usuari que sobra:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>&gt; DROP USER alu06</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>User 'alu06' dropped.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</section>
+<section id="gestió-de-privilegis" class="level3">
+<h3 class="anchored" data-anchor-id="gestió-de-privilegis">2.3. Gestió de privilegis</h3>
+<p>La gestió de privilegis en BaseX és força senzilla. En concret, incorpora 5 privilegis que poden aplicar-se sobre qualsevol usuari i sobre les bases de dades.</p>
+<p>L’esquema que resumeix el comportament en aquest sentit és el següent:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/basex_privilegis.png" class="img-fluid figure-img"></p>
+<figcaption>Jerarquia de privilegis en BaseX</figcaption>
+</figure>
+</div>
+<p>Observi que els privilegis poden aplicar-se a dos nivells:</p>
+<ul>
+<li><p><strong>Globalment</strong>: Afectaran a totes les bases de dades i sobre la gestió mateixa del servidor.</p></li>
+<li><p><strong>Localment</strong>: Afectaran només a una base de dades específica. Si existeixen privilegis locals, aquests sobreescriuen els globals, de manera que els locals prevalen sobre els globals.</p></li>
+</ul>
+<p>A més, dos dels 5 privilegis no poden ser aplicats localment, perquè fan referència a la gestió del servidor.</p>
+<p>El significat dels privilegis és força evident:</p>
+<ul>
+<li><code>NONE</code>: Cap privilegi</li>
+<li><code>READ</code>: Es permet accedir a les dades, però sense modificar-les</li>
+<li><code>WRITE</code>: Es concedeix la possibilitat de modificar les dades existents</li>
+<li><code>CREATE</code>: S’atorga la possibilitat exclusiva de crear objectes nous</li>
+<li><code>ADMIN</code>: Es disposa de tots els privilegis, podent qualsevol ordre</li>
+</ul>
+<p>Finalment, tingui present que un privilegi de nivell superior engloba tots els de nivell inferior. Així doncs, si s’atorga el dret de modificació de dades <code>WRITE</code>, també s’està atorgant implícitament en de lectura <code>READ</code>.</p>
+<p>Per a manipular els privilegis només existeixen dues ordres relacionades:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 75%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ordre</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>GRANT [NONE|READ|WRITE|CREATE|ADMIN] (ON [database]) TO [user]</code></td>
+<td style="text-align: left;">Atorga drets a l’usuari</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>SHOW USERS (ON [database])</code></td>
+<td style="text-align: left;">Mostra drets dels usuaris</td>
+</tr>
+</tbody>
+</table>
+<p>Posem ara uns quants exemples de com manipular privilegis:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Username: admin</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>Password: admin</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>Try "help" to get more information.</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>&gt; GRANT ADMIN TO admin2</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>ADMIN granted to 'admin2'.</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>&gt; GRANT READ ON prova TO alu*</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu01' on 'prova'.</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu02' on 'prova'.</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu03' on 'prova'.</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu04' on 'prova'.</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu05' on 'prova'.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com veu, assignar un dret global només implica dir el privilegi i l’usuari que el rebrà. Per assignar un dret concret sobre una base de dades específica, hem de fer servir la clàusula ON per indicar el nom de la base de dades. A més, pot veure com s’han assignat privilegis en bloc a diversos usuaris, simplement utilitzant el símbol comodí “<code>*</code>”.</p>
+<p>Els privilegis poden ser modificats en qualsevol moment. Vegi la següent seqüència d’ordres:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>&gt; GRANT CREATE ON prova TO usuari</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>CREATE permission is unknown.</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>&gt; GRANT CREATE TO usuari</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>CREATE granted to 'usuari'.</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>&gt; GRANT READ TO usuari</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>READ granted to 'usuari'.</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>&gt; GRANT WRITE ON prova TO usuari</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>WRITE granted to 'usuari' on 'prova'.</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>&gt; GRANT NONE ON mondial TO usuari</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>NONE granted to 'usuari' on 'mondial'.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com veu, el privilegi <code>CREATE</code> és global i genera un error. Si donem un dret més gran i volem reduir-lo, simplement hem de substituir tornant a definir el nivell de dret per a aquell usuari.</p>
+<p>Finalment, en l’exemple mostrat també s’ha indicat com podem tenir drets globals i locals diferents. En aquest cas, l’usuari “<code>usuari</code>” tindrà dret de lectura sobre tota base de dades (si no s’indica una altra cosa a nivell local) i específicament fixem un nivell de dret més elevat en una base de dades i un de menor en una altra. D’aquesta manera, podem fixar un dret per defecte i perfilar un de diferent per a cada base de dades concreta.</p>
+<p>Per acabar, podem visualitzar els drets atorgats a nivell global i/o local amb l’ordre <code>SHOW USERS</code>. Seguint amb el nostre exemple:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>&gt; SHOW users</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Username  Read  Write  Create  Admin  </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>------------------------------------</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>admin     X     X      X       X      </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>admin2    X     X      X       X      </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>alu01                                 </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>alu02                                 </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>alu03                                 </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>alu04                                 </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>alu05                                 </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>usuari    X                           </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>8 Users.</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>&gt; SHOW USERS ON prova</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>Username  Read  Write  </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>---------------------</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>alu01     X            </span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>alu02     X            </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>alu03     X            </span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>alu04     X            </span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>alu05     X            </span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>usuari    X     X      </span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>6 Users.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ordres-relacionades-amb-les-còpies-de-seguretat" class="level3">
+<h3 class="anchored" data-anchor-id="ordres-relacionades-amb-les-còpies-de-seguretat">2.4. Ordres relacionades amb les còpies de seguretat</h3>
+<p>Els <em>backups</em> s’emmagatzemen com a arxius de tipus ZIP al directori de dades de BaseX, que en Linux resideix al directori de l’usuari. Per exemple, /home/joan/BaseXData.</p>
+<p>Els arxius de backup generats per BaseX inclouen tots els arxius interns de la base de dades tal i com estan indexats i transformats internament per la base de dades.</p>
+<p>Les ordres relacionades amb la creació i manteniment de còpies de seguretat per a bases de dades BaseX són les següents:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ordre</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>COPY [name] [newname]</code></td>
+<td style="text-align: left;">Copia tota una base de dades</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>CREATE BACKUP [...]</code></td>
+<td style="text-align: left;">Crea un còpia de seguretat d’una base de dades</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>DROP BACKUP [...]</code></td>
+<td style="text-align: left;">Elimina una còpia de seguretat</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>EXPORT [path]</code></td>
+<td style="text-align: left;">Exporta una base de dades a un arxiu XML</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>INFO STORAGE</code></td>
+<td style="text-align: left;">Mostra informació sobre l’emmagatzematge</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>RESTORE [name-(date)]</code></td>
+<td style="text-align: left;">Restaura una base de dades</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>SHOW BACKUPS</code></td>
+<td style="text-align: left;">Mostra informació sobre les còpies de seguretat existents</td>
+</tr>
+</tbody>
+</table>
+<p>Exemples d’ús de la funcionalitat de les còpies de seguretat:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>&gt; CREATE BACKUP mondial</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Backup for 'mondial' created in 584.35 ms.</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>&gt; SHOW BACKUPS</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>Name                             Size    </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>---------------------------------------</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>mondial-2013-03-12-15-51-03.zip  913102  </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>1 Backups.</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>&gt; CREATE BACKUP mondial</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>Backup for 'mondial' created in 323.53 ms.</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>&gt; SHOW BACKUPS</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>Name                             Size    </span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>---------------------------------------</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>mondial-2013-03-12-15-51-03.zip  913102  </span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>mondial-2013-03-12-20-50-43.zip  913102  </span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>2 Backups.</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>&gt; RESTORE mondial</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>'mondial-2013-03-12-20-50-43.zip' restored in 310.44 ms.</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>&gt; RESTORE mondial-2013-03-12-15-51-03</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>'mondial-2013-03-12-15-51-03.zip' restored in 274.67 ms.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Observi que és possible restaurar un backup d’una data/hora específica, i no només la darrera còpia de seguretat.</p>
+</section>
+<section id="ordres-relacionats-amb-els-índexs" class="level3">
+<h3 class="anchored" data-anchor-id="ordres-relacionats-amb-els-índexs">2.5. Ordres relacionats amb els índexs</h3>
+<p>Els índexs permeten l’execució més ràpida de consultes d’extracció d’informació.</p>
+<p>Relacionat amb els índexs, només existeixen 3 funcions bàsiques:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ordre</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>CREATE INDEX [...]</code></td>
+<td style="text-align: left;">Crea un índex nou</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>DROP INDEX [...]</code></td>
+<td style="text-align: left;">Elimina un índex</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>INFO INDEX</code></td>
+<td style="text-align: left;">Mostra informació sobre els índexs existents</td>
+</tr>
+</tbody>
+</table>
+<p>En BaseX existeixen només 4 tipus d’índexs: <code>TEXT</code>, <code>FULLTEXT</code>, <code>ATTRIBUTES</code>, i <code>PATH</code>. Cadascun d’ells està especialitzat en optimitzar un aspecte diferent de les recerques i filtrat de les dades.</p>
+<p>En concret, l’ordre de crear índexs no permet crear índexs sobre nodes, atributs o texts específics; sinó d’una manera genèrica per als quatre tipus esmentats.</p>
+<p>L’ordre de crear o eliminar índexs accepten un únic argument que coincideix amb els 4 noms indicats al paràgraf anterior:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>CREATE INDEX [TEXT|FULLTEXT|ATTRIBUTE|PATH]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>DROP INDEX [TEXT|FULLTEXT|ATTRIBUTE|PATH]</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Els índexs faran que les consultes de selecció de dades siguin molt més eficients, reduint el temps total d’obtenció dels resultats. La diferència pot arribar, en alguns casos, a nivells de reducció de temps d’execució de consultes XQuery de fins el 1/10.</p>
+</section>
+<section id="ordres-relacionats-amb-les-consultes-de-dades-amb-xquery" class="level3">
+<h3 class="anchored" data-anchor-id="ordres-relacionats-amb-les-consultes-de-dades-amb-xquery">2.6. Ordres relacionats amb les consultes de dades amb XQuery</h3>
+<p>Quant a l’execució de consultes XQuery, BaseX ens ofereix les següents ordres:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 75%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ordre</th>
+<th style="text-align: left;">Descripció</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>CS [query]</code></td>
+<td style="text-align: left;">Executa una consulta XQuery i fixa el resultat com a context actual</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>RUN [path]</code></td>
+<td style="text-align: left;">Executa el contingut d’un arxiu com a consulta XQuery</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>XQUERY [query]</code></td>
+<td style="text-align: left;">Executa una consulta XQuery</td>
+</tr>
+</tbody>
+</table>
+<p>Podem executar una consulta XQuery directament amb l’ordre <code>XQUERY consulta</code>, però també podem tenir-la desada a disc i indicar la ruta amb l’ordre <code>RUN arxiu</code>.</p>
+<p>Al marge d’això, sempre podem canviar de “<em>node actiu</em>” (context) amb l’ordre <code>CS</code> acompanyada d’una consulta XQuery que retorni un node del document original. Així doncs, les consultes posteriors prendran aquell context com a punt de partida (ubicació actual) i podrem utilitzar camins relatius dins del document amb consultes XQuery.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>&gt; CS //mondial/country[name='Belgium']</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>&gt; XQUERY count(descendant::city)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>10</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>Query executed in 8.26 ms.</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>&gt; XQUERY province/city[name='Brussels']/population/text()</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>951580</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>&gt; CS /</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com veu, per retornar al nivell superior de l’arbre XML, només cal canviar el context a <code>/</code>.</p>
+</section>
+</section>
+<section id="connexió-per-a-consultes-xquery-amb-java" class="level2">
+<h2 class="anchored" data-anchor-id="connexió-per-a-consultes-xquery-amb-java">3. Connexió per a consultes XQuery amb Java</h2>
+<p>BaseX ens ofereix la possibilitat de connectar i utilitzar la seva infraestructura des dels nostres programes Java, i ho fa de diverses maneres que passarem a revisar tot seguit.</p>
+<section id="connexió-local-directa" class="level3">
+<h3 class="anchored" data-anchor-id="connexió-local-directa">3.1. Connexió local directa</h3>
+<p>BaseX ens permet connectar des de Java directament (sense sistema de seguretat, localment).</p>
+<p>Per fer-ho només cal utilitzar les classes Context i XQuery que ofereixen a la seva API:</p>
+<p><strong>Programa de prova per al API de BaseX</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Test01.java</strong></pre>
+</div>
+<div class="sourceCode" id="cb18" data-filename="Test01.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">core</span><span class="op">.</span><span class="im">Context</span><span class="op">;</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">core</span><span class="op">.</span><span class="im">cmd</span><span class="op">.</span><span class="im">XQuery</span><span class="op">;</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="kw">public</span> <span class="kw">class</span> Test01 <span class="op">{</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="dt">static</span> <span class="bu">Context</span> context <span class="op">=</span> <span class="kw">new</span> <span class="bu">Context</span><span class="op">();</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a></span>
+<span id="cb18-7"><a href="#cb18-7"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>    <span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a>      <span class="dt">long</span> t1 <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a>      <span class="bu">String</span> query <span class="op">=</span> </span>
+<span id="cb18-11"><a href="#cb18-11"></a>        <span class="st">"doc('mondial.xml')//mondial/country[name='Spain']"</span> <span class="op">+</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a>                    <span class="st">"/province[name='Catalonia']/city/name"</span><span class="op">;</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a>      <span class="bu">String</span> result <span class="op">=</span> <span class="kw">new</span> <span class="fu">XQuery</span><span class="op">(</span>query<span class="op">).</span><span class="fu">execute</span><span class="op">(</span>context<span class="op">);</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a>      <span class="dt">long</span> t2 <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span>result<span class="op">);</span></span>
+<span id="cb18-16"><a href="#cb18-16"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">();</span></span>
+<span id="cb18-17"><a href="#cb18-17"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"Executat en "</span> <span class="op">+</span> <span class="op">(</span>t2<span class="op">-</span>t1<span class="op">)</span> <span class="op">+</span> <span class="st">"ms"</span><span class="op">);</span></span>
+<span id="cb18-18"><a href="#cb18-18"></a>    <span class="op">}</span></span>
+<span id="cb18-19"><a href="#cb18-19"></a>    <span class="cf">catch</span> <span class="op">(</span><span class="bu">Exception</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-20"><a href="#cb18-20"></a>      e<span class="op">.</span><span class="fu">printStackTrace</span><span class="op">();</span></span>
+<span id="cb18-21"><a href="#cb18-21"></a>    <span class="op">}</span></span>
+<span id="cb18-22"><a href="#cb18-22"></a>  <span class="op">}</span></span>
+<span id="cb18-23"><a href="#cb18-23"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Com veu, el codi és molt senzill però només permet l’execució de sentències XQuery.</p>
+<p>El resultat de la seva execució es mostra tot seguit:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> javac <span class="at">-cp</span> .:/usr/share/java/basex.jar Test01.java</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> java <span class="at">-cp</span> .:/usr/share/java/basex.jar Test01</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Barcelona<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Lleida<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Tarragona<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Hospitalet <span class="ex">de</span> Llobregat<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Badalona<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Sabadell<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Terrassa<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Santa <span class="ex">Coloma</span> de Gramanet<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Mataro<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Executat</span> en 2455ms</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="connexió-remota-a-través-de-classes-client" class="level3">
+<h3 class="anchored" data-anchor-id="connexió-remota-a-través-de-classes-client">3.2. Connexió remota a través de classes client</h3>
+<p>La diferència és que ara utilitzarem un classe client anomenada <code>ClientSession</code>. Aquesta classe afegeix al mètode anterior el fet de poder connectar a un equip remot indicant usuari i contrasenya.</p>
+<p><strong>Programa de prova per al API de BaseX</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Test02.java</strong></pre>
+</div>
+<div class="sourceCode" id="cb20" data-filename="Test02.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">ClientSession</span><span class="op">;</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">ClientQuery</span><span class="op">;</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="kw">public</span> <span class="kw">class</span> Test02 <span class="op">{</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a></span>
+<span id="cb20-6"><a href="#cb20-6"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a>    <span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a>      <span class="dt">long</span> t1 <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a>      ClientSession sessio <span class="op">=</span> </span>
+<span id="cb20-10"><a href="#cb20-10"></a>              <span class="kw">new</span> <span class="fu">ClientSession</span><span class="op">(</span><span class="st">"localhost"</span><span class="op">,</span> <span class="dv">1984</span><span class="op">,</span> <span class="st">"admin"</span><span class="op">,</span> <span class="st">"admin"</span><span class="op">);</span></span>
+<span id="cb20-11"><a href="#cb20-11"></a>      <span class="bu">String</span> query <span class="op">=</span> </span>
+<span id="cb20-12"><a href="#cb20-12"></a>        <span class="st">"doc('mondial.xml')//mondial/country[name='Spain']"</span> <span class="op">+</span></span>
+<span id="cb20-13"><a href="#cb20-13"></a>                    <span class="st">"/province[name='Catalonia']/city/name"</span><span class="op">;</span></span>
+<span id="cb20-14"><a href="#cb20-14"></a>      ClientQuery clientQuery <span class="op">=</span> sessio<span class="op">.</span><span class="fu">query</span><span class="op">(</span>query<span class="op">);</span></span>
+<span id="cb20-15"><a href="#cb20-15"></a>      <span class="bu">String</span> result <span class="op">=</span> clientQuery<span class="op">.</span><span class="fu">execute</span><span class="op">();</span></span>
+<span id="cb20-16"><a href="#cb20-16"></a>      <span class="dt">long</span> t2 <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span></span>
+<span id="cb20-17"><a href="#cb20-17"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span>result<span class="op">);</span></span>
+<span id="cb20-18"><a href="#cb20-18"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">();</span></span>
+<span id="cb20-19"><a href="#cb20-19"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"Executat en "</span> <span class="op">+</span> <span class="op">(</span>t2<span class="op">-</span>t1<span class="op">)</span> <span class="op">+</span> <span class="st">"ms"</span><span class="op">);</span></span>
+<span id="cb20-20"><a href="#cb20-20"></a>    <span class="op">}</span></span>
+<span id="cb20-21"><a href="#cb20-21"></a>    <span class="cf">catch</span> <span class="op">(</span><span class="bu">Exception</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-22"><a href="#cb20-22"></a>      e<span class="op">.</span><span class="fu">printStackTrace</span><span class="op">();</span></span>
+<span id="cb20-23"><a href="#cb20-23"></a>    <span class="op">}</span></span>
+<span id="cb20-24"><a href="#cb20-24"></a>  <span class="op">}</span></span>
+<span id="cb20-25"><a href="#cb20-25"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Observi que aquesta classe permet la interacció directa amb el servidor BaseX, però cal indicar el context arrel amb l’especificació del document XML que agafem de base per a la consulta.</p>
+</section>
+<section id="mètode-a-través-de-classe-wrapper" class="level3">
+<h3 class="anchored" data-anchor-id="mètode-a-través-de-classe-wrapper">3.3. Mètode a través de classe wrapper</h3>
+<p>Existeix la possibilitat de construir tota una classe que interaccioni amb la base de dades mitjançant <em>sockets</em>, i així implementar la connexió a baix nivell.</p>
+<p>De fet, els mateixos creadors de BaseX ofereixen entre els exemples disponibles per a descarregar una classe anomenada <code>BaseXClient</code> que cobreix aquesta funcionalitat. Aquesta classe implementa la mateixa funcionalitat que el programa <code>basexclient</code> amb què ja havíem treballat.</p>
+<p>El codi font de dita classe no es mostra aquí per dos motius: perquè és extens (gairebé 500 línies, moltes d’elles comentaris), i perquè és codi fet per l’equip de BaseX i està disponible a la seva web per a descarregar i també s’adjunta amb els arxius del curs.</p>
+<p>Tornant a la funcionalitat que s’aconsegueix, les ordres i sintaxi de les mateixes coincidiran quan s’utilitza des de dita classe en Java.</p>
+<p>Un petit exemple d’això és el següent programa, on s’invoca una consulta XQuery sobre la base de dades Mondial, tenint en compte que el servidor existeix, està operatiu, i la base de dades està també creada i operativa. A més, l’usuari amb què fem la connexió serà el compte de l’administrador:</p>
+<p><strong>Programa de prova per al API de BaseX</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Test03.java</strong></pre>
+</div>
+<div class="sourceCode" id="cb21" data-filename="Test03.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">public</span> <span class="kw">class</span> Test03 <span class="op">{</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a></span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>    <span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>      <span class="dt">long</span> t1 <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a>      BaseXClient sessio <span class="op">=</span> </span>
+<span id="cb21-7"><a href="#cb21-7"></a>          <span class="kw">new</span> <span class="fu">BaseXClient</span><span class="op">(</span><span class="st">"localhost"</span><span class="op">,</span> <span class="dv">1984</span><span class="op">,</span> <span class="st">"admin"</span><span class="op">,</span> <span class="st">"admin"</span><span class="op">);</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a>      <span class="bu">String</span> query <span class="op">=</span> </span>
+<span id="cb21-9"><a href="#cb21-9"></a>        <span class="st">"XQUERY doc('mondial.xml')//mondial/country[name='Spain']"</span> <span class="op">+</span></span>
+<span id="cb21-10"><a href="#cb21-10"></a>                           <span class="st">"/province[name='Catalonia']/city/name"</span><span class="op">;</span></span>
+<span id="cb21-11"><a href="#cb21-11"></a>      <span class="bu">String</span> result <span class="op">=</span> sessio<span class="op">.</span><span class="fu">execute</span><span class="op">(</span>query<span class="op">);</span></span>
+<span id="cb21-12"><a href="#cb21-12"></a>      <span class="dt">long</span> t2 <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span></span>
+<span id="cb21-13"><a href="#cb21-13"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span>result<span class="op">);</span></span>
+<span id="cb21-14"><a href="#cb21-14"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">();</span></span>
+<span id="cb21-15"><a href="#cb21-15"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"Executat en "</span> <span class="op">+</span> <span class="op">(</span>t2<span class="op">-</span>t1<span class="op">)</span> <span class="op">+</span> <span class="st">"ms"</span><span class="op">);</span></span>
+<span id="cb21-16"><a href="#cb21-16"></a>    <span class="op">}</span></span>
+<span id="cb21-17"><a href="#cb21-17"></a>    <span class="cf">catch</span> <span class="op">(</span><span class="bu">Exception</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-18"><a href="#cb21-18"></a>      e<span class="op">.</span><span class="fu">printStackTrace</span><span class="op">();</span></span>
+<span id="cb21-19"><a href="#cb21-19"></a>    <span class="op">}</span></span>
+<span id="cb21-20"><a href="#cb21-20"></a>  <span class="op">}</span></span>
+<span id="cb21-21"><a href="#cb21-21"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Pot veure com el codi ofereix la possibilitat ara d’escriure una ordre qualsevol. En aquest cas s’invoca l’ordre <code>XQUERY</code> per sol·licitar una consulta d’aquest tipus, però podria efectuar-se qualsevol altre tipus de tasca.</p>
+<p>Com a mostra d’això, vegi el següent cas on s’ha afegit l’ordre per obrir una base de dades específica, establint un context i realitzat una consulta XQuery:</p>
+<p><strong>Programa de prova per al API de BaseX</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Test04.java</strong></pre>
+</div>
+<div class="sourceCode" id="cb22" data-filename="Test04.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">public</span> <span class="kw">class</span> Test04 <span class="op">{</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a></span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a>    <span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a>      <span class="dt">long</span> t1 <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a>      BaseXClient sessio <span class="op">=</span> </span>
+<span id="cb22-7"><a href="#cb22-7"></a>          <span class="kw">new</span> <span class="fu">BaseXClient</span><span class="op">(</span><span class="st">"localhost"</span><span class="op">,</span> <span class="dv">1984</span><span class="op">,</span> <span class="st">"admin"</span><span class="op">,</span> <span class="st">"admin"</span><span class="op">);</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a>      sessio<span class="op">.</span><span class="fu">execute</span><span class="op">(</span><span class="st">"OPEN mondial"</span><span class="op">);</span></span>
+<span id="cb22-9"><a href="#cb22-9"></a>      sessio<span class="op">.</span><span class="fu">execute</span><span class="op">(</span><span class="st">"CS //mondial/country[name='Spain']"</span><span class="op">);</span></span>
+<span id="cb22-10"><a href="#cb22-10"></a>      <span class="bu">String</span> query <span class="op">=</span> <span class="st">"XQUERY province[name='Catalonia']/city/name"</span><span class="op">;</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a>      <span class="bu">String</span> result <span class="op">=</span> sessio<span class="op">.</span><span class="fu">execute</span><span class="op">(</span>query<span class="op">);</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a>      <span class="dt">long</span> t2 <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span>result<span class="op">);</span></span>
+<span id="cb22-14"><a href="#cb22-14"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">();</span></span>
+<span id="cb22-15"><a href="#cb22-15"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"Executat en "</span> <span class="op">+</span> <span class="op">(</span>t2<span class="op">-</span>t1<span class="op">)</span> <span class="op">+</span> <span class="st">"ms"</span><span class="op">);</span></span>
+<span id="cb22-16"><a href="#cb22-16"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">exit</span><span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb22-17"><a href="#cb22-17"></a>    <span class="op">}</span></span>
+<span id="cb22-18"><a href="#cb22-18"></a>    <span class="cf">catch</span> <span class="op">(</span><span class="bu">Exception</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-19"><a href="#cb22-19"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">err</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"ERROR: "</span> <span class="op">+</span> e<span class="op">.</span><span class="fu">getMessage</span><span class="op">());</span></span>
+<span id="cb22-20"><a href="#cb22-20"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">exit</span><span class="op">(-</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb22-21"><a href="#cb22-21"></a>    <span class="op">}</span></span>
+<span id="cb22-22"><a href="#cb22-22"></a>  <span class="op">}</span></span>
+<span id="cb22-23"><a href="#cb22-23"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Observi com utilitzem la variable de sessió obtinguda per executar ordres BaseX segons convingui. En aquest sentit, vegi que si una instrucció fallés, es llançaria una excepció de tipus <code>java.io.IOException</code>.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiat!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiat!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/www\.flx\.cat");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html" class="pagination-link" aria-label="8 XND: XPath/XQuery">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">8 XND: XPath/XQuery</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
