@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.16">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../../">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a67ac2868200dddf7a4f0e3ae403775c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c2596e96578a95592c042e94c362e7b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7c7e40be1f9e7197293d8dea5ad08f5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -187,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Publicat</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">2 de juliol de 2013</p>
+        <p class="date">2 de juliol del 2013</p>
       </div>
     </div>
     
@@ -320,7 +321,7 @@ Nota
 <section id="configuració-connexió-i-desconnexió" class="level3">
 <h3 class="anchored" data-anchor-id="configuració-connexió-i-desconnexió">1.1. Configuració, connexió i desconnexió</h3>
 <p>En primer lloc, l’aplicació haurà de disposar de les llibreries necessàries per a la seva completa operativa. Això implica els següents arxius:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ant.jar</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ant.jar</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>bloat-1.0.jar</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>db4o-8.0.249.16098-all-java5.jar</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>db4o-8.0.249.16098-bench.jar</span>
@@ -334,22 +335,22 @@ Nota
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>db4o-8.0.249.16098-osgi-java5.jar</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>db4o-8.0.249.16098-osgi-test-java5.jar</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>db4o-8.0.249.16098-taj-java5.jar</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>db4o-8.0.249.16098-tools-java5.jar</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>db4o-8.0.249.16098-tools-java5.jar</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Ara, una vegada disposem d’aquestes llibreries en el lloc adient, el nostre programa podrà utilitzar les funcionalitats de db4o per afegir persistència d’objectes.</p>
 <p>Per connectar amb una base de dades existent (o crear-ne una de nova si no existia abans), només caldrà fer una crida com la següent:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ObjectContainer db <span class="op">=</span> Db4oEmbedded<span class="op">.</span><span class="fu">openFile</span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ObjectContainer db <span class="op">=</span> Db4oEmbedded<span class="op">.</span><span class="fu">openFile</span><span class="op">(</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                        Db4oEmbedded<span class="op">.</span><span class="fu">newConfiguration</span><span class="op">(),</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                        dbFile<span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                        dbFile<span class="op">);</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>on <code>dbFile</code> representa un <code>String</code> amb el nom de l’arxiu on estigui (o vulgui crear-se) la base de dades d’objectes.</p>
 <p>Quan hem acabat de fer les accions que siguin oportunes amb la base de dades, hem de tancar la base de dades mitjançant una simple crida com la següent:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>db<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>db<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>D’aquesta manera s’alliberaran tots els recursos que db4o hagi ocupat per mantenir la base de dades activa i connectada, a més de buidar al disc les últimes modificacions pendents de ser fixades.</p>
 </section>
 <section id="execució-de-consultes-crud" class="level3">
 <h3 class="anchored" data-anchor-id="execució-de-consultes-crud">1.2. Execució de consultes CRUD</h3>
 <p>Quant a l’execució de consultes, les de selecció d’objectes es faran en algun dels tres formats que s’han comentat anteriorment en aquest tema: QBE, Native Query o SODA, i que seran analitzats més endavant.</p>
 <p>Com a exemple bàsic, consideri que podria tractar-se d’una sentència tant senzilla com:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> db<span class="op">.</span><span class="fu">queryByExample</span><span class="op">(</span>Employee<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> db<span class="op">.</span><span class="fu">queryByExample</span><span class="op">(</span>Employee<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Aquest cas simplement és tota la llista de treballadors.</p>
 <p>Quan a la resta d’operacions (CRUD), tingui present les següents crides:</p>
 <table class="caption-top table">
@@ -384,8 +385,8 @@ Nota
 </ul>
 <p>Com veu, excepte en el cas d’inserir un nou objecte, les manipulacions d’objectes existents passen per que abans hagi estat inclòs en una consulta de selecció.</p>
 <p>A més, db4o ens ofereix control de transaccions mitjançant les crides:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>db<span class="op">.</span><span class="fu">commit</span><span class="op">();</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>db<span class="op">.</span><span class="fu">rollback</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>db<span class="op">.</span><span class="fu">commit</span><span class="op">();</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>db<span class="op">.</span><span class="fu">rollback</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Quan es connecta amb una base de dades s’inicia automàticament una transacció, que tancarem amb una de les dues funcions esmentades. Quan es criden, aquestes funcions inicien automàticament una nova transacció.</p>
 </section>
 </section>
@@ -396,12 +397,12 @@ Nota
 <h3 class="anchored" data-anchor-id="qbe-query-by-example">2.1. QBE (<em>Query By Example</em>)</h3>
 <p>Aquesta modalitat de consultes es fonamenta en <em>explicar-li</em> a db4o com volem que sigui el resultat obtingut. Dit d’una altra manera, passem a la consulta un objecte amb els camps assignats de manera que donin a entendre quins valors estem condicionant.</p>
 <p>El cas més senzill és una consulta no filtrada, que pren la següent forma:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Department<span class="op">&gt;</span> depts <span class="op">=</span> db<span class="op">.</span><span class="fu">queryByExample</span><span class="op">(</span>Department<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Department<span class="op">&gt;</span> depts <span class="op">=</span> db<span class="op">.</span><span class="fu">queryByExample</span><span class="op">(</span>Department<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com veu, l’<em>exemple</em> és passar la classe del resultat que busquem, és a dir, tots els objectes <code>Department</code> (de la seva classe).</p>
 <p>Si el que volem és filtrar per algun criteri, haurem de subministrar un objecte parcialment assignat que demostri la nostra intenció:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Department d <span class="op">=</span> <span class="kw">new</span> <span class="fu">Department</span><span class="op">();</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Department d <span class="op">=</span> <span class="kw">new</span> <span class="fu">Department</span><span class="op">();</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>d<span class="op">.</span><span class="fu">setDepartmentName</span><span class="op">(</span><span class="st">"Sales"</span><span class="op">);</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Department<span class="op">&gt;</span> depts <span class="op">=</span> db<span class="op">.</span><span class="fu">queryByExample</span><span class="op">(</span>d<span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Department<span class="op">&gt;</span> depts <span class="op">=</span> db<span class="op">.</span><span class="fu">queryByExample</span><span class="op">(</span>d<span class="op">);</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>En aquest cas s’ha configurat un <code>Department</code> que només té assignat un camp, que és el nom del departament. Això farà que, en cercar els departaments, realitzi un filtrat d’igualtat amb el valor indicat només en aquest camp.</p>
 <p>Com veu, les consultes QBE són útils en casos molt bàsics, i no permetran filtrar rangs de valors o expressions avaluades més complexes.</p>
 </section>
@@ -411,14 +412,14 @@ Nota
 <p>La idea és senzilla: Estem treballant amb objectes, en un llenguatge de programació orientat a objectes, on la comprovació d’un filtratge “passa/no passa” pot ser tant senzilla com una condició <code>if</code> ben escrita.</p>
 <p>Així doncs, no seria més pràctic deixar al programador escriure la funció de filtrat “passa/no passa” en el seu llenguatge d’alt nivell orientat a objectes? Native Query fa exactament això.</p>
 <p>Un exemple: Suposem que volem tots els treballadors que cobrin un sou superior a 10000 o que treballin per al departament anomenat “Sales”. Amb Native Query quedarà així:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> db<span class="op">.</span><span class="fu">query</span><span class="op">(</span><span class="kw">new</span> <span class="bu">Predicate</span><span class="op">&lt;</span>Employee<span class="op">&gt;()</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> db<span class="op">.</span><span class="fu">query</span><span class="op">(</span><span class="kw">new</span> <span class="bu">Predicate</span><span class="op">&lt;</span>Employee<span class="op">&gt;()</span> <span class="op">{</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">match</span><span class="op">(</span>Employee emp<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span> </span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>emp<span class="op">.</span><span class="fu">getSalary</span><span class="op">()</span> <span class="op">&gt;</span> <span class="dv">10000</span><span class="op">)</span> <span class="op">||</span> </span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>emp<span class="op">.</span><span class="fu">getDepartment</span><span class="op">().</span><span class="fu">getDepartmentName</span><span class="op">().</span><span class="fu">equals</span><span class="op">(</span><span class="st">"Sales"</span><span class="op">))</span> </span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>És a dir, la consulta es basa en un <code>Predicate</code> sobre la classe <code>Employee</code> que passarà cadascun dels <code>Employee</code> trobats a la base de dades per la funció interna que hi és definida. Si l’objecte concret aplicat a <code>match()</code> passa la condició i retorna un <code>true</code>, aquell objecte sortirà al resultat de la consulta. Si per a l’objecte, la funció <code>match()</code> hagués retornat un <code>false</code>, aleshores serà eliminat del resultat.</p>
 <p>Aquest mecanisme ens permet, amb molta facilitat, utilitzar tota la infraestructura de funcions i classes del llenguatge de programació i podrem realitzar qualsevol tasca que ens puguem imaginar o plantejar.</p>
 </section>
@@ -427,28 +428,28 @@ Nota
 <p>SODA és el mecanisme intern de db4o per executar consultes sobre les seves bases de dades. És, per tant, el llenguatge més eficient i que permet afinar més la consulta que s’executarà sobre la base de dades.</p>
 <p>En el cas SODA, les consultes s’inicien afegint una restricció que indica quina és la classe buscada en la base de dades, i després s’afegeixen filtres addicionals que condicionen els objectes obtinguts com a resultat.</p>
 <p>Observi el següent exemple:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Query</span> query<span class="op">=</span>db<span class="op">.</span><span class="fu">query</span><span class="op">();</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Query</span> query<span class="op">=</span>db<span class="op">.</span><span class="fu">query</span><span class="op">();</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>query<span class="op">.</span><span class="fu">constrain</span><span class="op">(</span>Employee<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>query<span class="op">.</span><span class="fu">descend</span><span class="op">(</span><span class="st">"lastname"</span><span class="op">).</span><span class="fu">constrain</span><span class="op">(</span><span class="st">"King"</span><span class="op">);</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> result <span class="op">=</span> query<span class="op">.</span><span class="fu">execute</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> result <span class="op">=</span> query<span class="op">.</span><span class="fu">execute</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Veurà que s’ha utilitzat el mètode <code>descend()</code> per <em>baixar</em> a aquell atribut de l’objecte i aplicar un criteri restrictiu. En aquest cas, obtindrem els treballadors amb cognom “King”.</p>
 <p>Podem aplicar restriccions d’aquest tipus sobre qualsevol tipus de dada:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Query</span> query<span class="op">=</span>db<span class="op">.</span><span class="fu">query</span><span class="op">();</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Query</span> query<span class="op">=</span>db<span class="op">.</span><span class="fu">query</span><span class="op">();</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>query<span class="op">.</span><span class="fu">constrain</span><span class="op">(</span>Department<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>query<span class="op">.</span><span class="fu">descend</span><span class="op">(</span><span class="st">"locationId"</span><span class="op">).</span><span class="fu">constrain</span><span class="op">(</span><span class="dv">1700</span><span class="op">);</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Department<span class="op">&gt;</span> result <span class="op">=</span> query<span class="op">.</span><span class="fu">execute</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Department<span class="op">&gt;</span> result <span class="op">=</span> query<span class="op">.</span><span class="fu">execute</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>I aplicar modificadors que alteren el sentit de la restricció:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Query</span> query<span class="op">=</span>db<span class="op">.</span><span class="fu">query</span><span class="op">();</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Query</span> query<span class="op">=</span>db<span class="op">.</span><span class="fu">query</span><span class="op">();</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>query<span class="op">.</span><span class="fu">constrain</span><span class="op">(</span>Department<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>query<span class="op">.</span><span class="fu">descend</span><span class="op">(</span><span class="st">"locationId"</span><span class="op">).</span><span class="fu">constrain</span><span class="op">(</span><span class="dv">1700</span><span class="op">).</span><span class="fu">not</span><span class="op">();</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Department<span class="op">&gt;</span> result <span class="op">=</span> query<span class="op">.</span><span class="fu">execute</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Department<span class="op">&gt;</span> result <span class="op">=</span> query<span class="op">.</span><span class="fu">execute</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A més, podrem combinar diversos <code>descend()</code> i construir consultes de selecció realment complexes:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Query</span> query<span class="op">=</span>db<span class="op">.</span><span class="fu">query</span><span class="op">();</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Query</span> query<span class="op">=</span>db<span class="op">.</span><span class="fu">query</span><span class="op">();</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>query<span class="op">.</span><span class="fu">constrain</span><span class="op">(</span>Employee<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>query<span class="op">.</span><span class="fu">descend</span><span class="op">(</span><span class="st">"lastname"</span><span class="op">).</span><span class="fu">constrain</span><span class="op">(</span><span class="st">"King"</span><span class="op">)</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">or</span><span class="op">(</span>query<span class="op">.</span><span class="fu">descend</span><span class="op">(</span><span class="st">"salary"</span><span class="op">).</span><span class="fu">constrain</span><span class="op">(</span><span class="dv">13000</span><span class="op">).</span><span class="fu">greater</span><span class="op">());</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>query<span class="op">.</span><span class="fu">descend</span><span class="op">(</span><span class="st">"salary"</span><span class="op">).</span><span class="fu">orderDescending</span><span class="op">();</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> result <span class="op">=</span> query<span class="op">.</span><span class="fu">execute</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> result <span class="op">=</span> query<span class="op">.</span><span class="fu">execute</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Observi com s’ha afegit ordenació del resultat de la consulta en aquest últim exemple.</p>
 
 
@@ -507,13 +508,14 @@ Nota
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.16">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../../">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a67ac2868200dddf7a4f0e3ae403775c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c2596e96578a95592c042e94c362e7b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7c7e40be1f9e7197293d8dea5ad08f5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -185,7 +186,7 @@ background-size: cover;
       <div>
       <div class="quarto-title-meta-heading">Publicat</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">1 d’abril de 2021</p>
+        <p class="date">1 d’abril del 2021</p>
       </div>
     </div>
     
@@ -229,7 +230,7 @@ background-size: cover;
 <div class="code-with-filename-file">
 <pre><strong>example1.sh</strong></pre>
 </div>
-<div class="sourceCode" id="cb1" data-filename="example1.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#!/bin/bash</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="example1.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">function</span><span class="fu"> showHelp()</span> <span class="kw">{</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a>  <span class="va">PROGNAME</span><span class="op">=</span><span class="kw">`</span><span class="fu">basename</span> <span class="va">$0</span><span class="kw">`</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a>  <span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$PROGNAME</span><span class="st"> [-h|--help]"</span></span>
@@ -242,7 +243,7 @@ background-size: cover;
 <span id="cb1-11"><a href="#cb1-11"></a>  <span class="bu">exit</span> 0</span>
 <span id="cb1-12"><a href="#cb1-12"></a><span class="cf">fi</span></span>
 <span id="cb1-13"><a href="#cb1-13"></a></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># Rest of the script...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># Rest of the script...</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Aquesta implementació la deixaria només per al cas en què:</p>
 <ol type="1">
@@ -270,7 +271,7 @@ background-size: cover;
 <div class="code-with-filename-file">
 <pre><strong>example2.sh</strong></pre>
 </div>
-<div class="sourceCode" id="cb2" data-filename="example2.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#!/bin/bash</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="example2.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="kw">function</span><span class="fu"> showHelp()</span> <span class="kw">{</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>    <span class="va">PROGNAME</span><span class="op">=</span><span class="kw">`</span><span class="fu">basename</span> <span class="va">$0</span><span class="kw">`</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a>    <span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$PROGNAME</span><span class="st"> [-h] [-v] [-c color]"</span></span>
@@ -295,15 +296,15 @@ background-size: cover;
 <span id="cb2-23"><a href="#cb2-23"></a><span class="bu">shift</span> <span class="va">$(($OPTIND</span> <span class="op">-</span> <span class="dv">1</span><span class="va">))</span></span>
 <span id="cb2-24"><a href="#cb2-24"></a><span class="bu">echo</span> <span class="st">"Remaining arguments are: </span><span class="va">$*</span><span class="st">"</span></span>
 <span id="cb2-25"><a href="#cb2-25"></a></span>
-<span id="cb2-26"><a href="#cb2-26"></a><span class="co"># Here goes more code...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co"># Here goes more code...</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Aquest programa tal i com està ara mateix ens permetrà executar-lo de les següents maneres:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>programa -h</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>programa -h</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>programa -v</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>programa -c red</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>programa -c red image.png</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>programa -v -c red image.png</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>programa -vc red image.png</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>programa -vc red image.png</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>És a dir, que ens acceptarà qualsevol de les combinacions habituals a què estem acostumats en programes i <em>scripts</em> de Linux, amb opcions curtes que podem escriure juntes (<code>-vc red</code> és equivalent a <code>-v -c red</code>). El programa mostrat també accepta arguments addicionals, que seran posicionals (<code>$1</code>, <code>$2</code>, …) i que seran la resta que quedi després de treure les opcions.</p>
 <p><strong>Però com és que funciona així?</strong> Què són <code>OPTARG</code> i <code>OPTIND</code>? Què representa la línia del <code>while</code>? Analitzem com funciona:</p>
 <ul>
@@ -322,7 +323,7 @@ background-size: cover;
 <div class="code-with-filename-file">
 <pre><strong>example3.sh</strong></pre>
 </div>
-<div class="sourceCode" id="cb4" data-filename="example3.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#!/bin/bash</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="example3.sh"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="kw">function</span><span class="fu"> showHelp()</span> <span class="kw">{</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>    <span class="va">PROGNAME</span><span class="op">=</span><span class="kw">`</span><span class="fu">basename</span> <span class="va">$0</span><span class="kw">`</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$PROGNAME</span><span class="st"> [-h|--help] [-v|--verbose] [-c|--color color]"</span></span>
@@ -354,12 +355,12 @@ background-size: cover;
 <span id="cb4-30"><a href="#cb4-30"></a><span class="bu">echo</span> <span class="st">"Requested color: </span><span class="va">$COLOR</span><span class="st">"</span></span>
 <span id="cb4-31"><a href="#cb4-31"></a><span class="bu">shift</span> <span class="va">$(($OPTIND</span> <span class="op">-</span> <span class="dv">1</span><span class="va">))</span></span>
 <span id="cb4-32"><a href="#cb4-32"></a><span class="bu">echo</span> <span class="st">"Remaining arguments are: </span><span class="va">$*</span><span class="st">"</span></span>
-<span id="cb4-33"><a href="#cb4-33"></a><span class="co"># ...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-33"><a href="#cb4-33"></a><span class="co"># ...</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Ara el programa podrà executar-se amb totes les formes i variants (combinades o no):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>programa --help</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>programa --help</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>programa --verbose --color blue image.png</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>programa -v --color blue image.png</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>programa -v --color blue image.png</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Dependrà de com vulguem que el programa estigui definit que farem una combinació o altra dels <code>case</code> tant per a la part de modificadors “llargs” com a la part de modificadors “curts”. Dit d’una altra manera: ningú ens obliga a implementar els modificadors en els dos modes. Podem crear modificadors només curts, modificadors només llargs i modificadors que tinguin les dues variants. Tot dependrà de nosaltres.</p>
 <p>Observi’s que ara s’utilitza <code>OPTARG</code> per a analitzar les opcions llargues, perquè quan escrivim <code>--color</code> en realitat ho processarà com un modificador curt <code>--</code> que ha rebut com a argument la cadena <code>color</code>. De la mateixa manera, usem <code>OPTIND</code> per treure la dada subministrada després a través de la indexació <code>${!OPTIND}</code> com a argument del modificador, i incrementem aquest comptador per saltar l’argument ja capturat.</p>
 <p>Veiem doncs una manera bastant senzilla de crear <em>shell scripts</em> que compleixin amb un <strong>mínim estàndard de qualitat</strong> en la forma en què donem opcions i variacions a l’usuari, apropant els nostres <em>scripts</em> una mica al que s’esperaria d’un programa de <em>shell</em> mínimament professional.</p>
@@ -420,13 +421,14 @@ background-size: cover;
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.16">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../../">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a67ac2868200dddf7a4f0e3ae403775c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c2596e96578a95592c042e94c362e7b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7c7e40be1f9e7197293d8dea5ad08f5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -191,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Publicat</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">1 de juliol de 2013</p>
+        <p class="date">1 de juliol del 2013</p>
       </div>
     </div>
     
@@ -336,7 +337,7 @@ Nota
 </div>
 </div>
 <p>Per tant, tenim els següents arxius:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>antlr-2.7.7.jar                                </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>antlr-2.7.7.jar                                </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dom4j-1.6.1.jar                                </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>hibernate-commons-annotations-4.0.1.Final.jar  </span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>hibernate-core-4.1.8.Final.jar                 </span>
@@ -345,11 +346,11 @@ Nota
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>jboss-logging-3.1.0.GA.jar</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>jboss-transaction-api_1.1_spec-1.0.0.Final.jar</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>log4j-1.2.17.jar</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>mysql-connector-java.jar</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>mysql-connector-java.jar</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Si disposem els arxius en un directori anomenat <code>libs</code>, aleshores podrem compilar manualment els programes Java fent:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">javac</span> <span class="at">-cp</span> .:libs/<span class="pp">*</span> Classe.java</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">javac</span> <span class="at">-cp</span> .:libs/<span class="pp">*</span> Classe.java</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>I executar el programa fent:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">java</span> <span class="at">-cp</span> .:libs/<span class="pp">*</span> Classe</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">java</span> <span class="at">-cp</span> .:libs/<span class="pp">*</span> Classe</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Observi que l’especificació del <code>CLASSPATH</code> amb el modificador <code>-cp</code> accepta més d’un camí a arxius o directoris, i en el cas d’arxius JAR és molt més còmode utilitzar el caràcter <code>*</code> per indicar tots els arxius JAR del directori en qüestió.</p>
 </section>
 <section id="configuració-de-hibernate" class="level2">
@@ -361,7 +362,7 @@ Nota
 <div class="code-with-filename-file">
 <pre><strong>hibernate.cfg.xml</strong></pre>
 </div>
-<div class="sourceCode" id="cb4" data-filename="hibernate.cfg.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">'1.0'</span><span class="ot"> encoding=</span><span class="st">'utf-8'</span><span class="fu">?&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="hibernate.cfg.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">'1.0'</span><span class="ot"> encoding=</span><span class="st">'utf-8'</span><span class="fu">?&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="dt">&lt;!DOCTYPE</span> <span class="dt">hibernate-configuration</span> PUBLIC</span>
 <span id="cb4-3"><a href="#cb4-3"></a>          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"</span>
 <span id="cb4-4"><a href="#cb4-4"></a>          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd"<span class="dt">&gt;</span></span>
@@ -384,14 +385,14 @@ Nota
 <span id="cb4-21"><a href="#cb4-21"></a>    ...</span>
 <span id="cb4-22"><a href="#cb4-22"></a></span>
 <span id="cb4-23"><a href="#cb4-23"></a>  &lt;/<span class="kw">session-factory</span>&gt;</span>
-<span id="cb4-24"><a href="#cb4-24"></a>&lt;/<span class="kw">hibernate-configuration</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-24"><a href="#cb4-24"></a>&lt;/<span class="kw">hibernate-configuration</span>&gt;</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>S’ha indicat a les quatre primeres propietats el lloc on es configura el servidor, el nom de la base de dades, el nom de l’usuari i la contrasenya. Observarà que la sintaxi és la mateixa que en les cadenes JDBC de connexió a base de dades.</p>
 <p>En el punt que s’ha indicat amb punts suspensius farem esment de les classes i altres elements que haurà de tenir present Hibernate per a l’aplicació concreta que estiguem escrivint. Els exemples mostrats posteriorment indicaran exemples d’ús i com s’omple en cada cas.</p>
 <p>A més, Hibernate generarà un gran volum d’informació de registre i depuració a través de la consola. Si vol desactivar-la haurà de configurar el paquet <strong>log4j</strong> per a què redueixi (o elimini) la sortida de depuració pel terminal.</p>
 <p>Una de les múltiples formes de fer-ho és a través d’una línia de codi com aquesta:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>org<span class="op">.</span><span class="fu">apache</span><span class="op">.</span><span class="fu">log4j</span><span class="op">.</span><span class="fu">Logger</span><span class="op">.</span><span class="fu">getLogger</span><span class="op">(</span><span class="st">"org.Hibernate"</span><span class="op">)</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span><span class="fu">setLevel</span><span class="op">(</span>org<span class="op">.</span><span class="fu">apache</span><span class="op">.</span><span class="fu">log4j</span><span class="op">.</span><span class="fu">Level</span><span class="op">.</span><span class="fu">FATAL</span><span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>org<span class="op">.</span><span class="fu">apache</span><span class="op">.</span><span class="fu">log4j</span><span class="op">.</span><span class="fu">Logger</span><span class="op">.</span><span class="fu">getLogger</span><span class="op">(</span><span class="st">"org.Hibernate"</span><span class="op">)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span><span class="fu">setLevel</span><span class="op">(</span>org<span class="op">.</span><span class="fu">apache</span><span class="op">.</span><span class="fu">log4j</span><span class="op">.</span><span class="fu">Level</span><span class="op">.</span><span class="fu">FATAL</span><span class="op">);</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com veu s’ha fixat el nivell de <em>logging</em> a <code>FATAL</code>, que correspon a errors fatals que normalment avortaran l’execució de l’aplicació. Els possibles cassos que presenta aquesta enumeració són: <code>ALL</code>, <code>DEBUG</code>, <code>ERROR</code>, <code>FATAL</code>, <code>INFO</code>, <code>OFF</code> o <code>WARN</code>. Cadascun d’ells fixa un nivell de generació de <em>logging</em> diferent.</p>
 <p>Una altra tècnica, que permet modificar el comportament sense haver d’escriure codi específic, es mitjançant l’arxiu de propietats <code>log4j.properties</code>. Aquest arxiu permet configurar el paquet <code>log4j</code> en diversos paràmetres.</p>
 <p>Un exemple de configuració de <code>log4j</code> mitjançant arxiu de propietats podria ser el mostrat tot seguit:</p>
@@ -399,13 +400,13 @@ Nota
 <div class="code-with-filename-file">
 <pre><strong>log4j.properties</strong></pre>
 </div>
-<div class="sourceCode" id="cb6" data-filename="log4j.properties"><pre class="sourceCode numberSource plain number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>#Log to Console as STDOUT</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="log4j.properties"><pre class="sourceCode numberSource plain number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>#Log to Console as STDOUT</span>
 <span id="cb6-2"><a href="#cb6-2"></a>log4j.appender.stdout=org.apache.log4j.ConsoleAppender</span>
 <span id="cb6-3"><a href="#cb6-3"></a>log4j.appender.stdout.Target=System.out</span>
 <span id="cb6-4"><a href="#cb6-4"></a>log4j.appender.stdout.layout=org.apache.log4j.PatternLayout</span>
 <span id="cb6-5"><a href="#cb6-5"></a></span>
 <span id="cb6-6"><a href="#cb6-6"></a>#Root Logger</span>
-<span id="cb6-7"><a href="#cb6-7"></a>log4j.rootLogger=FATAL, stdout</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-7"><a href="#cb6-7"></a>log4j.rootLogger=FATAL, stdout</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="exemples-de-hibernate" class="level2">
@@ -456,7 +457,7 @@ Nota
 </div>
 </div>
 <p>Els arxius font que trobarà al directori són:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>06_hibernate_config_xml/</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>06_hibernate_config_xml/</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    |-- src</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    |     |-- com.flx.ex06</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    |     |     |-- DAOHibernateTest1.java</span>
@@ -471,7 +472,7 @@ Nota
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    |           |-- Department.hbm.xml</span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    |           \-- Employee.hbm.xml</span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    |-- hibernate.cfg.xml</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    \-- log4j.properties</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    \-- log4j.properties</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Passem ara a descriure’ls un a un, tot destacant els fets més importants:</p>
 <ul>
 <li><p>Classes <code>com.flx.ex06.model.Employee.java</code> i <code>com.flx.ex06.model.Department.java</code>, que són els POJO bàsics per a les dades de les files de les taules. Aquestes classes són simples POJOs amb tots els atributs declarats, i els mètodes <em>getter</em> i <em>setter</em> associats.</p></li>
@@ -505,7 +506,7 @@ Nota
 </div>
 </div>
 <p>Els arxius font que trobarà al directori són:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>07_hibernate_config_annotations/</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>07_hibernate_config_annotations/</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    |-- src</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    |     |-- com.flx.ex07</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    |     |     |-- DAOHibernateTest1.java</span>
@@ -517,16 +518,16 @@ Nota
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    |           |-- Employee.java</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    |           \-- HrDAOHibernate.java</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    |-- hibernate.cfg.xml</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    \-- log4j.properties</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    \-- log4j.properties</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Observarà que ara no apareix un arxiu de definició de mapatge, perquè ja està inclòs en les classes <code>Employee</code> i <code>Department</code>. Observi com estan definides ara aquestes classes POJO.</p>
 <p>Fixi’s que apareixen <em>annotations</em> que indiquen fets transcendents per al mapatge ORM.</p>
 <p>En concret, l’anotació <code>@Entity</code> indica que aquesta classe és una entitat que s’ha d’associar a taula de base de dades, mentre que <code>@Table(name="nom_de_taula")</code> indica que el nom de la taula a associar és l’indicat com a argument. Així es pot indicar quina taula correspon a quina entitat.</p>
 <p>Després només calen afegir les anotacions <code>@Id</code> i <code>@GeneratedValue</code> sobre el mètode <em>getter</em> de l’atribut que sigui clau primària de la taula. Això és així per permetre la generació automàtica de valors en aquest camp.</p>
 <p>Com veu, les anotacions necessàries en una classe POJO senzilla són ben poques, i força lògiques.</p>
 <p>En el cas concret dels atributs que són claus foranes, observi que s’han establert les <em>unions</em> de taula a través de codi com el següent:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="at">@ManyToOne</span><span class="op">(</span>fetch<span class="op">=</span>FetchType<span class="op">.</span><span class="fu">LAZY</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="at">@ManyToOne</span><span class="op">(</span>fetch<span class="op">=</span>FetchType<span class="op">.</span><span class="fu">LAZY</span><span class="op">)</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">@JoinColumn</span><span class="op">(</span>name<span class="op">=</span><span class="st">"departmentId"</span><span class="op">)</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> Department <span class="fu">getDepartment</span><span class="op">()</span> <span class="op">{</span> <span class="cf">return</span> department<span class="op">;</span> <span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> Department <span class="fu">getDepartment</span><span class="op">()</span> <span class="op">{</span> <span class="cf">return</span> department<span class="op">;</span> <span class="op">}</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Aquestes estructures d’anotació permeten vincular objectes entre taules diferents. Indiquem el nom del camp (<code>departmentId</code>) que serà el de clau forana sobre l’atribut que s’obtindrà una vegada resolta la unió de taules (<code>department</code>).</p>
 <p>L’especificació <code>FetchType.LAZY</code> indica a Hibernate que no cal que es resolgui la unió de taules i es busqui el registre referenciat a menys que sigui imprescindible (es consulti el seu valor). L’alternativa és indicar <code>FetchType.EAGER</code>, que intenta resoldre les relacions sempre que pugui.</p>
 <p>Ara, només caldrà configurar Hibernate per tal que utilitzi les anotacions fetes sobre la classe model. Això ho fem des de l’arxiu <code>hibernate.cfg.xml</code>, on veurà que simplement esmentem les classes POJO que defineixen els nostres objectes de dades.</p>
@@ -544,14 +545,14 @@ Nota
 <li>Quan volem modificar un registre de la taula, utilitzarem el mètode <code>Session.update(objecte)</code>, i Hibernate generarà l’ordre <code>UPDATE</code> adequada.</li>
 </ul>
 <p>A més, Hibernate ens ofereix el control de transaccions bàsic, de manera que els canvis no es faran efectius definitivament en la base de dades mentre no tanquem la transacció. Les transaccions normalment es delimiten així:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Transaction tx <span class="op">=</span> session<span class="op">.</span><span class="fu">beginTransaction</span><span class="op">();</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Transaction tx <span class="op">=</span> session<span class="op">.</span><span class="fu">beginTransaction</span><span class="op">();</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>tx<span class="op">.</span><span class="fu">commit</span><span class="op">();</span>  <span class="co">// tx.rollback();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>tx<span class="op">.</span><span class="fu">commit</span><span class="op">();</span>  <span class="co">// tx.rollback();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Això també es pot programar així:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>session<span class="op">.</span><span class="fu">beginTransaction</span><span class="op">();</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>session<span class="op">.</span><span class="fu">beginTransaction</span><span class="op">();</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>session<span class="op">.</span><span class="fu">getTransaction</span><span class="op">().</span><span class="fu">commit</span><span class="op">();</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">// session.getTransaction().rollback();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">// session.getTransaction().rollback();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Per tant, tota l’operativa està protegida pels mecanismes convencionals de transaccions.</p>
 <p>Per altra banda, observi que no hem de fer cap procediment especial per controlar la replicació de dades entre memòria i base de dades. Quan tanquem una transacció amb la crida <code>commit()</code> les dades són portades des de memòria a la base de dades sense que sigui necessari codificar cap procediment especial.</p>
 </section>
@@ -567,14 +568,14 @@ Nota
 <section id="consultes-amb-sql" class="level3">
 <h3 class="anchored" data-anchor-id="consultes-amb-sql">9.1. Consultes amb SQL</h3>
 <p>Per generar una consulta SQL amb Hibernate, només hem d’escriure la sentència SQL dins d’una crida a la funció <code>Session.createSQLQuery()</code>. Aquest mètode ens retorna un objecte <code>SQLQuery</code>, al qual podem demanar el resultat de la seva execució invocant <code>SQLQuery.list()</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>SQLQuery q <span class="op">=</span> session<span class="op">.</span><span class="fu">createSQLQuery</span><span class="op">(</span><span class="st">"SELECT * FROM employees"</span><span class="op">);</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">[]&gt;</span> result <span class="op">=</span> q<span class="op">.</span><span class="fu">list</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>SQLQuery q <span class="op">=</span> session<span class="op">.</span><span class="fu">createSQLQuery</span><span class="op">(</span><span class="st">"SELECT * FROM employees"</span><span class="op">);</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">[]&gt;</span> result <span class="op">=</span> q<span class="op">.</span><span class="fu">list</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>El valor retornat és una llista de files, on cada fila és un <em>array</em> indexat que ens permetrà accedir a les diferents columnes de resultat. Haurem d’utilitzar meta-dades per descobrir els tipus dels diferents elements en temps d’execució.</p>
 <p>Això no és res més que una consulta com les que realitzàvem amb JDBC. Per associar i obtenir objectes a partir de la base de dades hem d’utilitzar una altra via: hem de cridar el mètode <code>SQLQuery.addEntity()</code> per indicar l’entitat que s’espera rebre d’aquesta consulta i així obtenir la llista d’objectes ja en la forma que ens interessa:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>SQLQuery q <span class="op">=</span> session<span class="op">.</span><span class="fu">createSQLQuery</span><span class="op">(</span><span class="st">"SELECT * FROM employees"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>SQLQuery q <span class="op">=</span> session<span class="op">.</span><span class="fu">createSQLQuery</span><span class="op">(</span><span class="st">"SELECT * FROM employees"</span><span class="op">)</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">addEntity</span><span class="op">(</span>Employee<span class="op">.</span><span class="fu">class</span><span class="op">);</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="at">@SuppressWarnings</span><span class="op">(</span><span class="st">"unchecked"</span><span class="op">)</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> result <span class="op">=</span> q<span class="op">.</span><span class="fu">list</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> result <span class="op">=</span> q<span class="op">.</span><span class="fu">list</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Observi que s’ha fet una referència a la classe de l’entitat amb l’operador <code>Employee.class</code>.</p>
 <p>Observarà també que s’ha afegit la línia <code>@SuppressWarnings("unchecked")</code> per demanar al compilador de Java que no generi un avís sobre la transformació de tipus que es produeix en l’obtenció de la llista de resultats de la consulta (aquesta directiva només afecta a la línia immediatament a continuació o el bloc iniciat en ella). Malauradament no hi ha una altra manera ràpida i senzilla per evitar l’aparició d’aquest missatge d’avís generat pel compilador i s’ha de recórrer a aquest mètode “<em>brut</em>” per evitar-lo: els avisos són normalment signes d’un mal disseny o d’una possible font de problemes a la llarga. En aquest cas malauradament no depèn de nosaltres sinó de la forma en què Hibernate està codificat amb la funció <code>SQLQuery.list()</code>.</p>
 <p>Sigui com sigui ara disposem de la llista d’objectes ubicats en memòria i podem utilitzar tota la potència de Java per manipular-los en memòria i realitzar les operacions necessàries de la nostra aplicació.</p>
@@ -584,7 +585,7 @@ Nota
 <p>Hibernate ens ofereix un mecanisme molt interessant per no fer servir consultes SQL en el llenguatge natiu de la base de dades. De fet, no té sentit fer consultes en SQL natiu en un entorn que ens permet no dependre del motor concret de base de dades utilitzat!</p>
 <p>Així doncs, una primera solució és la que es mostra aquí. En ella, tota consulta es fonamenta en l’ús d’un seguit de mètodes que pengen de la classe <code>Criteria</code> i que ens permeten anar construint la consulta a passos.</p>
 <p>Vegem un exemple:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Criteria c <span class="op">=</span> session<span class="op">.</span><span class="fu">createCriteria</span><span class="op">(</span>Employee<span class="op">.</span><span class="fu">class</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Criteria c <span class="op">=</span> session<span class="op">.</span><span class="fu">createCriteria</span><span class="op">(</span>Employee<span class="op">.</span><span class="fu">class</span><span class="op">)</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span><span class="fu">add</span><span class="op">(</span>Restrictions<span class="op">.</span><span class="fu">or</span><span class="op">(</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                        Restrictions<span class="op">.</span><span class="fu">like</span><span class="op">(</span><span class="st">"lastname"</span><span class="op">,</span> <span class="st">"K%"</span><span class="op">),</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                        Restrictions<span class="op">.</span><span class="fu">like</span><span class="op">(</span><span class="st">"lastname"</span><span class="op">,</span> <span class="st">"M%"</span><span class="op">)</span></span>
@@ -593,30 +594,30 @@ Nota
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span><span class="fu">addOrder</span><span class="op">(</span>Order<span class="op">.</span><span class="fu">asc</span><span class="op">(</span><span class="st">"lastname"</span><span class="op">));</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="at">@SuppressWarnings</span><span class="op">(</span><span class="st">"unchecked"</span><span class="op">)</span></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> c<span class="op">.</span><span class="fu">list</span><span class="op">();</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Observi com es van afegint elements a la consulta <code>Criteria</code> mitjançant el mètode <code>add()</code> i que disposem d’una gran col·lecció de paràmetres de filtrat de registres basats en la classe <code>Restrictions</code>. Consulti la documentació oficial per a més informació.</p>
 </section>
 <section id="consultes-amb-hql" class="level3">
 <h3 class="anchored" data-anchor-id="consultes-amb-hql">9.3. Consultes amb HQL</h3>
 <p>Les consultes que utilizen el llenguatge <strong>HQL (<em>Hibernate Query Language</em>)</strong> tenen una dinàmica semblant a la de SQL estàndard, però modifica lleugerament algunes expressions en alguns casos concrets.</p>
 <p>El procediment per construir una sentència HQL i executar-la pot ser tant senzill com el següent cas:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> hql <span class="op">=</span> <span class="st">"SELECT e FROM employees e WHERE lastname LIKE 'K%'"</span><span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> hql <span class="op">=</span> <span class="st">"SELECT e FROM employees e WHERE lastname LIKE 'K%'"</span><span class="op">;</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="at">@SuppressWarnings</span><span class="op">(</span><span class="st">"unchecked"</span><span class="op">)</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> session<span class="op">.</span><span class="fu">createQuery</span><span class="op">(</span>hql<span class="op">).</span><span class="fu">list</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> session<span class="op">.</span><span class="fu">createQuery</span><span class="op">(</span>hql<span class="op">).</span><span class="fu">list</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Fins i tot podem realitzar tasques d’assignació de paràmetres, com:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> hql <span class="op">=</span> <span class="st">"SELECT e FROM employees e WHERE lastname= :cognom"</span><span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> hql <span class="op">=</span> <span class="st">"SELECT e FROM employees e WHERE lastname= :cognom"</span><span class="op">;</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="at">@SuppressWarnings</span><span class="op">(</span><span class="st">"unchecked"</span><span class="op">)</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">List</span><span class="op">&lt;</span>Employee<span class="op">&gt;</span> emps <span class="op">=</span> session<span class="op">.</span><span class="fu">createQuery</span><span class="op">(</span>hql<span class="op">)</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">setParameter</span><span class="op">(</span><span class="st">"unnom"</span><span class="op">,</span> <span class="st">"King"</span><span class="op">)</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">list</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                        <span class="op">.</span><span class="fu">list</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Amb HQL també podem realitzar <code>INSERT</code>, <code>DELETE</code> i <code>UPDATE</code>, amb també una sintaxi semblant a l’estàndard SQL:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> hql <span class="op">=</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> hql <span class="op">=</span> </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"UPDATE employees e SET e.firstname = :nomNou WHERE e.firstname = :nomAntic"</span><span class="op">;</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> updatedEntities <span class="op">=</span> </span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    session<span class="op">.</span><span class="fu">createQuery</span><span class="op">(</span> hql <span class="op">)</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">setString</span><span class="op">(</span> <span class="st">"nomNou"</span><span class="op">,</span> <span class="st">"Steven"</span> <span class="op">)</span></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">setString</span><span class="op">(</span> <span class="st">"nomAntic"</span><span class="op">,</span> <span class="st">"Stefan"</span> <span class="op">)</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">executeUpdate</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">executeUpdate</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Consulti la documentació de JBoss/Hibernate per a més informació sobre HQL.</p>
 
 
@@ -675,13 +676,14 @@ Nota
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

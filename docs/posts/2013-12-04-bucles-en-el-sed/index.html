@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.16">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../../">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a67ac2868200dddf7a4f0e3ae403775c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c2596e96578a95592c042e94c362e7b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7c7e40be1f9e7197293d8dea5ad08f5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -182,7 +183,7 @@ background-size: cover;
       <div>
       <div class="quarto-title-meta-heading">Publicat</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">4 de desembre de 2013</p>
+        <p class="date">4 de desembre del 2013</p>
       </div>
     </div>
     
@@ -217,27 +218,27 @@ background-size: cover;
 </blockquote>
 <p>El problema és que, ho pensi com ho pensi, no trobo la manera de codificar-ho en una única sentència de <code>sed</code> sense fer bucles.</p>
 <p>Fer la incorporació de l’últim punt de milers és fàcil. Només cal buscar un bloc de 4 dígits numèrics consecutius abans d’un punt de decimal o milers, i inserir la coma de milers entre el primer i el segon. Quelcom això:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"1234567890.12"</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/([0-9])([0-9]{3,3}[.,])/\1,\2/g'</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"1234567890.12"</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/([0-9])([0-9]{3,3}[.,])/\1,\2/g'</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>El resultat obtingut és <code>1234567,890.12</code>.</p>
 <p>Però per poder fer la conversió de tota la cadena s’hauria d’implantar un bucle que executi aquest procés mentre quedin blocs de 4 dígits seguits… Lleig!</p>
 <p>La solució l’he trobada descobrint que <strong><code>sed</code> accepta un pseudo-llenguatge de programació</strong> que inclou <strong>bucles</strong> en l’expressió a executar!!!</p>
 <p>El format d’un bucle és així:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>: etiqueta</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>: etiqueta</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>/condició/ {</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ordre</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    ordre</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    ...</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    b etiqueta</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>La directiva <code>b</code> és la que força que es torni a l’etiqueta inicial, fent un bucle on es valida la condició indicada.</p>
 <p>En el cas presentat, la condició és que quedin blocs de 4 dígits seguits. Per tant, la solució a aquest repte és la següent:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="bu">echo</span> <span class="st">"1234567890.12"</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="bu">echo</span> <span class="st">"1234567890.12"</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="st">    :loop</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="st">    /[0-9]{4,4}/ {</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="st">        s/([0-9])([0-9]{3,3}[.,])/\1,\2/g</span></span>
 <span id="cb3-5"><a href="#cb3-5"></a><span class="st">        b loop</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a><span class="st">    }</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="st">'</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="st">'</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>El resultat és ara el desitjat: <code>1,234,567,890.12</code>.</p>
 <p><strong>Repte resolt!</strong></p>
 <p>Fonts d’informació addicionals:</p>
@@ -301,13 +302,14 @@ background-size: cover;
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

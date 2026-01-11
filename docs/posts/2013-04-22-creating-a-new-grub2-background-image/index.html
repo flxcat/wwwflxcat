@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.16">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../../">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a67ac2868200dddf7a4f0e3ae403775c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c2596e96578a95592c042e94c362e7b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7c7e40be1f9e7197293d8dea5ad08f5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -175,7 +176,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Publicat</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">22 d’abril de 2013</p>
+        <p class="date">22 d’abril del 2013</p>
       </div>
     </div>
     
@@ -206,44 +207,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="procedure" class="level1">
 <h1>Procedure</h1>
 <p>Install the <code>desktop-base</code> package (if not already installed):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> aptitude install desktop-base</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> aptitude install desktop-base</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you reboot the system, the boot menu will show an <em>ugly</em> background. Right. We’ll change it!</p>
 <p>First, we will prepare the image. Get a photo, search your albums, whatever will serve. We will consider the image as if it will reside on <code>/shared/photos/myphoto.jpg</code>. We will keep the grub version under the same directory and then link with it, so follow the next steps.</p>
 <p>If your monitor ratio is 16:9, and the original photo is 4:3, you can run the following line in the terminal prompt:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /shared/photos</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">convert</span> myphoto.jpg <span class="at">-resize</span> 600x450 <span class="at">-gravity</span> center <span class="at">-background</span> Black <span class="at">-extent</span> 800x450 myphoto-grub.png</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /shared/photos</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">convert</span> myphoto.jpg <span class="at">-resize</span> 600x450 <span class="at">-gravity</span> center <span class="at">-background</span> Black <span class="at">-extent</span> 800x450 myphoto-grub.png</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>But, if your monitor is 16:10, you can run the next variation:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">convert</span> myphoto.jpg <span class="at">-resize</span> 640x480 <span class="at">-gravity</span> center <span class="at">-background</span> Black <span class="at">-extent</span> 768x480 myphoto-grub.png</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">convert</span> myphoto.jpg <span class="at">-resize</span> 640x480 <span class="at">-gravity</span> center <span class="at">-background</span> Black <span class="at">-extent</span> 768x480 myphoto-grub.png</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>As you can see, I’ve used the convert command (from <strong>ImageMagick</strong>), resizing the image to an intermediate size and centering on to the final layout, making the left and right extra bands filled with black.</p>
 <p>Adapt it to your needs: maybe the original image is 16:9 or 16:10 already, or your computer has a 4:3 monitor. In such cases, change the resize part and remove the rest of parameters.</p>
 <p>Remember the <code>bc</code> command to make simple (or not so-simple) calculations:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="st">"scale=10; 450*16/9"</span> <span class="kw">|</span> <span class="fu">bc</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">800</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="st">"scale=10; 450*16/9"</span> <span class="kw">|</span> <span class="fu">bc</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">800</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>In my case, I have a photo of one of my sons, and I want to put it bottom-right to the menu, bordered and filling with a similar color of its background:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">convert</span> joan.jpg <span class="at">-resize</span> 120x90 <span class="at">-bordercolor</span> White <span class="dt">\</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">convert</span> joan.jpg <span class="at">-resize</span> 120x90 <span class="at">-bordercolor</span> White <span class="dt">\</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>-border 1x1 <span class="at">-gravity</span> SouthEast <span class="dt">\</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>-background <span class="kw">`</span><span class="ex">convert</span> joan.jpg <span class="at">-format</span> <span class="st">"%[pixel:s.p{0,0}]"</span> info:<span class="kw">`</span> <span class="dt">\</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>-extent 800x450 joan_grub.png</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>-extent 800x450 joan_grub.png</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>First, I resize it to 120x90 (1/5 in the final image height, 4:3 ratio), I enclose it with a white border, and then put it to the bottom-right of the final extent of 800x450. For the background color, I use another convert execution, that extracts the rgb of the pixel at coordinates (0,0) of the original image. Suit yourself to adapt it to what you want.</p>
 <p>In any case, you now have the image at a good (sufficient) resolution for the boot menu. We’ll reassign the link to that image.</p>
 <p>By default, the image can be found as <code>/usr/share/images/desktop-base/desktop-grub.png</code>, but this is only a sym-link, so we’ll change the target:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /usr/share/images/desktop-base</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /usr/share/images/desktop-base</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> rm desktop-grub.png</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ls <span class="at">-s</span> /shared/photos/myphoto-grub.png desktop-grub.png</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ls <span class="at">-s</span> /shared/photos/myphoto-grub.png desktop-grub.png</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>As you see, we destroy the original link and then recreate it with our own image path.</p>
 <p>If you want to change the default text colors of the menu, edit the <code>/usr/share/desktop-base/grub_background.sh</code> script:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gksudo</span> gedit /usr/share/desktop-base/grub_background.sh</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gksudo</span> gedit /usr/share/desktop-base/grub_background.sh</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can change the two color definition lines:</p>
 <ul>
 <li><code>COLOR_NORMAL</code> defines the normal color of the menu entries (foreground/background).</li>
 <li><code>COLOR_HIGHLIGHT</code> defines the foreground/background colors of the selected entry.</li>
 </ul>
 <p>For example, I want to make the highlighted with yellow color, so I change only that line:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">COLOR_HIGHLIGHT</span><span class="op">=</span>yellow/black</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">COLOR_HIGHLIGHT</span><span class="op">=</span>yellow/black</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>When a background image is active, background color doesn’t work, so leave it black, as it doesn’t matter.</p>
 <p>The color is specified according to RGB codes (“#c3e28a”) or common names (“light-blue”), and are found at <a href="http://www.gnu.org/software/grub/manual/html_node/Theme-file-format.html#Theme-file-format">theming grub</a> …with lots of other interesting configuration parameters!!!</p>
 <p>And finally, we re-run the <code>update-grub</code> script:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-grub</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-grub</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>And… voilà! Restart the system and enjoy!</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -309,13 +310,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

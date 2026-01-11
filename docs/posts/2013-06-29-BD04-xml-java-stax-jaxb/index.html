@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.16">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../../">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a67ac2868200dddf7a4f0e3ae403775c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c2596e96578a95592c042e94c362e7b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7c7e40be1f9e7197293d8dea5ad08f5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -119,7 +120,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -219,7 +220,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Publicat</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">29 de juny de 2013</p>
+        <p class="date">29 de juny del 2013</p>
       </div>
     </div>
     
@@ -356,7 +357,7 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>biblio.xml</strong></pre>
 </div>
-<div class="sourceCode" id="cb1" data-filename="biblio.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span> <span class="fu">?&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="biblio.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span> <span class="fu">?&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="dt">&lt;!DOCTYPE</span> <span class="dt">biblioteca</span> SYSTEM "biblio.dtd"<span class="dt">&gt;</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co">&lt;!-- Un exemple de base de dades bibliogràfica --&gt;</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a>&lt;<span class="kw">biblioteca</span>&gt;</span>
@@ -381,7 +382,7 @@ window.Quarto = {
 <span id="cb1-23"><a href="#cb1-23"></a>    &lt;<span class="kw">autor</span>&gt;Frank Herbert&lt;/<span class="kw">autor</span>&gt;</span>
 <span id="cb1-24"><a href="#cb1-24"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
 <span id="cb1-25"><a href="#cb1-25"></a>  <span class="co">&lt;!-- més llibres ... --&gt;</span></span>
-<span id="cb1-26"><a href="#cb1-26"></a>&lt;/<span class="kw">biblioteca</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-26"><a href="#cb1-26"></a>&lt;/<span class="kw">biblioteca</span>&gt;</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="consideracions-de-sintaxi" class="level3">
@@ -389,9 +390,9 @@ window.Quarto = {
 <p>Observant l’exemple mostrat, destaquem les següents característiques en el seu format:</p>
 <ul>
 <li><p>Els arxius XML, com es veu, sempre comencen per un pròleg que descriu l’arxiu XML mateix. Aquest pròleg pot ser mínim, com:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="fu">?&gt;</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="fu">?&gt;</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>O pot contenir altre informació, com la codificació dels caràcters i altres propietats:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="ot"> standalone=</span><span class="st">"yes"</span> <span class="fu">?&gt;</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="ot"> standalone=</span><span class="st">"yes"</span> <span class="fu">?&gt;</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>També s’ha de tenir en compte que un <em>tag</em> que no conté contingut al seu interior es coneix com a <strong><em>tag</em> buit</strong>. Per exemple: “<code>&lt;logo/&gt;</code>”.</p></li>
 <li><p>Els <strong>comentaris</strong> en XML es defineixen així: <code>&lt;!-- comentari --&gt;</code>.</p></li>
 <li><p>Si hem d’incloure algun caràcter que pugui ser interpretat per la mateixa sintaxi de XML, haurem d’escapar-lo per prevenir la confusió amb el significat estàndard. Els caràcters que presenten escapament són els següents:</p></li>
@@ -432,11 +433,11 @@ window.Quarto = {
 <p>En un arxiu o document XML, una secció <code>CDATA</code> és una secció de contingut d’un element que és marcat com a dades exclusivament, de manera que no s’interpreti el seu contingut com a ordres o marques de sintaxi.</p>
 <p>Per tant, una secció <code>CDATA</code> és simplement una alternativa de sintaxi per expressar dades textuals, on cap caràcter especial hagi hagut de ser escapat (sense necessitat de <code>&lt;</code> o <code>&amp;</code>, per exemple).</p>
 <p>La secció marcada <code>CDATA</code> ha d’estar encerclada de la següent manera:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bn">&lt;![CDATA[</span> ... text ... <span class="bn">]]&gt;</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bn">&lt;![CDATA[</span> ... text ... <span class="bn">]]&gt;</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Tot el text inclòs en la secció <code>CDATA</code> serà interpretat com a caràcters literal, sense marques o referència a entitats.</p>
 <p>Així doncs, si en un document XML haguéssim d’enregistrar una condició com <code>(edat&lt;40) &amp;&amp; (tipus&gt;3)</code>, ho podríem fer de dues maneres:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">condicio</span>&gt; (edat<span class="dv">&amp;lt;</span>40) <span class="dv">&amp;amp;&amp;amp;</span> (tipus<span class="dv">&amp;gt;</span>3) &lt;/<span class="kw">condicio</span>&gt;</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">condicio</span>&gt;<span class="bn">&lt;![CDATA[</span> (edat&lt;40) &amp;&amp; (tipus&gt;3) <span class="bn">]]&gt;</span>&lt;/<span class="kw">condicio</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">condicio</span>&gt; (edat<span class="dv">&amp;lt;</span>40) <span class="dv">&amp;amp;&amp;amp;</span> (tipus<span class="dv">&amp;gt;</span>3) &lt;/<span class="kw">condicio</span>&gt;</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">condicio</span>&gt;<span class="bn">&lt;![CDATA[</span> (edat&lt;40) &amp;&amp; (tipus&gt;3) <span class="bn">]]&gt;</span>&lt;/<span class="kw">condicio</span>&gt;</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com es veu, la segona permet una lectura immediata, però ha d’estar encerclada entre les marques que defineixen la secció <code>CDATA</code>.</p>
 </section>
 <section id="esquemes-xml" class="level3">
@@ -455,7 +456,7 @@ window.Quarto = {
 <div class="code-with-filename-file">
 <pre><strong>biblio.dtd</strong></pre>
 </div>
-<div class="sourceCode" id="cb6" data-filename="biblio.dtd"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span> <span class="fu">?&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="biblio.dtd"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span> <span class="fu">?&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="co">&lt;!-- Aquesta és la DTD de la biblioteca --&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="er">&lt;</span>!ELEMENT biblioteca (llibre)*&gt;</span>
@@ -463,7 +464,7 @@ window.Quarto = {
 <span id="cb6-6"><a href="#cb6-6"></a><span class="er">&lt;</span>!ATTLIST llibre isbn CDATA #REQUIRED&gt;</span>
 <span id="cb6-7"><a href="#cb6-7"></a><span class="er">&lt;</span>!ELEMENT idioma (#PCDATA)&gt;</span>
 <span id="cb6-8"><a href="#cb6-8"></a><span class="er">&lt;</span>!ELEMENT titol (#PCDATA)&gt;</span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="er">&lt;</span>!ELEMENT autor (#PCDATA)&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="er">&lt;</span>!ELEMENT autor (#PCDATA)&gt;</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Observi com s’indica que una biblioteca està formada per un o més llibres, que els llibres han de presentar tres elements al seu interior (idioma, títol i autor) i un atribut (el ISBN).</p>
 <p>Observi també com s’ha especificat el tipus de dades dels diferents elements: el ISBN és <code>CDATA</code> (text directe) mentre que els elements idioma, títol i autor són text interpretat (que pot escapar-se o encerclar-se amb una secció <code>CDATA</code>).</p>
@@ -480,7 +481,7 @@ window.Quarto = {
 </ul>
 <p>Només destaca un <strong>inconvenient</strong>, i és que en alguns tipus de documents i dades genera un gran volum de marques per descriure correctament el contingut de dades del mateix. Un exemple d’això és <strong>MathML</strong> (que molt poca gent fa servir en productes comercials).</p>
 <p>Observi el següent exemple de MathML:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb7-1"><a href="#cb7-1"></a>&lt;<span class="kw">math</span><span class="ot"> xmlns=</span><span class="st">"http://www.w3.org/1998/Math/MathML"</span><span class="ot"> display=</span><span class="st">"block"</span>&gt;</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb7-1"><a href="#cb7-1"></a>&lt;<span class="kw">math</span><span class="ot"> xmlns=</span><span class="st">"http://www.w3.org/1998/Math/MathML"</span><span class="ot"> display=</span><span class="st">"block"</span>&gt;</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  &lt;<span class="kw">mrow</span>&gt;</span>
 <span id="cb7-3"><a href="#cb7-3"></a>    &lt;<span class="kw">mi</span>&gt;x&lt;/<span class="kw">mi</span>&gt;</span>
 <span id="cb7-4"><a href="#cb7-4"></a>    &lt;<span class="kw">mo</span>&gt;=&lt;/<span class="kw">mo</span>&gt;</span>
@@ -508,7 +509,7 @@ window.Quarto = {
 <span id="cb7-26"><a href="#cb7-26"></a>      &lt;/<span class="kw">mrow</span>&gt;</span>
 <span id="cb7-27"><a href="#cb7-27"></a>    &lt;/<span class="kw">mfrac</span>&gt;</span>
 <span id="cb7-28"><a href="#cb7-28"></a>  &lt;/<span class="kw">mrow</span>&gt;</span>
-<span id="cb7-29"><a href="#cb7-29"></a>&lt;/<span class="kw">math</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-29"><a href="#cb7-29"></a>&lt;/<span class="kw">math</span>&gt;</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>El resultat d’aquest XML, aplicant-li un renderitzador adequat (per exemple, el navegador Safari n’incorpora un per defecte), serà visualitzat com a:</p>
 <div class="column" style="width:30%;">
 <div class="quarto-figure quarto-figure-center">
@@ -519,7 +520,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Aquesta mateixa fórmula, codificada en LaTeX, simplement és:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x=<span class="fu">\frac</span>{-b<span class="fu">\pm\sqrt</span>{b^2-4ac}}{2a}</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x=<span class="fu">\frac</span>{-b<span class="fu">\pm\sqrt</span>{b^2-4ac}}{2a}</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Resultant en:</p>
 <p><span class="math display">\[ x=\frac{-b\pm\sqrt{b^2-4ac}}{2a} \]</span></p>
 <p>Podem dir que XML és útil sempre i quan és evident aplicar-lo. Si quan l’apliquem, l’estructura és complexa i difícil de seguir i llegir, aleshores és millor alguna altra alternativa, excepte el cas en què volem un format uniforme que sempre tingui el mateix aspecte i estructura.</p>
@@ -584,7 +585,7 @@ Nota
 <div class="code-with-filename-file">
 <pre><strong>biblio2.xml</strong></pre>
 </div>
-<div class="sourceCode" id="cb9" data-filename="biblio2.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="fu">?&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="biblio2.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="fu">?&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="dt">&lt;!DOCTYPE</span> <span class="dt">biblioteca</span> SYSTEM "biblio.dtd"<span class="dt">&gt;</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="co">&lt;!--Un exemple de base de dades bibliogràfica--&gt;</span></span>
 <span id="cb9-4"><a href="#cb9-4"></a>&lt;<span class="kw">biblioteca</span>&gt;</span>
@@ -612,7 +613,7 @@ Nota
 <span id="cb9-26"><a href="#cb9-26"></a>    &lt;<span class="kw">titol</span>&gt;<span class="bn">&lt;![CDATA[</span>Thinking in Java<span class="bn">]]&gt;</span>&lt;/<span class="kw">titol</span>&gt;</span>
 <span id="cb9-27"><a href="#cb9-27"></a>    &lt;<span class="kw">autor</span>&gt;Bruce Eckel&lt;/<span class="kw">autor</span>&gt;</span>
 <span id="cb9-28"><a href="#cb9-28"></a>  &lt;/<span class="kw">llibre</span>&gt;</span>
-<span id="cb9-29"><a href="#cb9-29"></a>&lt;/<span class="kw">biblioteca</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-29"><a href="#cb9-29"></a>&lt;/<span class="kw">biblioteca</span>&gt;</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Com veu, la tècnica és senzilla, però es fa llarga la codificació del programa si l’estructura jeràrquica té molts nivells intermedis. Pensi, per exemple, com s’hauria d’implementar un lector per a la fórmula MathML mostrada anteriorment!!!</p>
 </section>
@@ -665,7 +666,7 @@ Nota
 <div class="code-with-filename-file">
 <pre><strong>biblio3.xml</strong></pre>
 </div>
-<div class="sourceCode" id="cb10" data-filename="biblio3.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="ot"> standalone=</span><span class="st">"yes"</span><span class="fu">?&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="biblio3.xml"><pre class="sourceCode numberSource xml number-lines code-with-copy"><code class="sourceCode xml"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">"1.0"</span><span class="ot"> encoding=</span><span class="st">"UTF-8"</span><span class="ot"> standalone=</span><span class="st">"yes"</span><span class="fu">?&gt;</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>&lt;<span class="kw">biblioteca</span>&gt;</span>
 <span id="cb10-3"><a href="#cb10-3"></a>    &lt;<span class="kw">llibre</span><span class="ot"> isbn=</span><span class="st">"978-0156837507"</span>&gt;</span>
 <span id="cb10-4"><a href="#cb10-4"></a>        &lt;<span class="kw">idioma</span>&gt;en&lt;/<span class="kw">idioma</span>&gt;</span>
@@ -697,7 +698,7 @@ Nota
 <span id="cb10-30"><a href="#cb10-30"></a>        &lt;<span class="kw">autor</span>&gt;Bruce Eckel&lt;/<span class="kw">autor</span>&gt;</span>
 <span id="cb10-31"><a href="#cb10-31"></a>        &lt;<span class="kw">titol</span>&gt;Thinking in Java&lt;/<span class="kw">titol</span>&gt;</span>
 <span id="cb10-32"><a href="#cb10-32"></a>    &lt;/<span class="kw">llibre</span>&gt;</span>
-<span id="cb10-33"><a href="#cb10-33"></a>&lt;/<span class="kw">biblioteca</span>&gt;</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-33"><a href="#cb10-33"></a>&lt;/<span class="kw">biblioteca</span>&gt;</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Com veu, inclou els 6 llibres correctament formatats seguint l’estructura dels objectes i les seves dades.</p>
 <p>Evidentment aquesta tècnica és aparentment més còmoda, però es complica quan volem utilitzar tipus de dades diferents dels bàsics, o quan volem realitzar estructures XML complexes. No obstant, el codi generat ha estat mínim i resulta una bona primera aproximació per a la lectura i escriptura d’arxius XML senzills.</p>
@@ -757,13 +758,14 @@ Nota
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

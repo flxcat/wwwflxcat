@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.16">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../posts/2013-07-03-BD08-xnd-xpath-i-xquery/index.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a67ac2868200dddf7a4f0e3ae403775c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c2596e96578a95592c042e94c362e7b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7c7e40be1f9e7197293d8dea5ad08f5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -188,7 +189,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Publicat</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">3 de juliol de 2013</p>
+        <p class="date">3 de juliol del 2013</p>
       </div>
     </div>
     
@@ -321,12 +322,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>El que ens interessa aquí és <code>basexserver</code> que, en ser iniciat, obre un port d’accés que permet la interacció amb el servidor de la manera tradicional gràcies a connexions remotes o locals a través del subsistema de xarxa.</p>
 <p>Per tant, necessitem iniciar el servidor, i això ho fem des de la consola escrivint el nom de l’ordre del servidor.</p>
 <p>També podem iniciar-lo en mode daemon escrivint:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexserver</span> <span class="at">-S</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexserver</span> <span class="at">-S</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Un cop iniciat el servidor, podem realitzar connexions amb ell des del client <code>basexclient</code> o des de llenguatges de programació com farem nosaltres des de Java.</p>
 <p>Si mai hem d’aturar el servidor manualment, ho farem mitjançant l’ordre de consola:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexserver</span> stop</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexserver</span> stop</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Si hem de fer proves des d’un client remot al servidor amb què volem connectar, necessitarem iniciar sessió remota. Així, per exemple, per connectar amb un servidor BaseX en marxa situat a una IP 192.168.1.1, amb usuari “usuari” i contrasenya “1234”, simplement hem d’escriure:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexclient</span> <span class="at">-n192.168.1.1</span> <span class="at">-Uusuari</span> <span class="at">-P1234</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">basexclient</span> <span class="at">-n192.168.1.1</span> <span class="at">-Uusuari</span> <span class="at">-P1234</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Així iniciarem una sessió interactiva per executar ordres sobre el servidor XND.</p>
 <p>D’igual manera, per realitzar tasques sobre el servidor XND, però des de llenguatges d’alt nivell com Java, necessitarem algun tipus de llibreria que ens ofereixi la infraestructura per a connectar, tot especificant també la IP, el nom d’usuari i la contrasenya d’aquell usuari.</p>
 <p>Un cop iniciada una sessió d’execució d’ordres, BaseX és molt semblant a qualsevol altre sistema servidor, tot i que el seu llenguatge té característiques pròpies.</p>
@@ -337,15 +338,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Els exemples i passos mostrats són tots des del client <code>basexclient</code>, assumint que un servidor <code>basexserver</code> està en execució i que estem connectats amb un usuari amb prou privilegis com per fer les operacions aquí indicades.</p>
 <p>Tingui present que, tot just instal·lat, BaseX configura un usuari amb nom “<code>admin</code>” i contrasenya “<code>admin</code>”, de manera que podem connectar amb dit usuari per iniciar la interacció amb el servidor. Si ho fem en la mateixa màquina que el servidor, no cal indicar res a la línia d’ordres.</p>
 <p>A més, es recomana utilitzar el <em>wrapper</em> <code>rlwrap</code> per fer que l’execució de l’ordre sigui més còmoda (memòria de línies antigues, correcte funcionament de les fletxes del cursor, etc.):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Username: admin</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Password: admin</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>Try "help" to get more information.</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>&gt; </span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>&gt; </span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Les ordres que accepta BaseX des d’aquesta interfície són moltes i de natura molt variada:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&gt; help</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&gt; help</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Try "help [...]" to get info on a specific command.</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ADD (TO [path]) [input]</span>
@@ -411,7 +412,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>STORE (TO [path]) [input]</span>
 <span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    Store raw data.</span>
 <span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>XQUERY [query]</span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    Run XQuery.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    Run XQuery.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Tractarem ara les més destacables, tot agrupant-les en diversos grups:</p>
 <ul>
 <li>Ordres de gestió de bases de dades</li>
@@ -507,7 +508,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>Observi les següents ordres que mostren l’ús bàsic d’una sessió d’administració de base de dades XND:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Username: admin</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>Password: admin</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
@@ -572,7 +573,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>    Attribute Index: OFF</span>
 <span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>    Full-Text Index: OFF</span>
 <span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>&gt; OPTIMIZE</span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>Database 'prova' optimized in 548.67 ms.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>Database 'prova' optimized in 548.67 ms.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="gestió-dusuaris" class="level3">
 <h3 class="anchored" data-anchor-id="gestió-dusuaris">2.2. Gestió d’usuaris</h3>
@@ -610,10 +611,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Les ordres mostrades permeten una gestió simple però efectiva dels usuaris. Observi aquests exemples d’ús:</p>
 <ol type="1">
 <li><p>Primer de tot definirem un usuari nou anomenat “<code>usuari</code>” amb contrasenya “<code>1234</code>”. Per introduir la contrasenya directament en línia d’ordres de BaseX necessitem calcular el <em>hash</em> MD5 de la contrasenya, perquè ens requereix introduir-la d’aquesta manera. Per tant, primer obtindrem la contrasenya des de consola amb l’eina <code>md5sum</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="at">-n</span> <span class="st">"1234"</span> <span class="kw">|</span> <span class="fu">md5sum</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">81dc9bdb52d04dc20036dbd8313ed055</span>  <span class="at">-</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="at">-n</span> <span class="st">"1234"</span> <span class="kw">|</span> <span class="fu">md5sum</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">81dc9bdb52d04dc20036dbd8313ed055</span>  <span class="at">-</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>I aleshores entrem amb l’usuari administrador i creem efectivament l’usuari:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Username: admin</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Password: admin</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
@@ -622,9 +623,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER usuari 81dc9bdb52d04dc20036dbd8313ed055</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>User 'usuari' created.</span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>&gt; EXIT</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Enjoy life.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Enjoy life.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Ara intentem comprovar si l’usuari creat pot iniciar sessió:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Username: usuari</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>Password: 1234</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
@@ -633,10 +634,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>&gt; OPEN prova</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>READ permission needed.</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>&gt; EXIT</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>See you.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>See you.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com veu, es pot iniciar sessió, però no es tenen privilegis d’accés a cap base de dades (més endavant es veurà com modificar privilegis).</p></li>
 <li><p>Ara definirem un altre usuari que voldrem que sigui administrador de la base de dades i algun altre usuari:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Username: ·admin</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>Password: ·admin</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
@@ -659,11 +660,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER alu05 81dc9bdb52d04dc20036dbd8313ed055</span>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>User 'alu05' created.</span>
 <span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>&gt; CREATE USER alu06 81dc9bdb52d04dc20036dbd8313ed055</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>User 'alu06' created.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>User 'alu06' created.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com veu, es mostra com hem de canviar una contrasenya d’un usuari existent, a més de com introduir-la sense que es vegi per pantalla.</p></li>
 <li><p>Eliminem un usuari que sobra:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>&gt; DROP USER alu06</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>User 'alu06' dropped.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>&gt; DROP USER alu06</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>User 'alu06' dropped.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ol>
 </section>
 <section id="gestió-de-privilegis" class="level3">
@@ -715,7 +716,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>Posem ara uns quants exemples de com manipular privilegis:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>$ rlwrap basexclient</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Username: admin</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>Password: admin</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>BaseX 7.0.2 [Client]</span>
@@ -728,10 +729,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu02' on 'prova'.</span>
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu03' on 'prova'.</span>
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu04' on 'prova'.</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu05' on 'prova'.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>READ granted to 'alu05' on 'prova'.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com veu, assignar un dret global només implica dir el privilegi i l’usuari que el rebrà. Per assignar un dret concret sobre una base de dades específica, hem de fer servir la clàusula ON per indicar el nom de la base de dades. A més, pot veure com s’han assignat privilegis en bloc a diversos usuaris, simplement utilitzant el símbol comodí “<code>*</code>”.</p>
 <p>Els privilegis poden ser modificats en qualsevol moment. Vegi la següent seqüència d’ordres:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>&gt; GRANT CREATE ON prova TO usuari</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>&gt; GRANT CREATE ON prova TO usuari</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>CREATE permission is unknown.</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>&gt; GRANT CREATE TO usuari</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>CREATE granted to 'usuari'.</span>
@@ -740,11 +741,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>&gt; GRANT WRITE ON prova TO usuari</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>WRITE granted to 'usuari' on 'prova'.</span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>&gt; GRANT NONE ON mondial TO usuari</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>NONE granted to 'usuari' on 'mondial'.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>NONE granted to 'usuari' on 'mondial'.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com veu, el privilegi <code>CREATE</code> és global i genera un error. Si donem un dret més gran i volem reduir-lo, simplement hem de substituir tornant a definir el nivell de dret per a aquell usuari.</p>
 <p>Finalment, en l’exemple mostrat també s’ha indicat com podem tenir drets globals i locals diferents. En aquest cas, l’usuari “<code>usuari</code>” tindrà dret de lectura sobre tota base de dades (si no s’indica una altra cosa a nivell local) i específicament fixem un nivell de dret més elevat en una base de dades i un de menor en una altra. D’aquesta manera, podem fixar un dret per defecte i perfilar un de diferent per a cada base de dades concreta.</p>
 <p>Per acabar, podem visualitzar els drets atorgats a nivell global i/o local amb l’ordre <code>SHOW USERS</code>. Seguint amb el nostre exemple:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>&gt; SHOW users</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>&gt; SHOW users</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Username  Read  Write  Create  Admin  </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>------------------------------------</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>admin     X     X      X       X      </span>
@@ -767,7 +768,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>alu05     X            </span>
 <span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>usuari    X     X      </span>
 <span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>6 Users.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>6 Users.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="ordres-relacionades-amb-les-còpies-de-seguretat" class="level3">
 <h3 class="anchored" data-anchor-id="ordres-relacionades-amb-les-còpies-de-seguretat">2.4. Ordres relacionades amb les còpies de seguretat</h3>
@@ -817,7 +818,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>Exemples d’ús de la funcionalitat de les còpies de seguretat:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>&gt; CREATE BACKUP mondial</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>&gt; CREATE BACKUP mondial</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Backup for 'mondial' created in 584.35 ms.</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>&gt; SHOW BACKUPS</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>Name                             Size    </span>
@@ -837,7 +838,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>&gt; RESTORE mondial</span>
 <span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>'mondial-2013-03-12-20-50-43.zip' restored in 310.44 ms.</span>
 <span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>&gt; RESTORE mondial-2013-03-12-15-51-03</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>'mondial-2013-03-12-15-51-03.zip' restored in 274.67 ms.</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>'mondial-2013-03-12-15-51-03.zip' restored in 274.67 ms.</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Observi que és possible restaurar un backup d’una data/hora específica, i no només la darrera còpia de seguretat.</p>
 </section>
 <section id="ordres-relacionats-amb-els-índexs" class="level3">
@@ -869,8 +870,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>En BaseX existeixen només 4 tipus d’índexs: <code>TEXT</code>, <code>FULLTEXT</code>, <code>ATTRIBUTES</code>, i <code>PATH</code>. Cadascun d’ells està especialitzat en optimitzar un aspecte diferent de les recerques i filtrat de les dades.</p>
 <p>En concret, l’ordre de crear índexs no permet crear índexs sobre nodes, atributs o texts específics; sinó d’una manera genèrica per als quatre tipus esmentats.</p>
 <p>L’ordre de crear o eliminar índexs accepten un únic argument que coincideix amb els 4 noms indicats al paràgraf anterior:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>CREATE INDEX [TEXT|FULLTEXT|ATTRIBUTE|PATH]</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>DROP INDEX [TEXT|FULLTEXT|ATTRIBUTE|PATH]</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>CREATE INDEX [TEXT|FULLTEXT|ATTRIBUTE|PATH]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>DROP INDEX [TEXT|FULLTEXT|ATTRIBUTE|PATH]</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Els índexs faran que les consultes de selecció de dades siguin molt més eficients, reduint el temps total d’obtenció dels resultats. La diferència pot arribar, en alguns casos, a nivells de reducció de temps d’execució de consultes XQuery de fins el 1/10.</p>
 </section>
 <section id="ordres-relacionats-amb-les-consultes-de-dades-amb-xquery" class="level3">
@@ -904,13 +905,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>Podem executar una consulta XQuery directament amb l’ordre <code>XQUERY consulta</code>, però també podem tenir-la desada a disc i indicar la ruta amb l’ordre <code>RUN arxiu</code>.</p>
 <p>Al marge d’això, sempre podem canviar de “<em>node actiu</em>” (context) amb l’ordre <code>CS</code> acompanyada d’una consulta XQuery que retorni un node del document original. Així doncs, les consultes posteriors prendran aquell context com a punt de partida (ubicació actual) i podrem utilitzar camins relatius dins del document amb consultes XQuery.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>&gt; CS //mondial/country[name='Belgium']</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>&gt; CS //mondial/country[name='Belgium']</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>&gt; XQUERY count(descendant::city)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>10</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>Query executed in 8.26 ms.</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>&gt; XQUERY province/city[name='Brussels']/population/text()</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>951580</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>&gt; CS /</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>&gt; CS /</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com veu, per retornar al nivell superior de l’arbre XML, només cal canviar el context a <code>/</code>.</p>
 </section>
 </section>
@@ -926,7 +927,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>Test01.java</strong></pre>
 </div>
-<div class="sourceCode" id="cb18" data-filename="Test01.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">core</span><span class="op">.</span><span class="im">Context</span><span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="Test01.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">core</span><span class="op">.</span><span class="im">Context</span><span class="op">;</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">core</span><span class="op">.</span><span class="im">cmd</span><span class="op">.</span><span class="im">XQuery</span><span class="op">;</span></span>
 <span id="cb18-3"><a href="#cb18-3"></a></span>
 <span id="cb18-4"><a href="#cb18-4"></a><span class="kw">public</span> <span class="kw">class</span> Test01 <span class="op">{</span></span>
@@ -948,11 +949,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb18-20"><a href="#cb18-20"></a>      e<span class="op">.</span><span class="fu">printStackTrace</span><span class="op">();</span></span>
 <span id="cb18-21"><a href="#cb18-21"></a>    <span class="op">}</span></span>
 <span id="cb18-22"><a href="#cb18-22"></a>  <span class="op">}</span></span>
-<span id="cb18-23"><a href="#cb18-23"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-23"><a href="#cb18-23"></a><span class="op">}</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Com veu, el codi és molt senzill però només permet l’execució de sentències XQuery.</p>
 <p>El resultat de la seva execució es mostra tot seguit:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> javac <span class="at">-cp</span> .:/usr/share/java/basex.jar Test01.java</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> javac <span class="at">-cp</span> .:/usr/share/java/basex.jar Test01.java</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> java <span class="at">-cp</span> .:/usr/share/java/basex.jar Test01</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Barcelona<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Lleida<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
@@ -964,7 +965,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Santa <span class="ex">Coloma</span> de Gramanet<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>name<span class="op">&gt;</span>Mataro<span class="op">&lt;</span>/name<span class="op">&gt;</span></span>
 <span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Executat</span> en 2455ms</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="ex">Executat</span> en 2455ms</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="connexió-remota-a-través-de-classes-client" class="level3">
 <h3 class="anchored" data-anchor-id="connexió-remota-a-través-de-classes-client">3.2. Connexió remota a través de classes client</h3>
@@ -974,7 +975,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>Test02.java</strong></pre>
 </div>
-<div class="sourceCode" id="cb20" data-filename="Test02.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">ClientSession</span><span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="Test02.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">ClientSession</span><span class="op">;</span></span>
 <span id="cb20-2"><a href="#cb20-2"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">basex</span><span class="op">.</span><span class="im">server</span><span class="op">.</span><span class="im">ClientQuery</span><span class="op">;</span></span>
 <span id="cb20-3"><a href="#cb20-3"></a></span>
 <span id="cb20-4"><a href="#cb20-4"></a><span class="kw">public</span> <span class="kw">class</span> Test02 <span class="op">{</span></span>
@@ -998,7 +999,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-22"><a href="#cb20-22"></a>      e<span class="op">.</span><span class="fu">printStackTrace</span><span class="op">();</span></span>
 <span id="cb20-23"><a href="#cb20-23"></a>    <span class="op">}</span></span>
 <span id="cb20-24"><a href="#cb20-24"></a>  <span class="op">}</span></span>
-<span id="cb20-25"><a href="#cb20-25"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-25"><a href="#cb20-25"></a><span class="op">}</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Observi que aquesta classe permet la interacció directa amb el servidor BaseX, però cal indicar el context arrel amb l’especificació del document XML que agafem de base per a la consulta.</p>
 </section>
@@ -1014,7 +1015,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>Test03.java</strong></pre>
 </div>
-<div class="sourceCode" id="cb21" data-filename="Test03.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">public</span> <span class="kw">class</span> Test03 <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="Test03.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">public</span> <span class="kw">class</span> Test03 <span class="op">{</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a></span>
 <span id="cb21-3"><a href="#cb21-3"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb21-4"><a href="#cb21-4"></a>    <span class="cf">try</span> <span class="op">{</span></span>
@@ -1034,7 +1035,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb21-18"><a href="#cb21-18"></a>      e<span class="op">.</span><span class="fu">printStackTrace</span><span class="op">();</span></span>
 <span id="cb21-19"><a href="#cb21-19"></a>    <span class="op">}</span></span>
 <span id="cb21-20"><a href="#cb21-20"></a>  <span class="op">}</span></span>
-<span id="cb21-21"><a href="#cb21-21"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-21"><a href="#cb21-21"></a><span class="op">}</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Pot veure com el codi ofereix la possibilitat ara d’escriure una ordre qualsevol. En aquest cas s’invoca l’ordre <code>XQUERY</code> per sol·licitar una consulta d’aquest tipus, però podria efectuar-se qualsevol altre tipus de tasca.</p>
 <p>Com a mostra d’això, vegi el següent cas on s’ha afegit l’ordre per obrir una base de dades específica, establint un context i realitzat una consulta XQuery:</p>
@@ -1043,7 +1044,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>Test04.java</strong></pre>
 </div>
-<div class="sourceCode" id="cb22" data-filename="Test04.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">public</span> <span class="kw">class</span> Test04 <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="Test04.java"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">public</span> <span class="kw">class</span> Test04 <span class="op">{</span></span>
 <span id="cb22-2"><a href="#cb22-2"></a></span>
 <span id="cb22-3"><a href="#cb22-3"></a>  <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span><span class="op">(</span><span class="bu">String</span><span class="op">[]</span> args<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb22-4"><a href="#cb22-4"></a>    <span class="cf">try</span> <span class="op">{</span></span>
@@ -1065,7 +1066,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb22-20"><a href="#cb22-20"></a>      <span class="bu">System</span><span class="op">.</span><span class="fu">exit</span><span class="op">(-</span><span class="dv">1</span><span class="op">);</span></span>
 <span id="cb22-21"><a href="#cb22-21"></a>    <span class="op">}</span></span>
 <span id="cb22-22"><a href="#cb22-22"></a>  <span class="op">}</span></span>
-<span id="cb22-23"><a href="#cb22-23"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-23"><a href="#cb22-23"></a><span class="op">}</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Observi com utilitzem la variable de sessió obtinguda per executar ordres BaseX segons convingui. En aquest sentit, vegi que si una instrucció fallés, es llançaria una excepció de tipus <code>java.io.IOException</code>.</p>
 
@@ -1125,13 +1126,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

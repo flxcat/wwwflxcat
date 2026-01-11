@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.16">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../../">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a67ac2868200dddf7a4f0e3ae403775c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c2596e96578a95592c042e94c362e7b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7c7e40be1f9e7197293d8dea5ad08f5c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -187,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Publicat</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">29 de juny de 2013</p>
+        <p class="date">29 de juny del 2013</p>
       </div>
     </div>
     
@@ -304,10 +305,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>En aquest tema farem proves connectant contra una base de dades MySQL local. S’assumeix disposar del MySQL correctament instal·lat i operatiu.</p>
 <p>És responsabilitat del programador descarregar el connector JDBC que s’apliqui a la seva versió de Java i instal·lar-la apropiadament o fer ús de la configuració per defecte en casos com les distribucions de Linux.</p>
 <p>En concret, si s’utilitza una distribució Ubuntu moderna (les proves presentades aquí estan fetes amb Ubuntu &gt;11.10, amb openjdk versió 6 o 7), podrem instal·lar el connector JDBC per a MySQL simplement escrivint:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo aptitude install libmysql-java</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo aptitude install libmysql-java</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Quan disposem del connector ja instal·lat, l’única diferència respecte a la compilació i execució de programes Java és que, quan executem el programa, si el connector no està copiat al directori de treball, hem d’especificar-lo en la ruta de cerca <code>CLASSPATH</code>. En el cas particular, podrem escriure:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> javac LlistatPersones.java</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> java <span class="at">-cp</span> .:/usr/share/mysql-connector-java.jar LlistatPersones</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> javac LlistatPersones.java</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> java <span class="at">-cp</span> .:/usr/share/mysql-connector-java.jar LlistatPersones</span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com es veu, l’especificació amb el modificador <code>-cp</code> permet indicar el directori actual (<code>.</code>) i la ubicació de l’arxiu comprimit <code>mysql-connector-java.jar</code> que està en un directori del sistema, separant els camins amb el caràcter “<code>:</code>”.</p>
 </section>
 <section id="ús-dels-connectors" class="level2">
@@ -315,32 +316,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Els connectors JDBC requereixen d’un seguit de passos pràctics a l’hora d’usar-se en Java:</p>
 <ol type="1">
 <li><p><strong>Invocar la recerca de la classe</strong> relacionada amb el connector. Això es fa amb una crida com la següent:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Class</span><span class="op">.</span><span class="fu">forName</span><span class="op">(</span> <span class="st">"com.mysql.jdbc.Driver"</span> <span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Class</span><span class="op">.</span><span class="fu">forName</span><span class="op">(</span> <span class="st">"com.mysql.jdbc.Driver"</span> <span class="op">);</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Això dependrà, lògicament, del connector específic que estiguem utilitzant.</p>
 <p>Aquest pas podria generar una excepció de <em>classe no trobada</em> que ha de ser atesa.</p></li>
 <li><p><strong>Obtenir una connexió amb el servidor</strong>, utilitzant les credencials adients. Això sol fer-se escrivint una línia com la següent:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> url <span class="op">=</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> url <span class="op">=</span> </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Connection</span> conn <span class="op">=</span> <span class="bu">DriverManager</span><span class="op">.</span><span class="fu">getConnection</span><span class="op">(</span> </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">"jdbc:mysql://localhost/hr"</span><span class="op">,</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">"hr_user"</span><span class="op">,</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">"hr_pass"</span> <span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">"hr_pass"</span> <span class="op">);</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Com veu, el primer paràmetre de la crida a la funció conté el nom del servidor (o la IP) i el nom de la base de dades. Després s’indicaran l’usuari i la contrasenya en els altres dos arguments de la crida.</p>
 <p>Aquest pas podria generar una excepció d’<em>impossible contactar</em> que ha de ser atesa.</p></li>
 <li><p>Un cop tenim una connexió establerta, podem utilitzar-la per a <strong>realitzar una consulta</strong>. Només cal definir un <code>Statement</code> i executar-lo:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> sql <span class="op">=</span> <span class="st">"SELECT * FROM employees"</span><span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> sql <span class="op">=</span> <span class="st">"SELECT * FROM employees"</span><span class="op">;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Statement</span> stmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">createStatement</span><span class="op">();</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSet</span> rs <span class="op">=</span> stmt<span class="op">.</span><span class="fu">executeQuery</span><span class="op">(</span> sql <span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSet</span> rs <span class="op">=</span> stmt<span class="op">.</span><span class="fu">executeQuery</span><span class="op">(</span> sql <span class="op">);</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>L’objecte <code>ResultSet</code> obtingut permetrà recórrer les files de resultat de la consulta executada, així com modificar valors en la taula original, si la consulta és senzilla.</p></li>
 <li><p>També podem <strong>executar ordres SQL</strong> d’execució (no consultes) que no generaran taules de resultat. Aquí tindrem ordres SQL com <code>UPDATE</code>, <code>INSERT</code>, <code>DELETE</code>, <code>CREATE TABLE</code>, etc. Per invocar aquest tipus d’ordre SQL només cal fer:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> sql <span class="op">=</span> <span class="st">"UPDATE employees SET salary=12345 WHERE employeeId=103"</span><span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> sql <span class="op">=</span> <span class="st">"UPDATE employees SET salary=12345 WHERE employeeId=103"</span><span class="op">;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Statement</span> stmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">createStatement</span><span class="op">();</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>stmt<span class="op">.</span><span class="fu">execute</span><span class="op">(</span> sql <span class="op">);</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>stmt<span class="op">.</span><span class="fu">execute</span><span class="op">(</span> sql <span class="op">);</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>S’hauran d’atendre les possibles excepcions de tipus <code>java.sql.SQLException</code> que s’hi puguin produir.</p></li>
 <li><p>Un cop hem realitzat totes les tasques necessàries amb una consulta, hem d’<strong>alliberar</strong> (tancar) <strong>la consulta</strong>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rs<span class="op">.</span><span class="fu">close</span><span class="op">();</span>    <span class="co">// Si és una consulta SELECT</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>stmt<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rs<span class="op">.</span><span class="fu">close</span><span class="op">();</span>    <span class="co">// Si és una consulta SELECT</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>stmt<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>I quan hem acabat de realitzar totes les tasques amb la base de dades, podrem <strong>tancar la connexió</strong> establerta amb ella:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>conn<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>conn<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ol>
 </section>
 <section id="sobre-els-resultset" class="level2">
@@ -348,7 +349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Quan invoquem una consulta SQL que demani un bolcat de dades (consultes tipus <code>SELECT</code>), hem vist que hem d’invocar el mètode <code>Statement.executeQuery(...)</code>.</p>
 <p>Aquest mètode ens retorna un objecte de tipus <code>ResultSet</code> que contindrà la taula de resultats de la consulta.</p>
 <p>Per recórrer aquesta taula, ho farem línia a línia (fila a fila), mitjançant una estructura clàssica com la següent:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSet</span> rs <span class="op">=</span> stmt<span class="op">.</span><span class="fu">executeQuery</span><span class="op">(</span> sql <span class="op">);</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span><span class="op">(</span> rs<span class="op">.</span><span class="fu">next</span><span class="op">()</span> <span class="op">)</span> <span class="op">{</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> id <span class="op">=</span> rs<span class="op">.</span><span class="fu">getInt</span><span class="op">(</span><span class="st">"employeeId"</span><span class="op">);</span></span>
@@ -357,7 +358,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span> id <span class="op">+</span> <span class="st">": "</span> <span class="op">+</span> cognoms <span class="op">+</span> <span class="st">", "</span> <span class="op">+</span> nom <span class="op">);</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>rs<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Observi que es fa ús de la funció <code>ResultSet.next()</code> per anar recorrent tota la taula de resultats. Amb la fila activa, podem extreure els valors de les columnes fent crides a les funcions <code>ResultSet.getInt(...)</code> o <code>ResultSet.getString(...)</code>.</p>
 <p>Existeix tota una col·lecció de funcions en la classe <code>ResultSet</code> que permet recórrer verticalment la taula (moure’s entre les files) com <code>first()</code>, <code>last()</code>, etc.</p>
 <p>De la mateixa manera existeix tota una col·lecció de mètodes per obtenir les dades en diferents tipus: <code>getInt()</code>, <code>getString()</code>, <code>getDate()</code>, etc.</p>
@@ -386,7 +387,7 @@ Nota
 <p>Per aconseguir-ho hem de realitzar una consulta estàndard de selecció (<code>SELECT</code>), però marcar la consulta com a <strong>actualitzable</strong>. Aleshores executem la consulta normalment i rebem el resultat del <code>SELECT</code> en un objecte <code>ResultSet</code> com abans.</p>
 <p>La diferència és que mentre recorrem la taula de dades obtinguda, podem executar mètodes de modificació d’aquestes dades amb crides a <code>ResultSet.updateInt(...)</code> o <code>ResultSet.updateString(...)</code>, per exemple.</p>
 <p>Un cop hem realitzat totes les modificacions que necessitem, simplement executarem <code>ResultSet.updateRow()</code> per enregistrar els canvis de la fila modificada en la taula original de la base de dades:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> sql <span class="op">=</span> <span class="st">"SELECT * FROM employees"</span><span class="op">;</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">Statement</span> stmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">createStatement</span><span class="op">(</span> <span class="bu">ResultSet</span><span class="op">.</span><span class="fu">TYPE_SCROLL_INSENSITIVE</span><span class="op">,</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                                       <span class="bu">ResultSet</span><span class="op">.</span><span class="fu">CONCUR_UPDATABLE</span> <span class="op">);</span></span>
@@ -400,7 +401,7 @@ Nota
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>rs<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>stmt<span class="op">.</span><span class="fu">close</span><span class="op">();</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Els canvis són incorporats immediatament a la base de dades i són accessibles a posteriors consultes de selecció.</p>
 </section>
 <section id="preparació-de-consultes-amb-preparestatement" class="level2">
@@ -408,12 +409,12 @@ Nota
 <p>Podem configurar consultes parametritzades de qualsevol tipus (selecció, DML, etc.), és a dir, construir consultes que reben dades provinents de variables de Java que incorporem a la sentència.</p>
 <p>Per fer-ho, Java ens ofereix la classe <code>PreparedStatement</code> que funciona exactament igual que <code>Statement</code> des del punt de vista de l’execució de sentències SQL, però que accepta la parametrització de la consulta.</p>
 <p>Observi el següent exemple:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">PreparedStatement</span> pstmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">prepareStatement</span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">PreparedStatement</span> pstmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">prepareStatement</span><span class="op">(</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SELECT COUNT(*) AS total FROM employees WHERE firstname=? AND lastname=?"</span> <span class="op">);</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>pstmt<span class="op">.</span><span class="fu">setString</span><span class="op">(</span> <span class="dv">1</span><span class="op">,</span> firstname <span class="op">);</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>pstmt<span class="op">.</span><span class="fu">setString</span><span class="op">(</span> <span class="dv">2</span><span class="op">,</span> lastname <span class="op">);</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSet</span> rs <span class="op">=</span> pstmt<span class="op">.</span><span class="fu">executeQuery</span><span class="op">();</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Veurà que la consulta SQL, ara construïda sobre un objecte de tipus <code>PreparedStatement</code> i obtinguda amb una crida a <code>Connection.prepareStatement(...)</code>, rep una cadena SQL convencional on s’han omès l’usuari i la contrasenya, i s’ha escrit en el seu lloc un caràcter <code>?</code>. Observi que tampoc hi ha cometes simples ni dobles encerclant l’interrogant.</p>
 <p>Després es canvien els interrogants fent crides a <code>PreparedStatement.setString(...)</code> per modificar les dades en les posicions 1 i 2 (així és com fem referència als interrogants).</p>
 </section>
@@ -421,7 +422,7 @@ Nota
 <h2 class="anchored" data-anchor-id="extracció-de-les-metadates-de-la-consulta">7. Extracció de les metadates de la consulta</h2>
 <p>Tota consulta, un cop executada, genera un objecte <code>ResultSet</code> amb les dades obtingudes. Però si necessitem saber quantes columnes hem obtingut i quins són els seus tipus de dada, haurem d’accedir al que s’anomena les <em>metadates</em> del <code>ResultSet</code>.</p>
 <p>Per obtenir les metadates, simplement haurem d’executar una crida a la funció <code>ResultSet.getMetaData()</code> sobre el <code>ResultSet</code> obtingut de la consulta i obtindrem un objecte <code>ResultSetMetaData</code> amb la informació:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSetMetaData</span> rsmd <span class="op">=</span> rs<span class="op">.</span><span class="fu">getMetaData</span><span class="op">();</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSetMetaData</span> rsmd <span class="op">=</span> rs<span class="op">.</span><span class="fu">getMetaData</span><span class="op">();</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Amb aquest objecte podem descobrir moltes característiques relacionades amb les columnes obtingudes en aquell <code>ResultSet</code>:</p>
 <ul>
 <li>Amb <code>ResultSetMetaData.getColumnCount()</code> obtindrem la quantitat de columnes obtingudes</li>
@@ -560,7 +561,7 @@ Nota
 <p>Què passa si, mitjançant l’exemple número 3, intenta aplicar el procés de canvi de sou al treballador amb <code>employeeId=100</code>?</p>
 <p>La solució és fer que els POJO no facin referència als <code>id</code> d’altres taules, sinó que les referències entre taules es resolguin directament a objectes de les classes associades.</p>
 <p>Així doncs, el POJO <code>Employee</code> hauria de ser així:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Employee <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Employee <span class="op">{</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> employeeId<span class="op">;</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span> firstname<span class="op">;</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span> lastname<span class="op">;</span></span>
@@ -573,7 +574,7 @@ Nota
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  Employee manager<span class="op">;</span></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  Department department<span class="op">;</span></span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">...</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Observi que ara aquells camps que són clau forana a altres taules han estat substituïts per objectes referenciats adecuadament des d’aquest. Així, si tenim un determinat treballador <code>e1</code>, si apliquem <code>e1.getDepartment()</code> el que obtindríem seria tot un objecte de la classe <code>Department</code> amb què podrem treballar normalment.</p>
 <p>Aquesta idea, que resulta evident ara que ha estat presentada, incorpora una gran problemàtica si intenta dur-se a terme amb simples consultes SQL a través de JDBC. Els motius són diversos:</p>
 <ul>
@@ -640,13 +641,14 @@ Nota
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
